@@ -1,16 +1,14 @@
 package com.programmers.devcourse.vaemin.coupon.entity;
 
+import com.programmers.devcourse.vaemin.root.IdentifiableEntity;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class Coupon {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "name", nullable = false, length = 30)
+public class Coupon extends IdentifiableEntity {
+    @Column(name = "coupon_name", nullable = false, length = 30)
     private String name;
 
     @Column(name = "discount_type", nullable = false)

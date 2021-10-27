@@ -1,24 +1,15 @@
 package com.programmers.devcourse.vaemin.review.entity;
 
 import com.programmers.devcourse.vaemin.order.entity.Order;
+import com.programmers.devcourse.vaemin.root.AuditableEntity;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Review {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
+public class Review extends AuditableEntity {
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;

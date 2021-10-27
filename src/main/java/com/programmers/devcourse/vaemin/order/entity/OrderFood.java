@@ -2,18 +2,14 @@ package com.programmers.devcourse.vaemin.order.entity;
 
 import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.food.entity.FoodSub;
+import com.programmers.devcourse.vaemin.root.IdentifiableEntity;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class OrderFood {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class OrderFood extends IdentifiableEntity {
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;

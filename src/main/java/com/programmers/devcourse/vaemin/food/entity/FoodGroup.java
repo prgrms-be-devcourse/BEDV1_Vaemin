@@ -1,16 +1,14 @@
 package com.programmers.devcourse.vaemin.food.entity;
 
+import com.programmers.devcourse.vaemin.root.IdentifiableEntity;
 import lombok.Getter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-public class FoodGroup {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+@Table(name = "food_group_mapping")
+public class FoodGroup extends IdentifiableEntity {
     @ManyToOne
     @JoinColumn(name = "food_id", referencedColumnName = "id")
     private Food food;

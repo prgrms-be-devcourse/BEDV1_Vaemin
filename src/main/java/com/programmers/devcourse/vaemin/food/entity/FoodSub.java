@@ -1,5 +1,6 @@
 package com.programmers.devcourse.vaemin.food.entity;
 
+import com.programmers.devcourse.vaemin.root.AuditableEntity;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import lombok.Getter;
 
@@ -8,18 +9,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class FoodSub {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(name = "name", nullable = false, length = 30)
+public class FoodSub extends AuditableEntity {
+    @Column(name = "food_sub_name", nullable = false, length = 30)
     private String name;
 
     @Column(name = "price", nullable = false)

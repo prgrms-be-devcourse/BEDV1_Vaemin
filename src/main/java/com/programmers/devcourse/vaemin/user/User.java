@@ -1,17 +1,13 @@
 package com.programmers.devcourse.vaemin.user;
 
+import com.programmers.devcourse.vaemin.root.AuditableEntity;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
-
+public class User extends AuditableEntity {
     @Column(name = "username", nullable = false, length = 50)
     protected String username;
 
@@ -20,10 +16,4 @@ public class User {
 
     @Column(name = "phone_num", nullable = false, length = 15)
     protected String phoneNum;
-
-    @Column(name = "registered_at", nullable = false)
-    protected LocalDateTime registeredAt;
-
-    @Column(name = "updated_at", nullable = false)
-    protected LocalDateTime updatedAt;
 }

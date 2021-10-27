@@ -1,15 +1,13 @@
 package com.programmers.devcourse.vaemin.user.customer.entity;
 
+import com.programmers.devcourse.vaemin.root.IdentifiableEntity;
 import lombok.Getter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-public class CustomerDeliveryAddress {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class CustomerDeliveryAddress extends IdentifiableEntity {
     @Column(name = "location_code", nullable = false, length = 20)
     private String locationCode;
 

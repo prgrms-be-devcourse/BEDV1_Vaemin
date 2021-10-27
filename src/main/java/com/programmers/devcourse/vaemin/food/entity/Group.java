@@ -1,12 +1,12 @@
 package com.programmers.devcourse.vaemin.food.entity;
 
+import com.programmers.devcourse.vaemin.root.IdentifiableEntity;
+
 import javax.persistence.*;
 
 @Entity
-public class Group {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "name", nullable = false, length = 30)
+@Table(name = "food_group")
+public class Group extends IdentifiableEntity {
+    @Column(name = "group_name", nullable = false, length = 30)
     private String name;
 }

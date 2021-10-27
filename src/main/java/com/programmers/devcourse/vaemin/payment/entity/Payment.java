@@ -1,6 +1,7 @@
 package com.programmers.devcourse.vaemin.payment.entity;
 
 import com.programmers.devcourse.vaemin.order.entity.Order;
+import com.programmers.devcourse.vaemin.root.AuditableEntity;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import lombok.Getter;
 
@@ -9,16 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Payment {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
+public class Payment extends AuditableEntity {
     @Column(name = "price", nullable = false)
     private int price;
 

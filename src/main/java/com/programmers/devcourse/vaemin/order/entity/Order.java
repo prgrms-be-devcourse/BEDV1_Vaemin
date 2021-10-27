@@ -2,6 +2,7 @@ package com.programmers.devcourse.vaemin.order.entity;
 
 import com.programmers.devcourse.vaemin.coupon.entity.Coupon;
 import com.programmers.devcourse.vaemin.payment.entity.Payment;
+import com.programmers.devcourse.vaemin.root.AuditableEntity;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import lombok.Getter;
@@ -11,16 +12,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Order {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
+@Table(name = "food_order")
+public class Order extends AuditableEntity {
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
@@ -33,7 +26,7 @@ public class Order {
     @JoinColumn(name = "payment_id", referencedColumnName = "id")
     private Payment payment;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "order_status", nullable = false)
     private OrderStatus orderStatus;
 
     @Column(name = "total_price", nullable = false)

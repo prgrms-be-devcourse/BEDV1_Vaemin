@@ -1,17 +1,13 @@
 package com.programmers.devcourse.vaemin.food.entity;
 
+import com.programmers.devcourse.vaemin.root.IdentifiableEntity;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class FoodSubSelectGroup {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class FoodSubSelectGroup extends IdentifiableEntity {
     @Column(name = "group_name", nullable = false, length = 30)
     private String groupName;
 

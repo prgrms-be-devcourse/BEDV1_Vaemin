@@ -1,5 +1,6 @@
 package com.programmers.devcourse.vaemin.shop.entity;
 
+import com.programmers.devcourse.vaemin.root.AuditableEntity;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import lombok.Getter;
 
@@ -8,11 +9,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Shop {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "name", nullable = false, length = 50)
+public class Shop extends AuditableEntity {
+    @Column(name = "shop_name", nullable = false, length = 50)
     private String name;
 
     @Column(name = "phone_num", nullable = false, length = 20)

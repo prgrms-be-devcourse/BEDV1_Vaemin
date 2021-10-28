@@ -8,7 +8,6 @@ import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter

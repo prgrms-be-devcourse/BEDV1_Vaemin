@@ -4,8 +4,10 @@ import com.programmers.devcourse.vaemin.order.entity.Order;
 import com.programmers.devcourse.vaemin.root.AuditableEntity;
 import lombok.Getter;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 @Getter

@@ -5,6 +5,7 @@ import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.shop.entity.ShopStatus;
 import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedOrderType;
 import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedPayment;
+import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 
@@ -53,6 +54,9 @@ public class ShopDto {
     @NotNull(message = "RegisterNumber is mandatory")
     private final String registerNumber;
 
+    @NotNull(message = "Owner is mandatory")
+    private final Owner owner;
+
     @JsonProperty("doroAddress")
     private final String doroAddress;
 
@@ -76,6 +80,7 @@ public class ShopDto {
         this.minOrderPrice = shop.getMinOrderPrice();
         this.shopStatus = shop.getShopStatus();
         this.registerNumber = shop.getRegisterNumber();
+        this.owner = shop.getOwner();
         this.doroAddress = shop.getDoroAddress();
         this.doroIndex = shop.getDoroIndex();
         this.detailAddress = shop.getDetailAddress();

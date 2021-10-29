@@ -53,4 +53,13 @@ public class ShopDto {
 
     @NotNull(message = "RegisterNumber is mandatory")
     private final String registerNumber;
+
+    @JsonProperty("doroAddress")
+    private String doroAddress;
+
+    @JsonProperty("doroIndex")
+    private int doroIndex;
+
+    @JsonProperty("detailAddress")
+    private String detailAddress;
 }

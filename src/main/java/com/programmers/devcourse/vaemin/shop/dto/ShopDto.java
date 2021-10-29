@@ -1,11 +1,11 @@
 package com.programmers.devcourse.vaemin.shop.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.shop.entity.ShopStatus;
 import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedOrderType;
 import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedPayment;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
-@RequiredArgsConstructor
 public class ShopDto {
     @JsonProperty("id")
     private final long id;
@@ -55,11 +54,30 @@ public class ShopDto {
     private final String registerNumber;
 
     @JsonProperty("doroAddress")
-    private String doroAddress;
+    private final String doroAddress;
 
     @JsonProperty("doroIndex")
-    private int doroIndex;
+    private final int doroIndex;
 
     @JsonProperty("detailAddress")
-    private String detailAddress;
+    private final String detailAddress;
+
+    public ShopDto(Shop shop) {
+        this.id = shop.getId();
+        this.name = shop.getName();
+        this.phoneNum = shop.getPhoneNum();
+        this.shortDescription = shop.getShortDescription();
+        this.longDescription = shop.getLongDescription();
+        this.supportedOrderType = shop.getSupportedOrderType();
+        this.supportedPayment = shop.getSupportedPayment();
+        this.openTime = shop.getOpenTime();
+        this.closeTime = shop.getCloseTime();
+        this.deliveryFee = shop.getDeliveryFee();
+        this.minOrderPrice = shop.getMinOrderPrice();
+        this.shopStatus = shop.getShopStatus();
+        this.registerNumber = shop.getRegisterNumber();
+        this.doroAddress = shop.getDoroAddress();
+        this.doroIndex = shop.getDoroIndex();
+        this.detailAddress = shop.getDetailAddress();
+    }
 }

@@ -2,6 +2,7 @@ package com.programmers.devcourse.vaemin.user.customer.controller;
 
 import com.programmers.devcourse.vaemin.root.ApiResponse;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerCreateRequest;
+import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDetailResponse;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import com.programmers.devcourse.vaemin.user.customer.service.CustomerService;
 import javassist.NotFoundException;
@@ -28,9 +29,18 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ApiResponse<Customer> createPost(
+    public ApiResponse<Customer> createCustomer(
             @RequestBody CustomerCreateRequest request
             ) {
-        return ApiResponse.success(customerService.createCustomer(request));
+        Customer newCustomer = customerService.createCustomer(request);
+        return ApiResponse.success(newCustomer);
+    }
+
+    @GetMapping("/{customerId}")
+    public ApiResponse<CustomerDetailResponse> getCustomer(
+            @PathVariable Long customerId
+    )  {
+        CustomerDetailResponse customer = customerService.findOneCustomer(customerId);
+        return ApiResponse.success(customer);
     }
 }

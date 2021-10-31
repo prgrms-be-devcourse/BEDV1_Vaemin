@@ -25,4 +25,21 @@ public class Customer extends User {
     public Customer() {
 
     }
+
+    public void changeName(String userName) {
+        this.username = userName;
+    }
+
+    public void changeEmail(String email) {
+        this.email = email;
+    }
+
+
+    public void changePhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    public void changeUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

@@ -43,4 +43,9 @@ public class CustomerService {
         customer.changeUpdatedAt(request.getUpdatedAt());
         return customer;
     }
+
+    @Transactional
+    public void deleteCustomer(Long customerId) {
+        customerRepository.deleteById(customerId);
+    }
 }

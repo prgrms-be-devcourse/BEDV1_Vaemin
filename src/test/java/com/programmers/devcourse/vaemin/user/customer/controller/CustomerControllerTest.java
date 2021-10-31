@@ -2,6 +2,7 @@ package com.programmers.devcourse.vaemin.user.customer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerCreateRequest;
+import com.programmers.devcourse.vaemin.user.customer.dto.CustomerUpdateRequest;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import com.programmers.devcourse.vaemin.user.customer.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,9 +13,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -58,6 +62,17 @@ class CustomerControllerTest {
     void getCustomer() throws Exception {
         mockMvc.perform(get("/customers/{customerId}", setCustomerId)
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void updateCustomer() throws Exception {
+        mockMvc.perform(put("/customers/{customerId}", setCustomerId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new CustomerUpdateRequest("updated customer name",
+                        "updatedCustomer@gmail.com",
+                        "01010101010"))))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

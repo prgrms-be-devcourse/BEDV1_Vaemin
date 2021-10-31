@@ -53,4 +53,12 @@ public class CustomerController {
         Customer customer = customerService.updateCustomer(customerId, request);
         return ApiResponse.success(customer);
     }
+
+    @DeleteMapping("/{customerId}")
+    public ApiResponse<Void> deleteCustomer(
+            @PathVariable Long customerId
+    ) {
+        customerService.deleteCustomer(customerId);
+        return ApiResponse.success();
+    }
 }

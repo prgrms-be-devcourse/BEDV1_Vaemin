@@ -17,8 +17,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -73,6 +72,14 @@ class CustomerControllerTest {
                 .content(objectMapper.writeValueAsString(new CustomerUpdateRequest("updated customer name",
                         "updatedCustomer@gmail.com",
                         "01010101010"))))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void deleteCustomer() throws Exception {
+        mockMvc.perform(delete("/customers/{customerId}", setCustomerId)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

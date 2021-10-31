@@ -1,11 +1,15 @@
 package com.programmers.devcourse.vaemin.shop.entity;
 
+import com.programmers.devcourse.vaemin.food.entity.Food;
+import com.programmers.devcourse.vaemin.food.entity.Group;
 import com.programmers.devcourse.vaemin.root.AuditableEntity;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import lombok.Getter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -58,4 +62,10 @@ public class Shop extends AuditableEntity {
 
     @Column(name = "detail_address", nullable = false)
     private String detailAddress;
+
+    @OneToMany(mappedBy = "shop")
+    private final List<Food> foods = new ArrayList<>();
+
+    @OneToMany(mappedBy = "shop")
+    private final List<Group> groups = new ArrayList<>();
 }

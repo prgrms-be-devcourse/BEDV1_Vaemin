@@ -2,6 +2,7 @@ package com.programmers.devcourse.vaemin.user.customer.service;
 
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerCreateRequest;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDetailResponse;
+import com.programmers.devcourse.vaemin.user.customer.dto.CustomerUpdateRequest;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import com.programmers.devcourse.vaemin.user.customer.exception.CustomerExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerRepository;
@@ -29,5 +30,17 @@ public class CustomerService {
     public CustomerDetailResponse findOneCustomer(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
         return new CustomerDetailResponse(customer);
+    }
+
+    // question : 정보 하나하나를 수정할 건지? 아니면 하나의 request를 받아서 할 건지?
+    //  일단 하나의 request를 받아서 하는걸로...
+    @Transactional
+    public Customer updateCustomer(Long customerId, CustomerUpdateRequest request) {
+        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
+        customer.changeName(request.getUserName());
+        customer.changeEmail(request.getEmail());
+        customer.changePhoneNum(request.getPhoneNum());
+        customer.changeUpdatedAt(request.getUpdatedAt());
+        return customer;
     }
 }

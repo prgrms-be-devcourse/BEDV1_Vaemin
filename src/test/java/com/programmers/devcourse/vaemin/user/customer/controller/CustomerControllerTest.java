@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,6 +32,7 @@ class CustomerControllerTest {
 
     private static CustomerCreateRequest customerCreateRequest;
     private static Customer setCustomer;
+    private static Long setCustomerId;
 
     @BeforeEach
     void setUp() {
@@ -38,6 +40,7 @@ class CustomerControllerTest {
                 "setcustomer@gmail.com",
                 "01000000000");
         setCustomer = customerService.createCustomer(customerCreateRequest);
+        setCustomerId = setCustomer.getId();
     }
 
     @Test
@@ -47,6 +50,14 @@ class CustomerControllerTest {
                 .content(objectMapper.writeValueAsString(new CustomerCreateRequest("new customer name",
                         "newCustomer@gmail.com",
                         "01000000000"))))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void getCustomer() throws Exception {
+        mockMvc.perform(get("/customers/{customerId}", setCustomerId)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

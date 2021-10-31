@@ -3,6 +3,7 @@ package com.programmers.devcourse.vaemin.user.customer.controller;
 import com.programmers.devcourse.vaemin.root.ApiResponse;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerCreateRequest;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDetailResponse;
+import com.programmers.devcourse.vaemin.user.customer.dto.CustomerUpdateRequest;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import com.programmers.devcourse.vaemin.user.customer.service.CustomerService;
 import javassist.NotFoundException;
@@ -41,6 +42,15 @@ public class CustomerController {
             @PathVariable Long customerId
     )  {
         CustomerDetailResponse customer = customerService.findOneCustomer(customerId);
+        return ApiResponse.success(customer);
+    }
+
+    @PutMapping("/{customerId}")
+    public ApiResponse<Customer> updateCustomer(
+            @PathVariable Long customerId,
+            @RequestBody CustomerUpdateRequest request
+            )  {
+        Customer customer = customerService.updateCustomer(customerId, request);
         return ApiResponse.success(customer);
     }
 }

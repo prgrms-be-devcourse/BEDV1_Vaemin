@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter
 @EntityListeners(AuditingEntityListener.class)
+@Getter
 public class AuditableEntity extends IdentifiableEntity{
     @Column(name = "created_at", nullable = false)
     protected LocalDateTime createdAt;

@@ -33,7 +33,8 @@ public class ShopController {
 
     @DeleteMapping("/{shopId}")
     public ApiResponse<Long> deleteShop(@Valid @RequestBody ShopDto shopDto) {
-        return ApiResponse.ok(shopService.deleteShop(shopDto.getId()));
+        shopService.deleteShop(shopDto.getId());
+        return ApiResponse.ok(shopDto.getId());
     }
 
     @GetMapping("/{shopId}")

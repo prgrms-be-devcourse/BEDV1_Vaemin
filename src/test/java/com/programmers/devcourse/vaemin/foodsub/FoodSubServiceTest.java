@@ -6,6 +6,7 @@ import com.programmers.devcourse.vaemin.food.entity.dto.FoodSubDTO;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodSubRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodSubSelectGroupRepository;
+import com.programmers.devcourse.vaemin.food.service.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.food.service.FoodSubService;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.shop.entity.ShopStatus;
@@ -156,5 +157,33 @@ class FoodSubServiceTest {
 
         List<FoodSub> allBySelectGroup = foodSubRepository.findAllBySelectGroup(group);
         assertTrue(allBySelectGroup.stream().noneMatch(foodSub -> foodSub.getSelectGroup().equals(group)));
+    }
+
+    @Test
+    @DisplayName("Food-sub information update.")
+    void updateFoodSub() {
+        FoodSub foodSub = foodSubRepository.save(FoodSub.builder()
+                .food(food)
+                .shop(shop)
+                .name("FOOD_SUB")
+                .price(2500)
+                .group(null)
+                .build());
+        FoodSubSelectGroup group = groupRepository.save(FoodSubSelectGroup.builder()
+                .groupName("FOOD_SUB_GROUP")
+                .food(food)
+                .multiSelect(true)
+                .required(false)
+                .build());
+        FoodSubInformationRequest request = new FoodSubInformationRequest();
+        request.setName("UPDATED_FOOD_SUB");
+        request.setPrice(500);
+        request.setGroup(group.getId());
+        FoodSubDTO foodSubDTO = foodSubService.updateFoodSub(foodSub.getId(), request);
+
+        FoodSub updatedFood = foodSubRepository.findById(foodSubDTO.getId()).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
+        assertEquals("UPDATED_FOOD_SUB", updatedFood.getName());
+        assertEquals(500, updatedFood.getPrice());
+        assertEquals(group, updatedFood.getSelectGroup());
     }
 }

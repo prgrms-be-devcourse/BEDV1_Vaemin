@@ -39,9 +39,9 @@ public class CategoryService {
         return new CategoryDto(category);
     }
 
-    public Long updateCategory(Long id, ShopDto shopDto) {
+    public Long updateCategory(Long id, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(id).orElseThrow(ShopExceptionSuppliers.categoryNotFound);
-        category.changeName(shopDto.getName());
+        category.changeName(categoryDto.getName());
         return category.getId();
     }
 
@@ -63,7 +63,7 @@ public class CategoryService {
         return shopCategory.getId();
     }
 
-    public void withdrawFoodGroup(long shopId, long categoryId) {
+    public void withdrawShopCategory(long shopId, long categoryId) {
         Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
         Category category = categoryRepository.findById(categoryId).orElseThrow(ShopExceptionSuppliers.categoryNotFound);
         shopCategoryRepository.deleteByShopAndCategory(shop, category);

@@ -113,6 +113,7 @@ class FoodGroupServiceTest {
                 .getIncludingFoods().stream().map(FoodGroup::getFood).anyMatch(food::equals));
         assertTrue(foodRepository.findById(food.getId()).orElseThrow(EntityExceptionSuppliers.foodNotFound)
                 .getJoinedGroups().stream().map(FoodGroup::getGroup).anyMatch(group1::equals));
+        assertTrue(foodGroupRepository.existsByFoodAndGroup(food, group1));
 
         joinedGroups = foodGroupService.joinFoodGroup(food.getId(), group2.getId());
         assertTrue(joinedGroups.stream().anyMatch(groupDTO -> groupDTO.getId() == group2.getId()));
@@ -121,6 +122,7 @@ class FoodGroupServiceTest {
                 .getIncludingFoods().stream().map(FoodGroup::getFood).anyMatch(food::equals));
         assertTrue(foodRepository.findById(food.getId()).orElseThrow(EntityExceptionSuppliers.foodNotFound)
                 .getJoinedGroups().stream().map(FoodGroup::getGroup).anyMatch(group2::equals));
+        assertTrue(foodGroupRepository.existsByFoodAndGroup(food, group2));
     }
 
     @Test

@@ -53,15 +53,8 @@ public class FoodGroupService {
     public List<GroupDTO> joinFoodGroup(long foodId, long groupId) {
         Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
         Group group = groupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.groupNotFound);
-
-        if(!foodGroupRepository.existsByFoodAndGroup(food, group)) {
-            FoodGroup foodGroup = FoodGroup.builder()
-                    .food(food)
-                    .group(group).build();
-            foodGroupRepository.save(foodGroup);
-        }
-
-        return foodGroupRepository.findAllByFood(food).stream()
+        food.joinGroup(group);
+        return food.getJoinedGroups().stream()
                 .map(FoodGroup::getGroup)
                 .map(GroupDTO::new)
                 .collect(Collectors.toList());

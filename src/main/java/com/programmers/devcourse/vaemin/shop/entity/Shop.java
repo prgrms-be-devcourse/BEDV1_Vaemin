@@ -69,17 +69,20 @@ public class Shop extends AuditableEntity {
     @Column(name = "detail_address", nullable = false)
     private String detailAddress;
 
-    @OneToMany(mappedBy = "shop")
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     private final List<DeliverySupportedRegions> regions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "shop")
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     private final List<Food> foods = new ArrayList<>();
 
-    @OneToMany(mappedBy = "shop")
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     private final List<Order> orders = new ArrayList<>();
 
-    @OneToMany(mappedBy = "shop")
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     private final List<Coupon> coupons = new ArrayList<>();
+
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
+    private final List<ShopCategory> shopCategories = new ArrayList<>();
 
     public void changeName(@NonNull String name) {
         if (name.isBlank()) return;

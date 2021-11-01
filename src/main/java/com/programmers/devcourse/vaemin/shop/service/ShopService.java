@@ -38,10 +38,9 @@ public class ShopService {
         return shopRepository.save(shop).getId();
     }
 
-    public Long deleteShop(Long id) {
+    public void deleteShop(Long id) {
         Shop shop = shopRepository.findById(id).orElseThrow(ShopExceptionSuppliers.shopNotFound);
         shopRepository.delete(shop);
-        return shop.getId();
     }
 
     public ShopDto findShop(Long id) {

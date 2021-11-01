@@ -6,6 +6,7 @@ import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.food.entity.FoodStatus;
 import com.programmers.devcourse.vaemin.food.entity.dto.FoodDTO;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
+import com.programmers.devcourse.vaemin.food.service.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.food.service.FoodService;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.shop.entity.ShopStatus;
@@ -100,5 +101,36 @@ class FoodServiceTest {
         foodRepository.save(food);
         foodService.deleteFood(food.getId());
         assertFalse(foodRepository.existsById(food.getId()));
+    }
+
+    @Test
+    @DisplayName("Update food information.")
+    void updateFood() {
+        Food food = foodRepository.save(Food.builder()
+                .name("FOOD_NAME")
+                .shortDesc("SHORT_DESCRIPTION")
+                .shop(shop)
+                .price(2500)
+                .discountType(DiscountType.NONE)
+                .discountAmount(0)
+                .status(FoodStatus.UNAVAILABLE)
+                .build());
+        FoodInformationRequest request = new FoodInformationRequest();
+        request.setShortDescription("UPDATED_SHORT_DESCRIPTION");
+        request.setPrice(5500);
+        request.setStatus(FoodStatus.NORMAL);
+        request.setName("UPDATED_FOOD_NAME");
+        request.setDiscountType(DiscountType.FIXED);
+        request.setDiscountAmount(50);
+        FoodDTO foodDTO = foodService.updateFood(shop.getId(), food.getId(), request);
+
+        Food updated = foodRepository.findById(foodDTO.getId()).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        assertEquals("UPDATED_FOOD_NAME", updated.getName());
+        assertEquals("UPDATED_SHORT_DESCRIPTION", updated.getShortDescription());
+        assertEquals(5500, updated.getPrice());
+        assertEquals(FoodStatus.NORMAL, updated.getStatus());
+        assertEquals(DiscountType.FIXED, updated.getDiscountType());
+        assertEquals(50, updated.getDiscountAmount());
+        assertEquals(shop, updated.getShop());
     }
 }

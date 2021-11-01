@@ -15,10 +15,6 @@ public class ApiResponse<T> {
     private final LocalDateTime serverDatetime = LocalDateTime.now();
     private final String message;
 
-    public static <U> ApiResponse<U> success(String message) {
-        return success(null, message);
-    }
-  
     public static <U> ApiResponse<U> success(U result) {
         return success(result, "");
     }

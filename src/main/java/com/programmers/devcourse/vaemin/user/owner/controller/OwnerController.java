@@ -58,6 +58,6 @@ public class OwnerController {
             @PathVariable Long ownerId
     ) {
         ownerService.deleteOwner(ownerId);
-        return ApiResponse.success();
+        return ApiResponse.success(null, String.format("Owner %s deleted.", ownerId));
     }
 }

@@ -122,12 +122,12 @@ public class Shop extends AuditableEntity {
         this.closeTime = closeTime;
     }
 
-    public void changeDeliveryFee(@NonNull int deliveryFee) {
+    public void changeDeliveryFee(int deliveryFee) {
         if (deliveryFee < 0) return;
         this.deliveryFee = deliveryFee;
     }
 
-    public void changeMinOrderPrice(@NonNull int minOrderPrice) {
+    public void changeMinOrderPrice(int minOrderPrice) {
         if (minOrderPrice < 0) return;
         this.minOrderPrice = minOrderPrice;
     }

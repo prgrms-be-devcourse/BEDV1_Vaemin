@@ -55,10 +55,10 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{customerId}")
-    public ApiResponse<Void> deleteCustomer(
+    public ApiResponse<Object> deleteCustomer(
             @PathVariable Long customerId
     ) {
         customerService.deleteCustomer(customerId);
-        return ApiResponse.success();
+        return ApiResponse.success(null);
     }
 }

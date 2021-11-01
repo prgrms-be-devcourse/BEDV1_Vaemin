@@ -4,7 +4,6 @@ import com.programmers.devcourse.vaemin.root.ApiResponse;
 import com.programmers.devcourse.vaemin.shop.dto.ShopDto;
 import com.programmers.devcourse.vaemin.shop.service.CategoryService;
 import com.programmers.devcourse.vaemin.shop.service.ShopService;
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +47,7 @@ public class ShopController {
     @DeleteMapping("/{shopId}/categories/{categoryId}")
     public ApiResponse<Long> withdrawShopCategory(@PathVariable Long shopId, @PathVariable Long categoryId, @PathVariable Long ownerId) {
         categoryService.withdrawShopCategory(shopId, categoryId);
-        return ApiResponse.success(null);
+        return ApiResponse.success(null, String.format("Category %d deleted.", categoryId));
     }
 
 }

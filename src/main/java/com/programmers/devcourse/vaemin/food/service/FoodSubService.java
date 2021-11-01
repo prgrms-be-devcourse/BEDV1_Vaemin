@@ -9,6 +9,8 @@ import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodSubRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodSubSelectGroupRepository;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
+import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
+import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,20 +22,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class FoodSubService {
-    private static class Stub {
-        public static Shop findById(long shopId) {
-            return new Shop();
-        }
-    }
-
+    private final ShopRepository shopRepository;
     private final FoodRepository foodRepository;
     private final FoodSubRepository foodSubRepository;
     private final FoodSubSelectGroupRepository foodSubSelectGroupRepository;
 
     public List<FoodSubDTO> createFoodSub(long shopId, long foodId, FoodSubInformationRequest request) {
         Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
         FoodSub.FoodSubBuilder foodSubBuilder = FoodSub.builder()
-                .shop(Stub.findById(shopId))
+                .shop(shop)
                 .food(food)
                 .name(request.getName())
                 .price(request.getPrice());

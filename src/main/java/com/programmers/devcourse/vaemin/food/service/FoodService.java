@@ -5,6 +5,8 @@ import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.food.entity.dto.FoodDTO;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
+import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
+import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,26 +18,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class FoodService {
-    private static class Stub {
-        public static Shop findById(long shopId) {
-            return new Shop();
-        }
-    }
-
+    private final ShopRepository shopRepository;
     private final FoodRepository foodRepository;
 
 
     public List<FoodDTO> createFood(long shopId, FoodInformationRequest request) {
+        Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
         Food food = Food.builder()
                 .name(request.getName())
                 .shortDesc(request.getShortDescription())
                 .price(request.getPrice())
                 .discountType(request.getDiscountType())
                 .discountAmount(request.getDiscountAmount())
-                .shop(Stub.findById(shopId))
+                .shop(shop)
                 .status(request.getStatus()).build();
         foodRepository.save(food);
-        Shop shop = Stub.findById(shopId);
         return foodRepository.findAllByShop(shop).stream()
                 .map(FoodDTO::new)
                 .collect(Collectors.toList());
@@ -48,7 +45,8 @@ public class FoodService {
     }
 
     public FoodDTO updateFood(long shopId, long foodId, FoodInformationRequest request) {
-        Food food = foodRepository.findByIdAndShop(foodId, Stub.findById(shopId)).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
+        Food food = foodRepository.findByIdAndShop(foodId, shop).orElseThrow(EntityExceptionSuppliers.foodNotFound);
         food.changeName(request.getName());
         food.changeDescription(request.getShortDescription());
         food.changePrice(request.getPrice());

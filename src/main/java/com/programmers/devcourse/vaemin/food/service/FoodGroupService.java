@@ -9,6 +9,8 @@ import com.programmers.devcourse.vaemin.food.repository.FoodGroupRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.food.repository.GroupRepository;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
+import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
+import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,19 +22,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class FoodGroupService {
-    private static class Stub {
-        public static Shop findById(long shopId) {
-            return new Shop();
-        }
-    }
-
+    private final ShopRepository shopRepository;
     private final FoodRepository foodRepository;
     private final GroupRepository groupRepository;
     private final FoodGroupRepository foodGroupRepository;
 
 
     public List<GroupDTO> createFoodGroup(long shopId, FoodGroupInformationRequest request) {
-        Shop shop = Stub.findById(shopId);
+        Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
         Group group = Group.builder()
                 .name(request.getName())
                 .shop(shop).build();
@@ -49,7 +46,7 @@ public class FoodGroupService {
 
     public List<GroupDTO> deleteFoodGroup(long shopId, long groupId) {
         foodGroupRepository.deleteById(groupId);
-        Shop shop = Stub.findById(shopId);
+        Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
         return shop.getGroups().stream().map(GroupDTO::new).collect(Collectors.toList());
     }
 

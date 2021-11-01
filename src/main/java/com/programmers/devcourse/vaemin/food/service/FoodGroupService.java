@@ -70,7 +70,9 @@ public class FoodGroupService {
     public List<GroupDTO> withdrawFoodGroup(long foodId, long groupId) {
         Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
         Group group = groupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.groupNotFound);
-        foodGroupRepository.deleteByFoodAndGroup(food, group);
+        food.withdrawGroup(group);
+        // 여기서 엔티티 참조가 끝난다고 생각하지 말고 확실하게 지울 것.
+        // 리포지토리에서 다대다 관계를 지운다고 해서 이미 불러온 엔티티까지는 반영되진 않는듯.
         return food.getJoinedGroups().stream()
                 .map(FoodGroup::getGroup)
                 .map(GroupDTO::new)

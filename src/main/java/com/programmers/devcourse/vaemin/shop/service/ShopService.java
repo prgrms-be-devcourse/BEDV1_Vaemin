@@ -1,12 +1,16 @@
 package com.programmers.devcourse.vaemin.shop.service;
 
 import com.programmers.devcourse.vaemin.shop.dto.ShopDto;
+import com.programmers.devcourse.vaemin.shop.dto.ShopSearchResponse;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -67,4 +71,10 @@ public class ShopService {
         return shop.getId();
     }
 
+    // question : jpa repository vs crud repository
+    public List<ShopSearchResponse> findAllShops() {
+        List<ShopSearchResponse> shopResponses = new ArrayList<>();
+        shopRepository.findAll().forEach(shop -> shopResponses.add(new ShopSearchResponse(shop)));
+        return shopResponses;
+    }
 }

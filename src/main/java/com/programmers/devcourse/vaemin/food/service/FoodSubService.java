@@ -35,7 +35,12 @@ public class FoodSubService {
                 .food(food)
                 .name(request.getName())
                 .price(request.getPrice());
-        foodSubSelectGroupRepository.findById(request.getGroup()).ifPresent(foodSubBuilder::group);
+
+        if(request.getGroup() != null) {
+            foodSubSelectGroupRepository.findById(request.getGroup())
+                    .ifPresent(foodSubBuilder::group);
+        }
+
         FoodSub foodSub = foodSubBuilder.build();
         foodSubRepository.save(foodSub);
         return foodSubRepository.findAllByFood(food).stream()
@@ -43,9 +48,11 @@ public class FoodSubService {
                 .collect(Collectors.toList());
     }
 
-    public List<FoodSubDTO> deleteFoodSub(long foodId, long foodSubId) {
-        foodSubRepository.deleteById(foodSubId);
-        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+    public List<FoodSubDTO> deleteFoodSub(long foodSubId) {
+        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
+        foodSubRepository.delete(foodSub);
+        Food food = foodSub.getFood();
+        food.getSubFoods().remove(foodSub);
         return food.getSubFoods().stream()
                 .map(FoodSubDTO::new)
                 .collect(Collectors.toList());

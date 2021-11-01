@@ -57,7 +57,7 @@ public class FoodSubController {
                                                                        @PathVariable long shopId,
                                                                        @PathVariable long foodId,
                                                                        @PathVariable long subId) {
-        List<FoodSubDTO> foodSubDTOS = foodSubService.deleteFoodSub(foodId, subId);
+        List<FoodSubDTO> foodSubDTOS = foodSubService.deleteFoodSub(subId);
         return ResponseEntity.ok(ApiResponse.success(foodSubDTOS));
     }
 

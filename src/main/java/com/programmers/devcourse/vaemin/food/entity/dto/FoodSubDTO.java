@@ -16,13 +16,15 @@ public class FoodSubDTO {
     private final int price;
 
     @JsonProperty("group")
-    private final FoodSubSelectGroupDTO group;
+    private FoodSubSelectGroupDTO group;
 
 
     public FoodSubDTO(FoodSub foodSub) {
         this.id = foodSub.getId();
         this.name = foodSub.getName();
         this.price = foodSub.getPrice();
-        this.group = new FoodSubSelectGroupDTO(foodSub.getSelectGroup());
+        if(foodSub.getSelectGroup() != null) {
+            this.group = new FoodSubSelectGroupDTO(foodSub.getSelectGroup());
+        }
     }
 }

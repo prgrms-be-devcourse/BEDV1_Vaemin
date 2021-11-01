@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +40,10 @@ public class Shop extends AuditableEntity {
     private ShopSupportedPayment supportedPayment;
 
     @Column(name = "open_time", nullable = false)
-    private LocalDateTime openTime;
+    private LocalTime openTime;
 
     @Column(name = "close_time", nullable = false)
-    private LocalDateTime closeTime;
+    private LocalTime closeTime;
 
     @Column(name = "delivery_fee", nullable = false)
     private int deliveryFee;
@@ -114,11 +114,11 @@ public class Shop extends AuditableEntity {
         this.supportedPayment = supportedPayment;
     }
 
-    public void changeOpenTime(@NonNull LocalDateTime openTime) {
+    public void changeOpenTime(@NonNull LocalTime openTime) {
         this.openTime = openTime;
     }
 
-    public void changeCloseTime(@NonNull LocalDateTime closeTime) {
+    public void changeCloseTime(@NonNull LocalTime closeTime) {
         this.closeTime = closeTime;
     }
 
@@ -155,8 +155,8 @@ public class Shop extends AuditableEntity {
             String longDesc,
             ShopSupportedOrderType orderType,
             ShopSupportedPayment payment,
-            LocalDateTime openTime,
-            LocalDateTime closeTime,
+            LocalTime openTime,
+            LocalTime closeTime,
             int deliveryFee,
             int minOrderPrice,
             ShopStatus shopStatus,

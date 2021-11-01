@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 public class ShopDto {
@@ -37,10 +37,10 @@ public class ShopDto {
     private final ShopSupportedPayment supportedPayment;
 
     @JsonProperty("openTime")
-    private final LocalDateTime openTime;
+    private final LocalTime openTime;
 
     @JsonProperty("closeTime")
-    private final LocalDateTime closeTime;
+    private final LocalTime closeTime;
 
     @Min(0)
     private final int deliveryFee;

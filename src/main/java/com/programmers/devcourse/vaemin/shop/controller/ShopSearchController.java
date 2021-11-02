@@ -38,4 +38,11 @@ public class ShopSearchController {
     ) {
         return ApiResponse.success(shopService.findByCategory(categoryId));
     }
+
+    @GetMapping("/food/{foodName}")
+    public ApiResponse<List<ShopSearchResponse>> getByFoodName(
+            @PathVariable String foodName
+    ) {
+        return ApiResponse.success(shopService.findByFoodName(foodName));
+    }
 }

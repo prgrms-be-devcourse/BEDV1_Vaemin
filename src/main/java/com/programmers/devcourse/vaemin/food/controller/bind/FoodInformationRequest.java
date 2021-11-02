@@ -30,4 +30,13 @@ public class FoodInformationRequest {
 
     @NotNull
     private FoodStatus status;
+
+    public FoodInformationRequest(String name, String shortDescription, int price, DiscountType discountType, int discountAmount, FoodStatus status) {
+        this.name = name;
+        this.shortDescription = shortDescription;
+        this.price = price;
+        this.discountType = discountType;
+        this.discountAmount = discountAmount;
+        this.status = status;
+    }
 }

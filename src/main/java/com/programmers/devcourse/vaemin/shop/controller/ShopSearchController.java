@@ -26,9 +26,16 @@ public class ShopSearchController {
     }
 
     @GetMapping("/name/{shopName}")
-    public ApiResponse<List<ShopSearchResponse>> getShopsByName(
+    public ApiResponse<List<ShopSearchResponse>> getByName(
             @PathVariable String shopName
     ) {
-        return ApiResponse.success(shopService.findShopsByName(shopName));
+        return ApiResponse.success(shopService.findByName(shopName));
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public ApiResponse<List<ShopSearchResponse>> getByCategory(
+            @PathVariable Long categoryId
+    ) {
+        return ApiResponse.success(shopService.findByCategory(categoryId));
     }
 }

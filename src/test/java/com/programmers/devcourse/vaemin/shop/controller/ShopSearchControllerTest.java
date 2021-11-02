@@ -1,11 +1,10 @@
 package com.programmers.devcourse.vaemin.shop.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.programmers.devcourse.vaemin.shop.entity.Shop;
-import com.programmers.devcourse.vaemin.shop.entity.ShopStatus;
-import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedOrderType;
-import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedPayment;
+import com.programmers.devcourse.vaemin.shop.entity.*;
+import com.programmers.devcourse.vaemin.shop.repository.CategoryRepository;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
+import com.programmers.devcourse.vaemin.shop.service.CategoryService;
 import com.programmers.devcourse.vaemin.user.owner.dto.OwnerCreateRequest;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import com.programmers.devcourse.vaemin.user.owner.service.OwnerService;
@@ -31,31 +30,46 @@ class ShopSearchControllerTest {
 
     @Autowired
     private OwnerService ownerService;
+
+    @Autowired
+    private CategoryService categoryService;
+
     @Autowired
     private ShopRepository shopRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     ObjectMapper objectMapper;
 
     private static Shop setShop1;
     private static Shop setShop2;
+    private static Category setCategory1;
+    private static Category setCategory2;
     private static Owner setOwner1;
-    private static OwnerCreateRequest setOwnerRequest1;
     private static Owner setOwner2;
+    private static OwnerCreateRequest setOwnerRequest1;
     private static OwnerCreateRequest setOwnerRequest2;
 
     // question : shop 의 minTime이랑 maxTime의 타입이 LocalDateTime?
     // solved : localtime으로
     @BeforeEach
     void setUp() {
+
         setOwnerRequest1 = new OwnerCreateRequest("set owner1 name",
                 "setowner1@gmail.com",
                 "01000000000");
         setOwnerRequest2 = new OwnerCreateRequest("set owner2 name",
                 "setowner2@gmail.com",
                 "01000000000");
+
         setOwner1 = ownerService.createOwner(setOwnerRequest1);
         setOwner2 = ownerService.createOwner(setOwnerRequest2);
+
+        setCategory1 = categoryRepository.save(new Category("분식"));
+        setCategory2 = categoryRepository.save(new Category("치킨"));
+
         setShop1 = shopRepository.save(new Shop("set shop 1",
                 "01010101010",
                 "This is a short description of set shop 1.",
@@ -90,6 +104,9 @@ class ShopSearchControllerTest {
                 123,
                 "set shop 2's detail address"
         ));
+
+        categoryService.joinShopCategory(setShop1.getId(), setCategory1.getId());
+        categoryService.joinShopCategory(setShop2.getId(), setCategory2.getId());
     }
 
     @Test
@@ -103,6 +120,14 @@ class ShopSearchControllerTest {
     @Test
     void getShopsByName() throws Exception {
         mockMvc.perform(get("/shops/search/name/{shopName}", "1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void getShopsByCategory() throws Exception {
+        mockMvc.perform(get("/shops/search/category/{categoryId}", setCategory1.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());

@@ -99,4 +99,12 @@ class ShopSearchControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+    @Test
+    void getShopsByName() throws Exception {
+        mockMvc.perform(get("/shops/search/name/{shopName}", "1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 }

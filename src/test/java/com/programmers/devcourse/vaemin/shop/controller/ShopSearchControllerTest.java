@@ -1,6 +1,10 @@
 package com.programmers.devcourse.vaemin.shop.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.programmers.devcourse.vaemin.food.controller.bind.FoodInformationRequest;
+import com.programmers.devcourse.vaemin.food.entity.DiscountType;
+import com.programmers.devcourse.vaemin.food.entity.FoodStatus;
+import com.programmers.devcourse.vaemin.food.service.FoodService;
 import com.programmers.devcourse.vaemin.shop.entity.*;
 import com.programmers.devcourse.vaemin.shop.repository.CategoryRepository;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
@@ -27,19 +31,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ShopSearchControllerTest {
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private OwnerService ownerService;
-
     @Autowired
     private CategoryService categoryService;
-
+    @Autowired
+    private FoodService foodService;
     @Autowired
     private ShopRepository shopRepository;
-
     @Autowired
     private CategoryRepository categoryRepository;
-
     @Autowired
     ObjectMapper objectMapper;
 
@@ -56,7 +57,6 @@ class ShopSearchControllerTest {
     // solved : localtime으로
     @BeforeEach
     void setUp() {
-
         setOwnerRequest1 = new OwnerCreateRequest("set owner1 name",
                 "setowner1@gmail.com",
                 "01000000000");
@@ -106,7 +106,13 @@ class ShopSearchControllerTest {
         ));
 
         categoryService.joinShopCategory(setShop1.getId(), setCategory1.getId());
-        categoryService.joinShopCategory(setShop2.getId(), setCategory2.getId());
+        categoryService.joinShopCategory(setShop2.getId(), setCategory1.getId());
+
+        foodService.createFood(setShop1.getId(),
+                new FoodInformationRequest("떡볶이", "약간 매운 떡볶이", 12000, DiscountType.FIXED, 0, FoodStatus.NORMAL));
+        foodService.createFood(setShop2.getId(),
+                new FoodInformationRequest("떡볶이", "shop1보다 맛있는 떡볶이", 10000, DiscountType.FIXED, 0, FoodStatus.NORMAL));
+
     }
 
     @Test
@@ -128,6 +134,14 @@ class ShopSearchControllerTest {
     @Test
     void getShopsByCategory() throws Exception {
         mockMvc.perform(get("/shops/search/category/{categoryId}", setCategory1.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void getShopsByFoodName() throws Exception {
+        mockMvc.perform(get("/shops/search/food/{foodName}", "떡볶이")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());

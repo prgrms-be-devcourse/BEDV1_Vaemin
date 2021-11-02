@@ -3,7 +3,9 @@ package com.programmers.devcourse.vaemin.shop.service;
 import com.programmers.devcourse.vaemin.shop.dto.ShopDto;
 import com.programmers.devcourse.vaemin.shop.dto.ShopSearchResponse;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
+import com.programmers.devcourse.vaemin.shop.entity.ShopCategory;
 import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
+import com.programmers.devcourse.vaemin.shop.repository.ShopCategoryRepository;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class ShopService {
 
     private final ShopRepository shopRepository;
+    private final ShopCategoryRepository shopCategoryRepository;
 
     public Long createShop(ShopDto shopDto) {
         Shop shop = Shop.builder()
@@ -79,8 +82,17 @@ public class ShopService {
         return shopResponses;
     }
 
-    public List<ShopSearchResponse> findShopsByName(String shopName) {
+    public List<ShopSearchResponse> findByName(String shopName) {
         List<ShopSearchResponse> shopResponses = shopRepository.findByNameContaining(shopName).stream()
+                .map(ShopSearchResponse::new)
+                .collect(Collectors.toList());
+        return shopResponses;
+    }
+
+    public List<ShopSearchResponse> findByCategory(Long categoryId) {
+        List<ShopCategory> shopCategories = shopCategoryRepository.findAllByCategoryId(categoryId);
+        List<ShopSearchResponse> shopResponses = shopCategories.stream()
+                .map(ShopCategory::getShop)
                 .map(ShopSearchResponse::new)
                 .collect(Collectors.toList());
         return shopResponses;

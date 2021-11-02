@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -75,6 +76,13 @@ public class ShopService {
     public List<ShopSearchResponse> findAllShops() {
         List<ShopSearchResponse> shopResponses = new ArrayList<>();
         shopRepository.findAll().forEach(shop -> shopResponses.add(new ShopSearchResponse(shop)));
+        return shopResponses;
+    }
+
+    public List<ShopSearchResponse> findShopsByName(String shopName) {
+        List<ShopSearchResponse> shopResponses = shopRepository.findByNameContaining(shopName).stream()
+                .map(ShopSearchResponse::new)
+                .collect(Collectors.toList());
         return shopResponses;
     }
 }

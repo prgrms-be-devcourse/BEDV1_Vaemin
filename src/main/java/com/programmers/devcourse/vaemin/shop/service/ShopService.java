@@ -1,5 +1,7 @@
 package com.programmers.devcourse.vaemin.shop.service;
 
+import com.programmers.devcourse.vaemin.food.entity.Food;
+import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.shop.dto.ShopDto;
 import com.programmers.devcourse.vaemin.shop.dto.ShopSearchResponse;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
@@ -22,6 +24,7 @@ public class ShopService {
 
     private final ShopRepository shopRepository;
     private final ShopCategoryRepository shopCategoryRepository;
+    private final FoodRepository foodRepository;
 
     public Long createShop(ShopDto shopDto) {
         Shop shop = Shop.builder()
@@ -93,6 +96,14 @@ public class ShopService {
         List<ShopCategory> shopCategories = shopCategoryRepository.findAllByCategoryId(categoryId);
         List<ShopSearchResponse> shopResponses = shopCategories.stream()
                 .map(ShopCategory::getShop)
+                .map(ShopSearchResponse::new)
+                .collect(Collectors.toList());
+        return shopResponses;
+    }
+
+    public List<ShopSearchResponse> findByFoodName(String foodName) {
+        List<ShopSearchResponse> shopResponses = foodRepository.findByName(foodName).stream()
+                .map(Food::getShop)
                 .map(ShopSearchResponse::new)
                 .collect(Collectors.toList());
         return shopResponses;

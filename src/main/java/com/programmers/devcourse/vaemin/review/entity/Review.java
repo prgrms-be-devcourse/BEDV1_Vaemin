@@ -2,6 +2,7 @@ package com.programmers.devcourse.vaemin.review.entity;
 
 import com.programmers.devcourse.vaemin.order.entity.Order;
 import com.programmers.devcourse.vaemin.root.AuditableEntity;
+import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,10 @@ public class Review extends AuditableEntity {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
+    @ManyToOne
+    @JoinColumn(name = "shop_id", referencedColumnName = "id")
+    private Shop shop;
+
     @Column(name = "text", nullable = false, length = 1024)
     private String text;
 
@@ -43,10 +48,12 @@ public class Review extends AuditableEntity {
     public Review(
             Order order,
             Customer customer,
+            Shop shop,
             String text,
             int starPoint) {
         this.order = order;
         this.customer = customer;
+        this.shop = shop;
         this.text = text;
         this.starPoint = starPoint;
     }

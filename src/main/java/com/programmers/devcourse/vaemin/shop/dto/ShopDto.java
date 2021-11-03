@@ -1,10 +1,9 @@
 package com.programmers.devcourse.vaemin.shop.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.programmers.devcourse.vaemin.shop.entity.Shop;
-import com.programmers.devcourse.vaemin.shop.entity.ShopStatus;
-import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedOrderType;
-import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedPayment;
+import com.programmers.devcourse.vaemin.review.dto.ReviewDto;
+import com.programmers.devcourse.vaemin.review.entity.Review;
+import com.programmers.devcourse.vaemin.shop.entity.*;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
@@ -12,6 +11,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 public class ShopDto {
@@ -66,6 +66,9 @@ public class ShopDto {
     @JsonProperty("detailAddress")
     private final String detailAddress;
 
+    @JsonProperty("reviews")
+    private List<ReviewDto> reviews;
+
     public ShopDto(Shop shop) {
         this.id = shop.getId();
         this.name = shop.getName();
@@ -84,5 +87,9 @@ public class ShopDto {
         this.doroAddress = shop.getDoroAddress();
         this.doroIndex = shop.getDoroIndex();
         this.detailAddress = shop.getDetailAddress();
+        List<Review> reviewList = shop.getReviews();
+        for(Review review : reviewList) {
+            this.reviews.add(new ReviewDto(review));
+        }
     }
 }

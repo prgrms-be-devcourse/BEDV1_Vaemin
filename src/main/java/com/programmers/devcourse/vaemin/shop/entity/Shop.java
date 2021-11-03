@@ -4,6 +4,7 @@ import com.programmers.devcourse.vaemin.coupon.entity.Coupon;
 import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.order.entity.Order;
 import com.programmers.devcourse.vaemin.food.entity.Group;
+import com.programmers.devcourse.vaemin.review.entity.Review;
 import com.programmers.devcourse.vaemin.root.AuditableEntity;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import lombok.Builder;
@@ -87,6 +88,9 @@ public class Shop extends AuditableEntity {
 
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     private final List<ShopCategory> shopCategories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
+    private final List<Review> reviews = new ArrayList<>();
 
     public void changeName(@NonNull String name) {
         if (name.isBlank()) return;

@@ -89,6 +89,29 @@ class FoodGroupServiceTest {
     }
 
     @Test
+    @DisplayName("Group delete test.")
+    void deleteGroup() {
+        Food food = foodRepository.save(Food.builder()
+                .name("NAME")
+                .discountType(DiscountType.FIXED)
+                .discountAmount(2500)
+                .shop(shop)
+                .shortDesc("SHORT_DESCRIPTION")
+                .price(7500)
+                .status(FoodStatus.UNAVAILABLE).build());
+        Group group1 = groupRepository.save(Group.builder()
+                .name("GROUP_NAME1")
+                .shop(shop).build());
+        Group group2 = groupRepository.save(Group.builder()
+                .name("GROUP_NAME2")
+                .shop(shop).build());
+        foodGroupService.joinFoodGroup(food.getId(), group1.getId());
+        foodGroupService.deleteFoodGroup(group1.getId());
+
+        assertTrue(foodGroupRepository.findByFoodAndGroup(food, group1).isEmpty());
+    }
+
+    @Test
     @DisplayName("Group join test.")
     void joinGroup() {
         Food food = foodRepository.save(Food.builder()
@@ -144,8 +167,8 @@ class FoodGroupServiceTest {
                 .shop(shop)
                 .shortDesc("Burrito made of chicken!").build();
 
-        food.joinGroup(group1);
-        food.joinGroup(group2);
+        group1.addFood(food);
+        group2.addFood(food);
         foodRepository.save(food);
 
         List<GroupDTO> joinedGroups = foodGroupService.withdrawFoodGroup(food.getId(), group1.getId());

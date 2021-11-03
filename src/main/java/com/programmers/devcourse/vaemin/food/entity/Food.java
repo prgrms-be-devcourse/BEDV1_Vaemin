@@ -44,25 +44,9 @@ public class Food extends AuditableEntity {
     @OneToMany(mappedBy = "food", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<FoodGroup> joinedGroups = new ArrayList<>();
 
-    @OneToMany(mappedBy = "food")
+    @OneToMany(mappedBy = "food", orphanRemoval = true)
     private final List<FoodSub> subFoods = new ArrayList<>();
 
-
-    public void joinGroup(Group group) {
-        FoodGroup foodGroup = FoodGroup.builder()
-                .food(this)
-                .group(group).build();
-        this.joinedGroups.add(foodGroup);
-        group.getIncludingFoods().add(foodGroup);
-    }
-
-    public void withdrawGroup(Group group) {
-        FoodGroup withdrawingGroup = this.joinedGroups.stream()
-                .filter(foodGroup -> foodGroup.getGroup().equals(group))
-                .findAny().orElseThrow(() -> new IllegalArgumentException("Not joined team."));
-        this.joinedGroups.remove(withdrawingGroup);
-        group.getIncludingFoods().remove(withdrawingGroup);
-    }
 
     public void changeName(@NonNull String name) {
         if(name.isBlank()) return;

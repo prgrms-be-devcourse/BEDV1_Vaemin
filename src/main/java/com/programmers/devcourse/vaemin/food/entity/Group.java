@@ -25,7 +25,7 @@ public class Group extends IdentifiableEntity {
     @JoinColumn(name = "shop_id", referencedColumnName = "id")
     private Shop shop;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private final List<FoodGroup> includingFoods = new ArrayList<>();
 
 
@@ -43,6 +43,11 @@ public class Group extends IdentifiableEntity {
                 .findAny().orElseThrow(() -> new IllegalArgumentException("Not added food."));
         this.includingFoods.remove(removingFoodGroup);
         food.getJoinedGroups().remove(removingFoodGroup);
+    }
+
+    public void cleanup() {
+        shop.getGroups().remove(this);
+        includingFoods.forEach(foodGroup -> foodGroup.getFood().getJoinedGroups().remove(foodGroup));
     }
 
     public void changeName(@NonNull String name) {

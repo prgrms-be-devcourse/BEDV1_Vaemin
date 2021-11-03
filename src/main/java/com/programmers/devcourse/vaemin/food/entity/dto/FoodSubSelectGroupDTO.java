@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.programmers.devcourse.vaemin.food.entity.FoodSubSelectGroup;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.BeanUtils;
 
 @Getter
 @Setter
@@ -22,8 +21,10 @@ public class FoodSubSelectGroupDTO {
     private boolean required;
 
 
-    // experimental usage of beanutils.
     public FoodSubSelectGroupDTO(FoodSubSelectGroup group) {
-        BeanUtils.copyProperties(group, this);
+        this.id = group.getId();
+        this.groupName = group.getGroupName();
+        this.multiselect = group.isMultiSelect();
+        this.required = group.isRequired();
     }
 }

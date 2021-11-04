@@ -1,5 +1,6 @@
 package com.programmers.devcourse.vaemin.user.customer.controller;
 
+import com.programmers.devcourse.vaemin.order.dto.OrderDetailResponse;
 import com.programmers.devcourse.vaemin.order.dto.OrderResponse;
 import com.programmers.devcourse.vaemin.order.service.OrderService;
 import com.programmers.devcourse.vaemin.root.ApiResponse;
@@ -25,6 +26,15 @@ public class CustomerOrderController {
     ) {
         List<OrderResponse> orders = orderService.getAllByCustomerId(customerId);
         return ApiResponse.success(orders);
+    }
+
+    @GetMapping("/{orderId}")
+    public ApiResponse<OrderDetailResponse> getOneOrder(
+            @PathVariable Long customerId,
+            @PathVariable Long orderId
+    ) {
+        OrderDetailResponse order = orderService.getOneById(customerId, orderId);
+        return ApiResponse.success(order);
     }
 
 }

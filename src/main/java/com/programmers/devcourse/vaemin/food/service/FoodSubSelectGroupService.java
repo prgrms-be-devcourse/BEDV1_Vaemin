@@ -26,7 +26,7 @@ public class FoodSubSelectGroupService {
 
 
     public List<FoodSubSelectGroupDTO> createSelectGroup(long foodId, FoodSubSelectGroupInformationRequest request) {
-        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
         FoodSubSelectGroup group = FoodSubSelectGroup.builder()
                 .groupName(request.getGroupName())
                 .multiSelect(request.isMultiSelect())
@@ -39,7 +39,7 @@ public class FoodSubSelectGroupService {
     }
 
     public FoodSubSelectGroupDTO updateSelectGroup(long groupId, FoodSubSelectGroupInformationRequest request) {
-        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.foodSubSelectGroupNotFound);
+        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.foodSubSelectGroupNotFound);
         group.changeGroupName(request.getGroupName());
         group.changeMultiSelect(request.isMultiSelect());
         group.changeRequired(request.isRequired());
@@ -47,7 +47,7 @@ public class FoodSubSelectGroupService {
     }
 
     public List<FoodSubSelectGroupDTO> deleteSelectGroup(long groupId) {
-        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.foodSubSelectGroupNotFound);
+        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.foodSubSelectGroupNotFound);
         Food food = group.getParentFood();
         foodSubSelectGroupRepository.delete(group);
         return foodSubSelectGroupRepository.findAllByParentFood(food).stream()
@@ -56,8 +56,8 @@ public class FoodSubSelectGroupService {
     }
 
     public List<FoodSubDTO> joinSelectGroup(long foodSubId, long groupId) {
-        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
-        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.foodSubSelectGroupNotFound);
+        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
+        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.foodSubSelectGroupNotFound);
         foodSub.changeGroup(group);
         return foodSubRepository.findAllBySelectGroup(group).stream()
                 .map(FoodSubDTO::new)
@@ -65,7 +65,7 @@ public class FoodSubSelectGroupService {
     }
 
     public List<FoodSubSelectGroupDTO> withdrawSelectGroup(long foodSubId) {
-        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
+        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
         foodSub.withdrawGroup();
         return foodSubSelectGroupRepository.findAllByParentFood(foodSub.getFood()).stream()
                 .map(FoodSubSelectGroupDTO::new)

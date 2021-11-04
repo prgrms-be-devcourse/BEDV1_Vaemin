@@ -39,7 +39,7 @@ public class FoodGroupService {
     }
 
     public GroupDTO updateFoodGroup(long groupId, FoodGroupInformationRequest request) {
-        Group group = groupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.groupNotFound);
+        Group group = groupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.groupNotFound);
         group.changeName(request.getName());
         return new GroupDTO(group);
     }
@@ -51,8 +51,8 @@ public class FoodGroupService {
     }
 
     public List<GroupDTO> joinFoodGroup(long foodId, long groupId) {
-        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
-        Group group = groupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.groupNotFound);
+        Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
+        Group group = groupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.groupNotFound);
 
         if(!foodGroupRepository.existsByFoodAndGroup(food, group)) {
             FoodGroup foodGroup = FoodGroup.builder()
@@ -68,8 +68,8 @@ public class FoodGroupService {
     }
 
     public List<GroupDTO> withdrawFoodGroup(long foodId, long groupId) {
-        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
-        Group group = groupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.groupNotFound);
+        Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
+        Group group = groupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.groupNotFound);
         foodGroupRepository.deleteByFoodAndGroup(food, group);
         return food.getJoinedGroups().stream()
                 .map(FoodGroup::getGroup)

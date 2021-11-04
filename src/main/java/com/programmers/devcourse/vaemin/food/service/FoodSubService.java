@@ -28,7 +28,7 @@ public class FoodSubService {
     private final FoodSubSelectGroupRepository foodSubSelectGroupRepository;
 
     public List<FoodSubDTO> createFoodSub(long shopId, long foodId, FoodSubInformationRequest request) {
-        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
         Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
         FoodSub.FoodSubBuilder foodSubBuilder = FoodSub.builder()
                 .shop(shop)
@@ -49,7 +49,7 @@ public class FoodSubService {
     }
 
     public List<FoodSubDTO> deleteFoodSub(long foodSubId) {
-        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
+        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
         foodSubRepository.delete(foodSub);
         Food food = foodSub.getFood();
         food.getSubFoods().remove(foodSub);
@@ -59,10 +59,10 @@ public class FoodSubService {
     }
 
     public FoodSubDTO updateFoodSub(long foodSubId, FoodSubInformationRequest request) {
-        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
+        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
         foodSub.changeName(request.getName());
         foodSub.changePrice(request.getPrice());
-        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(request.getGroup()).orElseThrow(EntityExceptionSuppliers.foodSubSelectGroupNotFound);
+        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(request.getGroup()).orElseThrow(FoodEntityExceptionSuppliers.foodSubSelectGroupNotFound);
         foodSub.changeGroup(group);
         return new FoodSubDTO(foodSub);
     }

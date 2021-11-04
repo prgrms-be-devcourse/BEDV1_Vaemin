@@ -39,14 +39,14 @@ public class FoodService {
     }
 
     public List<FoodDTO> deleteFood(long foodId) {
-        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
         foodRepository.delete(food);
         return food.getShop().getFoods().stream().map(FoodDTO::new).collect(Collectors.toList());
     }
 
     public FoodDTO updateFood(long shopId, long foodId, FoodInformationRequest request) {
         Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
-        Food food = foodRepository.findByIdAndShop(foodId, shop).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        Food food = foodRepository.findByIdAndShop(foodId, shop).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
         food.changeName(request.getName());
         food.changeDescription(request.getShortDescription());
         food.changePrice(request.getPrice());

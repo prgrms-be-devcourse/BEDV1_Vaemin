@@ -78,7 +78,6 @@ public class ShopService {
         return shop.getId();
     }
 
-    // question : jpa repository vs crud repository
     public List<ShopSearchResponse> findAllShops() {
         List<ShopSearchResponse> shopResponses = new ArrayList<>();
         shopRepository.findAll().forEach(shop -> shopResponses.add(new ShopSearchResponse(shop)));

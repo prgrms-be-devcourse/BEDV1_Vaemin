@@ -53,8 +53,6 @@ class ShopSearchControllerTest {
     private static OwnerCreateRequest setOwnerRequest1;
     private static OwnerCreateRequest setOwnerRequest2;
 
-    // question : shop 의 minTime이랑 maxTime의 타입이 LocalDateTime?
-    // solved : localtime으로
     @BeforeEach
     void setUp() {
         setOwnerRequest1 = new OwnerCreateRequest("set owner1 name",

@@ -2,7 +2,6 @@ package com.programmers.devcourse.vaemin.user.customer.dto;
 
 import java.time.LocalDateTime;
 
-// question : dto 나누려고 updatedAt을 넣기는 했는데 바꾸는 게 낫나?
 public class CustomerUpdateRequest {
     private String userName;
     private String email;

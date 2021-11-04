@@ -32,8 +32,6 @@ public class CustomerService {
         return new CustomerDetailResponse(customer);
     }
 
-    // question : 정보 하나하나를 수정할 건지? 아니면 하나의 request를 받아서 할 건지?
-    //  일단 하나의 request를 받아서 하는걸로...
     @Transactional
     public Customer updateCustomer(Long customerId, CustomerUpdateRequest request) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound);

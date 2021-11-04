@@ -142,4 +142,14 @@ class CustomerOrderControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+    @Test
+    void getOneById() throws Exception {
+        mockMvc.perform(get("/customers/{customerId}/order/{orderId}",
+                setCustomer.getId(),
+                setOrder1.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 }

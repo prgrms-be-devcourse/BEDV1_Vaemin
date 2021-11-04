@@ -1,6 +1,9 @@
 package com.programmers.devcourse.vaemin.order.service;
 
+import com.programmers.devcourse.vaemin.order.dto.OrderDetailResponse;
 import com.programmers.devcourse.vaemin.order.dto.OrderResponse;
+import com.programmers.devcourse.vaemin.order.entity.Order;
+import com.programmers.devcourse.vaemin.order.exception.OrderExceptionSupplier;
 import com.programmers.devcourse.vaemin.order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,5 +25,14 @@ public class OrderService {
                 .map(OrderResponse::new)
                 .collect(Collectors.toList());
         return orders;
+    }
+
+    @Transactional
+    public OrderDetailResponse getOneById(Long customerId, Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(OrderExceptionSupplier.orderNotFound);
+        if (customerId.equals(order.getCustomer().getId())) {
+            throw new IllegalArgumentException("This Customer has no access to this order.");
+        }
+        return new OrderDetailResponse(order);
     }
 }

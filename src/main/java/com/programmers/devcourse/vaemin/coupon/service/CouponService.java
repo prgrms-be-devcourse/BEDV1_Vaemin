@@ -44,6 +44,7 @@ public class CouponService {
                 .minimumOrderPrice(request.getMinimumOrderPrice())
                 .expirationDate(request.getExpirationDate())
                 .shop(shop).build());
+        shop.getCoupons().add(coupon);
         return new CouponDTO(coupon);
     }
 

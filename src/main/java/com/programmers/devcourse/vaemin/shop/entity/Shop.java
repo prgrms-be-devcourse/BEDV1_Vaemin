@@ -55,7 +55,7 @@ public class Shop extends AuditableEntity {
     @Column(name = "shop_status", nullable = false)
     private ShopStatus shopStatus;
 
-    @Column(name = "register_number", nullable = false, length = 30)
+    @Column(name = "register_number", nullable = false, unique = true, length = 30)
     private String registerNumber;
 
     @ManyToOne

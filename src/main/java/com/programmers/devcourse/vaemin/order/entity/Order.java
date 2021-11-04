@@ -34,4 +34,15 @@ public class Order extends AuditableEntity {
     @OneToOne
     @JoinColumn(name = "applied_coupon_id", referencedColumnName = "id")
     private Coupon appliedCoupon;
+
+    public Order(Customer customer, Shop shop, OrderStatus orderStatus, int totalPrice) {
+        this.customer = customer;
+        this.shop = shop;
+        this.orderStatus = orderStatus;
+        this.totalPrice = totalPrice;
+    }
+
+    public Order() {
+
+    }
 }

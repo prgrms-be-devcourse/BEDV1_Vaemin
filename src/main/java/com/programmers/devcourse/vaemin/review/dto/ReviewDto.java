@@ -6,30 +6,32 @@ import com.programmers.devcourse.vaemin.review.entity.Review;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
+@Setter
 public class ReviewDto {
 
     @JsonProperty("id")
-    private final long id;
+    private long id;
 
     @NotNull(message = "Order is mandatory")
-    private final Order order;
+    private Order order;
 
     @NotNull(message = "Customer is mandatory")
-    private final Customer customer;
+    private Customer customer;
 
     @NotNull(message = "Shop is mandatory")
-    private final Shop shop;
+    private Shop shop;
 
     @NotNull(message = "Text is mandatory")
-    private final String text;
+    private String text;
 
     @Range(min=0, max=10)
-    private final int starPoint;
+    private int starPoint;
 
     public ReviewDto(Review review) {
         this.id = review.getId();

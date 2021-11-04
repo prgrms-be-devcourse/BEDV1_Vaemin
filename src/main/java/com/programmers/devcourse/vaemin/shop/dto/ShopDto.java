@@ -6,6 +6,7 @@ import com.programmers.devcourse.vaemin.review.entity.Review;
 import com.programmers.devcourse.vaemin.shop.entity.*;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
@@ -14,57 +15,58 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Getter
+@Setter
 public class ShopDto {
     @JsonProperty("id")
-    private final long id;
+    private long id;
 
     @NotNull(message = "LocationCode is mandatory")
-    private final String name;
+    private String name;
 
     @JsonProperty("phoneNum")
-    private final String phoneNum;
+    private String phoneNum;
 
     @Range(min = 1, max = 100, message = "Short Description is between 0 and 100")
-    private final String shortDescription;
+    private String shortDescription;
 
     @Range(min = 1, max = 1000, message = "Long Description is between 0 and 1000")
-    private final String longDescription;
+    private String longDescription;
 
     @JsonProperty("supportedOrderType")
-    private final ShopSupportedOrderType supportedOrderType;
+    private ShopSupportedOrderType supportedOrderType;
 
     @JsonProperty("supportedPayment")
-    private final ShopSupportedPayment supportedPayment;
+    private ShopSupportedPayment supportedPayment;
 
     @JsonProperty("openTime")
-    private final LocalTime openTime;
+    private LocalTime openTime;
 
     @JsonProperty("closeTime")
-    private final LocalTime closeTime;
+    private LocalTime closeTime;
 
     @Min(0)
-    private final int deliveryFee;
+    private int deliveryFee;
 
     @Min(0)
-    private final int minOrderPrice;
+    private int minOrderPrice;
 
     @JsonProperty("shopStatus")
-    private final ShopStatus shopStatus;
+    private ShopStatus shopStatus;
 
     @NotNull(message = "RegisterNumber is mandatory")
-    private final String registerNumber;
+    private String registerNumber;
 
     @NotNull(message = "Owner is mandatory")
-    private final Owner owner;
+    private Owner owner;
 
     @JsonProperty("doroAddress")
-    private final String doroAddress;
+    private String doroAddress;
 
     @JsonProperty("doroIndex")
-    private final int doroIndex;
+    private int doroIndex;
 
     @JsonProperty("detailAddress")
-    private final String detailAddress;
+    private String detailAddress;
 
     @JsonProperty("reviews")
     private List<ReviewDto> reviews;

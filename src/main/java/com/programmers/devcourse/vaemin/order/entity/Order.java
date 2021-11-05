@@ -65,6 +65,10 @@ public class Order extends AuditableEntity {
         this.orderFoodSubItems.add(orderFoodSub);
     }
 
+    public void changeCustomer(@NonNull Customer customer) {
+        this.customer = customer;
+    }
+
     public void changeOrderStatus(@NonNull OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }

@@ -26,6 +26,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -90,6 +93,32 @@ public class OrderService {
             order.addFoodSub(foodSub, foodSubItemRequest.getCount());
         });
 
+        return new CustomerOrderDTO(order);
+    }
+
+    public List<CustomerOrderDTO> listCustomerOrders(long customerId) {
+        return customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound)
+                .getOrders().stream()
+                .map(CustomerOrderDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public CustomerOrderDTO readCustomerOrder(long customerId, long orderId) {
+        return customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound)
+                .getOrders().stream()
+                .filter(order -> order.getId() == orderId)
+                .findAny()
+                .map(CustomerOrderDTO::new)
+                .orElseThrow(() -> new IllegalArgumentException("Order with given id not found."));
+    }
+
+    public CustomerOrderDTO revokeCustomerOrder(long customerId, long orderId) {
+        Order order = customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound)
+                .getOrders().stream()
+                .filter(o -> o.getId() == orderId)
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("Order with given id not found."));
+        order.changeOrderStatus(OrderStatus.CANCELLED);
         return new CustomerOrderDTO(order);
     }
 }

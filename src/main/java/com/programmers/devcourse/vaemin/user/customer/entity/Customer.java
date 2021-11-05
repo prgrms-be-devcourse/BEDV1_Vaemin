@@ -2,6 +2,7 @@ package com.programmers.devcourse.vaemin.user.customer.entity;
 
 import com.programmers.devcourse.vaemin.coupon.entity.Coupon;
 import com.programmers.devcourse.vaemin.coupon.entity.CustomerCoupon;
+import com.programmers.devcourse.vaemin.order.entity.Order;
 import com.programmers.devcourse.vaemin.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,13 @@ public class Customer extends User {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
     private final List<CustomerCoupon> coupons = new ArrayList<>();
 
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private final List<Order> orders = new ArrayList<>();
+
+    public void addOrder(Order order) {
+        this.orders.add(order);
+        order.changeCustomer(this);
+    }
 
     public void addCoupon(Coupon coupon) {
         CustomerCoupon customerCoupon = CustomerCoupon.builder()

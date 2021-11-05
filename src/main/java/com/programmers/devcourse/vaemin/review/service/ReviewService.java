@@ -41,7 +41,6 @@ public class ReviewService {
         review.changeText(reviewDto.getText());
         review.changeStarPoint(reviewDto.getStarPoint());
 
-        reviewRepository.save(review).getId();
         return review.getId();
     }
 

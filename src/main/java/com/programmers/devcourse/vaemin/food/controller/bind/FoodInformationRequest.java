@@ -3,6 +3,7 @@ package com.programmers.devcourse.vaemin.food.controller.bind;
 import com.programmers.devcourse.vaemin.food.entity.DiscountType;
 import com.programmers.devcourse.vaemin.food.entity.FoodStatus;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ import javax.validation.constraints.PositiveOrZero;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class FoodInformationRequest {
     @NotBlank
     private String name;

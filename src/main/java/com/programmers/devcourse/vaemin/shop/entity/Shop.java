@@ -77,7 +77,7 @@ public class Shop extends AuditableEntity {
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     private final List<Food> foods = new ArrayList<>();
 
-    @OneToMany(mappedBy = "shop")
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.PERSIST)
     private final List<Group> groups = new ArrayList<>();
 
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
@@ -151,6 +151,7 @@ public class Shop extends AuditableEntity {
         this.detailAddress = detailAddress;
     }
 
+    // TODO: decouple fields?
     @Builder
     public Shop(
             String name,

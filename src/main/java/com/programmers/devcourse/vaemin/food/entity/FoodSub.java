@@ -20,11 +20,11 @@ public class FoodSub extends AuditableEntity {
     @Column(name = "price", nullable = false)
     private int price;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "food_sub_group_id", referencedColumnName = "id")
     private FoodSubSelectGroup selectGroup;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "shop_id", referencedColumnName = "id")
     private Shop shop;
 
@@ -32,6 +32,22 @@ public class FoodSub extends AuditableEntity {
     @JoinColumn(name = "parent_food_id", referencedColumnName = "id")
     private Food food;
 
+
+    public void changeSelectGroup(FoodSubSelectGroup group) {
+        this.selectGroup = group;
+    }
+
+    public void joinGroup(FoodSubSelectGroup group) {
+        selectGroup = group;
+        selectGroup.includeFood(this);
+    }
+
+    public void withdrawGroup() {
+        if(selectGroup != null) {
+            selectGroup.excludeFood(this);
+        }
+        selectGroup = null;
+    }
 
     public void changeName(@NonNull String name) {
         if(name.isBlank()) return;
@@ -44,19 +60,24 @@ public class FoodSub extends AuditableEntity {
     }
 
     public void changeGroup(@NonNull FoodSubSelectGroup selectGroup) {
+        if(this.selectGroup != null) {
+            this.selectGroup.excludeFood(this);
+        }
         this.selectGroup = selectGroup;
+        selectGroup.includeFood(this);
     }
 
-    public void withdrawGroup() {
-        this.selectGroup = null;
-    }
 
     @Builder
     public FoodSub(String name, int price, FoodSubSelectGroup group, Shop shop, Food food) {
         this.name = name;
         this.price = price;
         this.selectGroup = group;
+        if(group != null) {
+            group.getFoods().add(this);
+        }
         this.shop = shop;
         this.food = food;
+        food.getSubFoods().add(this);
     }
 }

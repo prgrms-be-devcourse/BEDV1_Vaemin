@@ -28,9 +28,17 @@ public class FoodSubSelectGroup extends IdentifiableEntity {
     @JoinColumn(name = "parent_food_id", referencedColumnName = "id")
     private Food parentFood;
 
-    @OneToMany(mappedBy = "selectGroup")
+    @OneToMany(mappedBy = "selectGroup", cascade = CascadeType.PERSIST) // orphan removal may delete food subs?
     private final List<FoodSub> foods = new ArrayList<>();
 
+
+    public void includeFood(FoodSub foodSub) {
+        this.foods.add(foodSub);
+    }
+
+    public void excludeFood(FoodSub foodSub) {
+        this.foods.remove(foodSub);
+    }
 
     public void changeGroupName(@NonNull String groupName) {
         this.groupName = groupName;

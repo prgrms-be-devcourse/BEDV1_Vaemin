@@ -118,7 +118,7 @@ public class FoodController {
             @PathVariable long ownerId,
             @PathVariable long shopId,
             @PathVariable long groupId) {
-        List<GroupDTO> groupDTOS = foodGroupService.deleteFoodGroup(shopId, groupId);
+        List<GroupDTO> groupDTOS = foodGroupService.deleteFoodGroup(groupId);
         return ResponseEntity.ok(ApiResponse.success(groupDTOS));
     }
 

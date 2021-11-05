@@ -50,10 +50,10 @@ public class FoodSubService {
 
     public List<FoodSubDTO> deleteFoodSub(long foodSubId) {
         FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
+        foodSub.withdrawGroup();
+        foodSub.getFood().getSubFoods().remove(foodSub);
         foodSubRepository.delete(foodSub);
-        Food food = foodSub.getFood();
-        food.getSubFoods().remove(foodSub);
-        return food.getSubFoods().stream()
+        return foodSub.getFood().getSubFoods().stream()
                 .map(FoodSubDTO::new)
                 .collect(Collectors.toList());
     }
@@ -65,5 +65,12 @@ public class FoodSubService {
         FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(request.getGroup()).orElseThrow(EntityExceptionSuppliers.foodSubSelectGroupNotFound);
         foodSub.changeGroup(group);
         return new FoodSubDTO(foodSub);
+    }
+
+    public List<FoodSubDTO> getFoodSubFromSubGroup(long groupId) {
+        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.foodSubSelectGroupNotFound);
+        return group.getFoods().stream()
+                .map(FoodSubDTO::new)
+                .collect(Collectors.toList());
     }
 }

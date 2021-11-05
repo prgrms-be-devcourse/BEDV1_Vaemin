@@ -16,6 +16,10 @@ public class ShopExceptionSuppliers {
         throw new IllegalArgumentException("Category with given id not found.");
     };
 
+    public static final Supplier<RuntimeException> shopCategoryNotFound = () -> {
+        throw new IllegalArgumentException("Shop-Category with given id not found.");
+    };
+
     public static final Supplier<RuntimeException> deliverySupportedRegionsNotFound = () -> {
         throw new IllegalArgumentException("Delivery Supported Regions with given id not found.");
     };

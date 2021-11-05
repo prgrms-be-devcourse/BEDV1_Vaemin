@@ -15,10 +15,10 @@ import java.util.List;
 @Table(name = "category")
 @NoArgsConstructor
 public class Category extends IdentifiableEntity {
-    @Column(name = "category_name", length = 20)
+    @Column(name = "category_name", length = 20, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private final List<ShopCategory> shopCategories = new ArrayList<>();
 
     public void changeName(@NonNull String name) {

@@ -2,15 +2,12 @@ package com.programmers.devcourse.vaemin.coupon.service;
 
 import com.programmers.devcourse.vaemin.coupon.controller.bind.CouponInformationRequest;
 import com.programmers.devcourse.vaemin.coupon.entity.Coupon;
-import com.programmers.devcourse.vaemin.coupon.entity.CustomerCoupon;
 import com.programmers.devcourse.vaemin.coupon.entity.dto.CouponDTO;
 import com.programmers.devcourse.vaemin.coupon.exception.CouponExceptionSuppliers;
 import com.programmers.devcourse.vaemin.coupon.repository.CouponRepository;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
-import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
-import com.programmers.devcourse.vaemin.user.customer.exception.CustomerExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -73,16 +70,6 @@ public class CouponService {
     public List<CouponDTO> listCreatedCoupons(long shopId) {
         Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
         return shop.getCoupons().stream()
-                .map(CouponDTO::new)
-                .collect(Collectors.toList());
-    }
-
-    public List<CouponDTO> listAvailableCoupons(long shopId, long customerId) {
-        Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
-        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
-        return customer.getCoupons().stream()
-                .map(CustomerCoupon::getCoupon)
-                .filter(coupon -> coupon.getShop().equals(shop))
                 .map(CouponDTO::new)
                 .collect(Collectors.toList());
     }

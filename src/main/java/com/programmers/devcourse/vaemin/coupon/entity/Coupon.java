@@ -9,6 +9,8 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +34,9 @@ public class Coupon extends IdentifiableEntity {
     @ManyToOne
     @JoinColumn(name = "shop_id", referencedColumnName = "id")
     private Shop shop;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
+    private final List<CustomerCoupon> customers = new ArrayList<>();
 
 
     public void changeName(@NonNull String name) {

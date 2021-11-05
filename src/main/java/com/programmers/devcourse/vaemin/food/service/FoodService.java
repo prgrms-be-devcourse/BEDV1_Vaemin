@@ -4,6 +4,7 @@ import com.programmers.devcourse.vaemin.food.controller.bind.FoodInformationRequ
 import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.food.entity.FoodGroup;
 import com.programmers.devcourse.vaemin.food.entity.dto.FoodDTO;
+import com.programmers.devcourse.vaemin.food.exception.FoodEntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
@@ -40,7 +41,7 @@ public class FoodService {
     }
 
     public List<FoodDTO> deleteFood(long foodId) {
-        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
         food.getJoinedGroups().stream()
                 .map(FoodGroup::getGroup)
                 .forEach(group -> group.removeFood(food));

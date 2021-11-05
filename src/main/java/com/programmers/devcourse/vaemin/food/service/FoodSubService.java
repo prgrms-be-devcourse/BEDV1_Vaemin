@@ -5,6 +5,7 @@ import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.food.entity.FoodSub;
 import com.programmers.devcourse.vaemin.food.entity.FoodSubSelectGroup;
 import com.programmers.devcourse.vaemin.food.entity.dto.FoodSubDTO;
+import com.programmers.devcourse.vaemin.food.exception.FoodEntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodSubRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodSubSelectGroupRepository;
@@ -49,7 +50,7 @@ public class FoodSubService {
     }
 
     public List<FoodSubDTO> deleteFoodSub(long foodSubId) {
-        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
+        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
         foodSub.withdrawGroup();
         foodSub.getFood().getSubFoods().remove(foodSub);
         foodSubRepository.delete(foodSub);
@@ -68,7 +69,7 @@ public class FoodSubService {
     }
 
     public List<FoodSubDTO> getFoodSubFromSubGroup(long groupId) {
-        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.foodSubSelectGroupNotFound);
+        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.foodSubSelectGroupNotFound);
         return group.getFoods().stream()
                 .map(FoodSubDTO::new)
                 .collect(Collectors.toList());

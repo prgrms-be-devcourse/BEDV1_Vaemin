@@ -40,7 +40,7 @@ public class FoodService {
     }
 
     public List<FoodDTO> deleteFood(long foodId) {
-        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
         food.getJoinedGroups().stream()
                 .map(FoodGroup::getGroup)
                 .forEach(group -> group.removeFood(food));

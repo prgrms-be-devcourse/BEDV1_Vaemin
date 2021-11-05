@@ -1,14 +1,17 @@
 package com.programmers.devcourse.vaemin.order.entity;
 
 import com.programmers.devcourse.vaemin.food.entity.Food;
-import com.programmers.devcourse.vaemin.food.entity.FoodSub;
 import com.programmers.devcourse.vaemin.root.IdentifiableEntity;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor
+@Table(name = "order_food")
 public class OrderFood extends IdentifiableEntity {
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
@@ -21,10 +24,10 @@ public class OrderFood extends IdentifiableEntity {
     @Column(name = "food_count", nullable = false)
     private int foodCount;
 
-    @ManyToOne
-    @JoinColumn(name = "food_sub_id", referencedColumnName = "id")
-    private FoodSub foodSub;
-
-    @Column(name = "food_sub_count", nullable = false)
-    private int foodSubCount;
+    @Builder
+    public OrderFood(Order order, Food food, int foodCount) {
+        this.order = order;
+        this.food = food;
+        this.foodCount = foodCount;
+    }
 }

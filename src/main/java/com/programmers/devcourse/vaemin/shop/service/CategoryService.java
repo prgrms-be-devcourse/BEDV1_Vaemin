@@ -1,7 +1,6 @@
 package com.programmers.devcourse.vaemin.shop.service;
 
 import com.programmers.devcourse.vaemin.shop.dto.CategoryDto;
-import com.programmers.devcourse.vaemin.shop.dto.ShopDto;
 import com.programmers.devcourse.vaemin.shop.entity.Category;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.shop.entity.ShopCategory;
@@ -22,6 +21,7 @@ public class CategoryService {
     private final ShopRepository shopRepository;
     private final ShopCategoryRepository shopCategoryRepository;
 
+    // question : categoryDto에 id가 있는데 이렇게 되면 생성된 category랑 categoryDto id가 달라질 거 같은데
     public Long createCategory(CategoryDto categoryDto) {
         Category category = Category.builder()
                 .name(categoryDto.getName())

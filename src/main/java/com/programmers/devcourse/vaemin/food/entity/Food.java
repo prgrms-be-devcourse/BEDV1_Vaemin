@@ -5,11 +5,13 @@ import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -39,10 +41,10 @@ public class Food extends AuditableEntity {
     @Enumerated(EnumType.STRING)
     private FoodStatus status;
 
-    @OneToMany(mappedBy = "food")
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<FoodGroup> joinedGroups = new ArrayList<>();
 
-    @OneToMany(mappedBy = "food")
+    @OneToMany(mappedBy = "food", orphanRemoval = true)
     private final List<FoodSub> subFoods = new ArrayList<>();
 
 
@@ -73,7 +75,6 @@ public class Food extends AuditableEntity {
         this.status = status;
     }
 
-
     @Builder
     public Food(
             String name,
@@ -90,5 +91,18 @@ public class Food extends AuditableEntity {
         this.discountAmount = discountAmount;
         this.shop = shop;
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Food food = (Food) o;
+        return id != null && Objects.equals(id, food.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, shortDescription, price, discountType, discountAmount, shop, status, joinedGroups, subFoods);
     }
 }

@@ -1,5 +1,6 @@
 package com.programmers.devcourse.vaemin.shop.controller;
 
+import com.programmers.devcourse.vaemin.review.dto.ReviewDto;
 import com.programmers.devcourse.vaemin.root.ApiResponse;
 import com.programmers.devcourse.vaemin.shop.dto.ShopDto;
 import com.programmers.devcourse.vaemin.shop.service.CategoryService;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/owners/{ownerId}/shops")
@@ -37,6 +39,13 @@ public class ShopController {
     @PutMapping("/{shopId}")
     public ApiResponse<Long> updateShop(@PathVariable Long shopId, @Valid @RequestBody ShopDto shopDto, @PathVariable Long ownerId) {
         return ApiResponse.success(shopService.updateShop(shopId, shopDto));
+    }
+
+    @GetMapping("/{shopId}/reviews")
+    public ApiResponse<List<ReviewDto>> getReviews(@PathVariable Long shopId, @PathVariable Long ownerId) {
+        ShopDto shop = shopService.findShop(shopId);
+        List<ReviewDto> reviews = shop.getReviews();
+        return ApiResponse.success(reviews);
     }
 
     @PutMapping("/{shopId}/categories/{categoryId}")

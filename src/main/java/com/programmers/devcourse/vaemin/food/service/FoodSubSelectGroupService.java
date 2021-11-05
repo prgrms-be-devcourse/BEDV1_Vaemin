@@ -25,6 +25,13 @@ public class FoodSubSelectGroupService {
     private final FoodSubSelectGroupRepository foodSubSelectGroupRepository;
 
 
+    public List<FoodSubSelectGroupDTO> getSelectGroups(long foodId) {
+        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        return foodSubSelectGroupRepository.findAllByParentFood(food).stream()
+                .map(FoodSubSelectGroupDTO::new)
+                .collect(Collectors.toList());
+    }
+
     public List<FoodSubSelectGroupDTO> createSelectGroup(long foodId, FoodSubSelectGroupInformationRequest request) {
         Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
         FoodSubSelectGroup group = FoodSubSelectGroup.builder()
@@ -47,10 +54,15 @@ public class FoodSubSelectGroupService {
     }
 
     public List<FoodSubSelectGroupDTO> deleteSelectGroup(long groupId) {
-        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.foodSubSelectGroupNotFound);
-        Food food = group.getParentFood();
+        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.foodSubSelectGroupNotFound);
+        group.getFoods().forEach(foodSub ->
+             // foodSub.getSelectGroup().excludeFood(foodSub); <- why? don't touch the iterating object!
+            foodSub.changeSelectGroup(null) // null로 연관관계를 끊어주지 않으면 constraint violation.
+        );
+//        group.getFoods().clear(); <- unnecessary work?
+        //https://stackoverflow.com/questions/22688402/delete-not-working-with-jparepository
         foodSubSelectGroupRepository.delete(group);
-        return foodSubSelectGroupRepository.findAllByParentFood(food).stream()
+        return foodSubSelectGroupRepository.findAllByParentFood(group.getParentFood()).stream()
                 .map(FoodSubSelectGroupDTO::new)
                 .collect(Collectors.toList());
     }
@@ -59,7 +71,7 @@ public class FoodSubSelectGroupService {
         FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
         FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.foodSubSelectGroupNotFound);
         foodSub.changeGroup(group);
-        return foodSubRepository.findAllBySelectGroup(group).stream()
+        return group.getFoods().stream()
                 .map(FoodSubDTO::new)
                 .collect(Collectors.toList());
     }

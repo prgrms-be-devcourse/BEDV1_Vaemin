@@ -1,12 +1,21 @@
 package com.programmers.devcourse.vaemin.shop.service;
 
+import com.programmers.devcourse.vaemin.food.entity.Food;
+import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.shop.dto.ShopDto;
+import com.programmers.devcourse.vaemin.shop.dto.ShopSearchResponse;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
+import com.programmers.devcourse.vaemin.shop.entity.ShopCategory;
 import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
+import com.programmers.devcourse.vaemin.shop.repository.ShopCategoryRepository;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -14,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ShopService {
 
     private final ShopRepository shopRepository;
+    private final ShopCategoryRepository shopCategoryRepository;
+    private final FoodRepository foodRepository;
 
     public Long createShop(ShopDto shopDto) {
         Shop shop = Shop.builder()
@@ -67,4 +78,34 @@ public class ShopService {
         return shop.getId();
     }
 
+    // question : jpa repository vs crud repository
+    public List<ShopSearchResponse> findAllShops() {
+        List<ShopSearchResponse> shopResponses = new ArrayList<>();
+        shopRepository.findAll().forEach(shop -> shopResponses.add(new ShopSearchResponse(shop)));
+        return shopResponses;
+    }
+
+    public List<ShopSearchResponse> findByName(String shopName) {
+        List<ShopSearchResponse> shopResponses = shopRepository.findByNameContaining(shopName).stream()
+                .map(ShopSearchResponse::new)
+                .collect(Collectors.toList());
+        return shopResponses;
+    }
+
+    public List<ShopSearchResponse> findByCategory(Long categoryId) {
+        List<ShopCategory> shopCategories = shopCategoryRepository.findAllByCategoryId(categoryId);
+        List<ShopSearchResponse> shopResponses = shopCategories.stream()
+                .map(ShopCategory::getShop)
+                .map(ShopSearchResponse::new)
+                .collect(Collectors.toList());
+        return shopResponses;
+    }
+
+    public List<ShopSearchResponse> findByFoodName(String foodName) {
+        List<ShopSearchResponse> shopResponses = foodRepository.findByName(foodName).stream()
+                .map(Food::getShop)
+                .map(ShopSearchResponse::new)
+                .collect(Collectors.toList());
+        return shopResponses;
+    }
 }

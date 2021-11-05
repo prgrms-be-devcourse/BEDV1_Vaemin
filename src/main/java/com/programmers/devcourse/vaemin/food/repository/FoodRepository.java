@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface FoodRepository extends CrudRepository<Food, Long> {
     Optional<Food> findByIdAndShop(long id, Shop shop);
     List<Food> findAllByShop(Shop shop);
+    List<Food> findByName(String foodName);
 }

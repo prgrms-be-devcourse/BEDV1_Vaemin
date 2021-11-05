@@ -4,6 +4,7 @@ import com.programmers.devcourse.vaemin.coupon.entity.Coupon;
 import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.order.entity.Order;
 import com.programmers.devcourse.vaemin.food.entity.Group;
+import com.programmers.devcourse.vaemin.review.entity.Review;
 import com.programmers.devcourse.vaemin.root.AuditableEntity;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import lombok.Builder;
@@ -54,7 +55,7 @@ public class Shop extends AuditableEntity {
     @Column(name = "shop_status", nullable = false)
     private ShopStatus shopStatus;
 
-    @Column(name = "register_number", nullable = false, length = 30)
+    @Column(name = "register_number", nullable = false, unique = true, length = 30)
     private String registerNumber;
 
     @ManyToOne
@@ -76,7 +77,7 @@ public class Shop extends AuditableEntity {
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     private final List<Food> foods = new ArrayList<>();
 
-    @OneToMany(mappedBy = "shop")
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.PERSIST)
     private final List<Group> groups = new ArrayList<>();
 
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
@@ -87,6 +88,9 @@ public class Shop extends AuditableEntity {
 
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     private final List<ShopCategory> shopCategories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
+    private final List<Review> reviews = new ArrayList<>();
 
     public void changeName(@NonNull String name) {
         if (name.isBlank()) return;
@@ -147,6 +151,7 @@ public class Shop extends AuditableEntity {
         this.detailAddress = detailAddress;
     }
 
+    // TODO: decouple fields?
     @Builder
     public Shop(
             String name,

@@ -2,6 +2,7 @@ package com.programmers.devcourse.vaemin.food.service;
 
 import com.programmers.devcourse.vaemin.food.controller.bind.FoodInformationRequest;
 import com.programmers.devcourse.vaemin.food.entity.Food;
+import com.programmers.devcourse.vaemin.food.entity.FoodGroup;
 import com.programmers.devcourse.vaemin.food.entity.dto.FoodDTO;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
@@ -39,7 +40,10 @@ public class FoodService {
     }
 
     public List<FoodDTO> deleteFood(long foodId) {
-        Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
+        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        food.getJoinedGroups().stream()
+                .map(FoodGroup::getGroup)
+                .forEach(group -> group.removeFood(food));
         foodRepository.delete(food);
         return food.getShop().getFoods().stream().map(FoodDTO::new).collect(Collectors.toList());
     }

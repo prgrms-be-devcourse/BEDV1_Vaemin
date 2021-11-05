@@ -5,6 +5,7 @@ import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.food.entity.FoodGroup;
 import com.programmers.devcourse.vaemin.food.entity.Group;
 import com.programmers.devcourse.vaemin.food.entity.dto.GroupDTO;
+import com.programmers.devcourse.vaemin.food.exception.FoodEntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.food.repository.GroupRepository;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
@@ -43,7 +44,7 @@ public class FoodGroupService {
     }
 
     public List<GroupDTO> deleteFoodGroup(long groupId) {
-        Group group = groupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.groupNotFound);
+        Group group = groupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.groupNotFound);
         group.cleanup();
         groupRepository.delete(group);
         // 읽어오는 시점의 레코드만 있고 다른 엔티티의 연관관계가 변형되어도 데이터베이스에 쓰기 전까지는 반영되지 않는듯?
@@ -52,8 +53,8 @@ public class FoodGroupService {
     }
 
     public List<GroupDTO> joinFoodGroup(long foodId, long groupId) {
-        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
-        Group group = groupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.groupNotFound);
+        Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
+        Group group = groupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.groupNotFound);
         group.addFood(food);
         return food.getJoinedGroups().stream()
                 .map(FoodGroup::getGroup)
@@ -62,8 +63,8 @@ public class FoodGroupService {
     }
 
     public List<GroupDTO> withdrawFoodGroup(long foodId, long groupId) {
-        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
-        Group group = groupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.groupNotFound);
+        Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
+        Group group = groupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.groupNotFound);
         group.removeFood(food);
         return food.getJoinedGroups().stream()
                 .map(FoodGroup::getGroup)

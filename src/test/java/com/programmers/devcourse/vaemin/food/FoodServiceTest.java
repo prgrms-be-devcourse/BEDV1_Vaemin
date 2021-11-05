@@ -6,7 +6,7 @@ import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.food.entity.FoodStatus;
 import com.programmers.devcourse.vaemin.food.entity.dto.FoodDTO;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
-import com.programmers.devcourse.vaemin.food.service.FoodEntityExceptionSuppliers;
+import com.programmers.devcourse.vaemin.food.exception.FoodEntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.food.service.FoodService;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.shop.entity.ShopStatus;

@@ -48,7 +48,7 @@ class CategoryServiceTest {
         // Given
         owner = new Owner("username", "email", "phoneNum");
         ownerRepository.save(owner);
-        shop = Shop.builder()
+        shop = shopRepository.save(Shop.builder()
                 .name("test")
                 .phoneNum("010-1234-5678")
                 .shortDesc("shop service test")
@@ -65,17 +65,13 @@ class CategoryServiceTest {
                 .doroAddress("Doro-ro")
                 .doroIndex(123)
                 .detailAddress("Seoul")
-                .build();
-        shopRepository.save(shop);
+                .build());
 
-        category = Category.builder()
-                .name("fastfood")
-                .build();
-        CategoryDto categoryDto = new CategoryDto(category);
+        CategoryDto categoryDto = new CategoryDto("fast food");
 
         // When
         categoryId = categoryService.createCategory(categoryDto);
-
+        category = categoryRepository.findById(categoryId).orElseThrow(ShopExceptionSuppliers.categoryNotFound);
         // Then
         assertThat(categoryRepository.count()).isEqualTo(1);
     }
@@ -130,21 +126,21 @@ class CategoryServiceTest {
         assertEquals(shopId, shopCategory.getShop().getId());
         assertEquals(categoryId, shopCategory.getCategory().getId());
     }
-    
-//    @Test
-//    void withdrawShopCategoryTest() {
-//        // Given
-//        Long shopId = shop.getId();
-//        ShopCategory shopCategory = ShopCategory.builder()
-//                .shop(shop)
-//                .category(category)
-//                .build();
-//        shopCategoryRepository.save(shopCategory);
-//
-//        // When
-//        categoryService.withdrawShopCategory(shopId, categoryId);
-//
-//        // Then
-//        assertFalse(shopCategoryRepository.existsByShopAndCategory(shop, category));
-//    }
+
+    @Test
+    void withdrawShopCategoryTest() {
+        // Given
+        Long shopId = shop.getId();
+        ShopCategory shopCategory = ShopCategory.builder()
+                .shop(shop)
+                .category(category)
+                .build();
+        shopCategoryRepository.save(shopCategory);
+
+        // When
+        categoryService.withdrawShopCategory(shopId, categoryId);
+
+        // Then
+        assertFalse(shopCategoryRepository.existsByShopAndCategory(shop, category));
+    }
 }

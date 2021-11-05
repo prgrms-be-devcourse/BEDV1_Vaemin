@@ -6,7 +6,7 @@ import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.food.entity.FoodStatus;
 import com.programmers.devcourse.vaemin.food.entity.dto.FoodDTO;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
-import com.programmers.devcourse.vaemin.food.service.EntityExceptionSuppliers;
+import com.programmers.devcourse.vaemin.food.service.FoodEntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.food.service.FoodService;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.shop.entity.ShopStatus;
@@ -124,7 +124,7 @@ class FoodServiceTest {
         request.setDiscountAmount(50);
         FoodDTO foodDTO = foodService.updateFood(shop.getId(), food.getId(), request);
 
-        Food updated = foodRepository.findById(foodDTO.getId()).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        Food updated = foodRepository.findById(foodDTO.getId()).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
         assertEquals("UPDATED_FOOD_NAME", updated.getName());
         assertEquals("UPDATED_SHORT_DESCRIPTION", updated.getShortDescription());
         assertEquals(5500, updated.getPrice());

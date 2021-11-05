@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import java.util.function.Supplier;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class EntityExceptionSuppliers {
+public class FoodEntityExceptionSuppliers {
     public static final Supplier<RuntimeException> groupNotFound = () -> {
         throw new IllegalArgumentException("Group with given id not found.");
     };

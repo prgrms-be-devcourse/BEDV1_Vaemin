@@ -6,10 +6,7 @@ import com.programmers.devcourse.vaemin.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +20,9 @@ public class Customer extends User {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
     private final List<CustomerCoupon> coupons = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private CustomerDeliveryAddress address;
 
     public void addCoupon(Coupon coupon) {
         CustomerCoupon customerCoupon = CustomerCoupon.builder()

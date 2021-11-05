@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class OrderService {
+public class CustomerOrderService {
     private final CustomerRepository customerRepository;
     private final CouponRepository couponRepository;
     private final ShopRepository shopRepository;

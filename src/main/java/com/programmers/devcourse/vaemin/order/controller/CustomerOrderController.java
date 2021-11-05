@@ -2,7 +2,7 @@ package com.programmers.devcourse.vaemin.order.controller;
 
 import com.programmers.devcourse.vaemin.order.controller.bind.OrderInformationRequest;
 import com.programmers.devcourse.vaemin.order.entity.dto.CustomerOrderDTO;
-import com.programmers.devcourse.vaemin.order.service.OrderService;
+import com.programmers.devcourse.vaemin.order.service.CustomerOrderService;
 import com.programmers.devcourse.vaemin.root.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/customers/{customerId}/orders")
 public class CustomerOrderController {
-    private final OrderService orderService;
+    private final CustomerOrderService customerOrderService;
 
     @PostMapping
     public ResponseEntity<ApiResponse<CustomerOrderDTO>> createOrder(OrderInformationRequest request) {
-        long paymentId = orderService.requestPayment(request);
-        CustomerOrderDTO order = orderService.createOrder(request, paymentId);
+        long paymentId = customerOrderService.requestPayment(request);
+        CustomerOrderDTO order = customerOrderService.createOrder(request, paymentId);
         return ResponseEntity.created(URI.create(
                 String.format("/customers/%d/orders/%d", request.getCustomerId(), order.getId())))
                 .body(ApiResponse.success(order));
@@ -29,7 +29,7 @@ public class CustomerOrderController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<CustomerOrderDTO>>> listCustomerOrders(
             @PathVariable("customerId") long customerId) {
-        List<CustomerOrderDTO> customerOrderDTOS = orderService.listCustomerOrders(customerId);
+        List<CustomerOrderDTO> customerOrderDTOS = customerOrderService.listCustomerOrders(customerId);
         return ResponseEntity.ok(ApiResponse.success(customerOrderDTOS));
     }
 
@@ -37,7 +37,7 @@ public class CustomerOrderController {
     public ResponseEntity<ApiResponse<CustomerOrderDTO>> readCustomerOrder(
             @PathVariable("customerId") long customerId,
             @PathVariable("orderId") long orderId) {
-        CustomerOrderDTO customerOrderDTO = orderService.readCustomerOrder(customerId, orderId);
+        CustomerOrderDTO customerOrderDTO = customerOrderService.readCustomerOrder(customerId, orderId);
         return ResponseEntity.ok(ApiResponse.success(customerOrderDTO));
     }
 
@@ -45,7 +45,7 @@ public class CustomerOrderController {
     public ResponseEntity<ApiResponse<CustomerOrderDTO>> revokeCustomerOrder(
             @PathVariable("customerId") long customerId,
             @PathVariable("orderId") long orderId) {
-        CustomerOrderDTO customerOrderDTO = orderService.revokeCustomerOrder(customerId, orderId);
+        CustomerOrderDTO customerOrderDTO = customerOrderService.revokeCustomerOrder(customerId, orderId);
         return ResponseEntity.ok(ApiResponse.success(customerOrderDTO));
     }
 }

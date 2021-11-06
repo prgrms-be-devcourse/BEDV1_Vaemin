@@ -1,11 +1,12 @@
 package com.programmers.devcourse.vaemin.user.customer.controller;
 
 import com.programmers.devcourse.vaemin.root.ApiResponse;
-import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDeliveryAddressRequest;
-import com.programmers.devcourse.vaemin.user.customer.entity.CustomerDeliveryAddress;
+import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDeliveryAddressResponse;
 import com.programmers.devcourse.vaemin.user.customer.service.CustomerDeliveryAddressService;
 import javassist.NotFoundException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/customers/{customerId}/address")
@@ -26,12 +27,19 @@ public class CustomerDeliveryAddressController {
         return ApiResponse.fail(e.getMessage());
     }
 
-    @PostMapping
-    public ApiResponse<CustomerDeliveryAddress> createCustomer(
-            @PathVariable Long customerId,
-            @RequestBody CustomerDeliveryAddressRequest request
-    ) throws IllegalAccessException {
-        CustomerDeliveryAddress address = addressService.createAddress(customerId, request);
+    @GetMapping
+    public ApiResponse<CustomerDeliveryAddressResponse> getAddress(
+            @PathVariable Long customerId
+    ) {
+        CustomerDeliveryAddressResponse address = addressService.getAddress(customerId);
         return ApiResponse.success(address);
+    }
+
+    @GetMapping("/list")
+    public ApiResponse<List<CustomerDeliveryAddressResponse>> getAllAddresses(
+            @PathVariable Long customerId
+    ) {
+        List<CustomerDeliveryAddressResponse> addresses = addressService.getAllAddresses(customerId);
+        return ApiResponse.success(addresses);
     }
 }

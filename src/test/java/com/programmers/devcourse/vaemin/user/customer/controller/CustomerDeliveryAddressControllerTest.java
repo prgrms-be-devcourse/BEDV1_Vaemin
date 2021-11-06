@@ -2,7 +2,6 @@ package com.programmers.devcourse.vaemin.user.customer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerCreateRequest;
-import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDeliveryAddressRequest;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import com.programmers.devcourse.vaemin.user.customer.service.CustomerDeliveryAddressService;
 import com.programmers.devcourse.vaemin.user.customer.service.CustomerService;
@@ -14,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,20 +39,19 @@ class CustomerDeliveryAddressControllerTest {
     void setUp() {
         setCustomer = customerService.createCustomer(
                 new CustomerCreateRequest("set customer name",
-                "setcustomer@gmail.com",
-                "01000000000"));
+                        "setcustomer@gmail.com",
+                        "01000000000",
+                        "set location code",
+                        "set address detail"));
     }
 
     @Test
-    void createAddress() throws Exception {
-        mockMvc.perform(post("/customers/{customerId}/address", setCustomer.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(
-                        new CustomerDeliveryAddressRequest(
-                                setCustomer,
-                                "created location-code",
-                                "created address-detail"))))
+    void getAddress() throws Exception {
+        mockMvc.perform(get("/customers/{customerId}/address/list", setCustomer.getId())
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+
 }

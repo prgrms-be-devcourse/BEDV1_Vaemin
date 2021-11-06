@@ -1,6 +1,7 @@
 package com.programmers.devcourse.vaemin.user.customer.controller;
 
 import com.programmers.devcourse.vaemin.root.ApiResponse;
+import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDeliveryAddressRequest;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDeliveryAddressResponse;
 import com.programmers.devcourse.vaemin.user.customer.service.CustomerDeliveryAddressService;
 import javassist.NotFoundException;
@@ -36,10 +37,20 @@ public class CustomerDeliveryAddressController {
     }
 
     @GetMapping("/list")
-    public ApiResponse<List<CustomerDeliveryAddressResponse>> getAllAddresses(
+    public ApiResponse<List<CustomerDeliveryAddressResponse>> getAddressList(
             @PathVariable Long customerId
     ) {
-        List<CustomerDeliveryAddressResponse> addresses = addressService.getAllAddresses(customerId);
+        List<CustomerDeliveryAddressResponse> addresses = addressService.getAddressList(customerId);
         return ApiResponse.success(addresses);
     }
+
+    @PostMapping
+    public ApiResponse<CustomerDeliveryAddressResponse> addAndUpdateAddress(
+            @PathVariable Long customerId,
+            @RequestBody CustomerDeliveryAddressRequest request
+            ) {
+        CustomerDeliveryAddressResponse address = addressService.addAndUpdateAddress(customerId, request);
+        return ApiResponse.success(address);
+    }
+
 }

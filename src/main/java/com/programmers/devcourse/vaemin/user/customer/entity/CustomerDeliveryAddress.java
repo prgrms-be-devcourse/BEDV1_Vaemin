@@ -15,7 +15,7 @@ public class CustomerDeliveryAddress extends IdentifiableEntity {
     private String addressDetail;
 
     @ManyToOne
-    @JoinColumn(name = "customer_delivery_address_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     public CustomerDeliveryAddress(String locationCode, String addressDetail, Customer customer) {

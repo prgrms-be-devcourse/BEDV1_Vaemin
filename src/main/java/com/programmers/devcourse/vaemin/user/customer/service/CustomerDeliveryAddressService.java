@@ -1,7 +1,9 @@
 package com.programmers.devcourse.vaemin.user.customer.service;
 
+import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDeliveryAddressRequest;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDeliveryAddressResponse;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
+import com.programmers.devcourse.vaemin.user.customer.entity.CustomerDeliveryAddress;
 import com.programmers.devcourse.vaemin.user.customer.exception.CustomerAddressExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.customer.exception.CustomerExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerDeliveryAddressRepository;
@@ -30,7 +32,7 @@ public class CustomerDeliveryAddressService {
     }
 
     @Transactional
-    public List<CustomerDeliveryAddressResponse> getAllAddresses(Long customerId) {
+    public List<CustomerDeliveryAddressResponse> getAddressList(Long customerId) {
         List<CustomerDeliveryAddressResponse> addresses = addressRepository.findAllByCustomerId(customerId)
                 .orElseThrow(CustomerAddressExceptionSuppliers.customerAddressNotFound)
                 .stream()
@@ -38,4 +40,15 @@ public class CustomerDeliveryAddressService {
                 .collect(Collectors.toList());
         return addresses;
     }
+
+    @Transactional
+    public CustomerDeliveryAddressResponse addAndUpdateAddress(Long customerId, CustomerDeliveryAddressRequest request) {
+        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
+        customer.changeLocationCode(request.getLocationCode());
+        customer.changeAddressDetail(request.getAddressDetail());
+        Customer updatedCustomer = customerRepository.save(customer);   // 주소 수정한 customer
+        CustomerDeliveryAddress address = addressRepository.save(new CustomerDeliveryAddress(request.getLocationCode(), request.getAddressDetail(), updatedCustomer));
+        return new CustomerDeliveryAddressResponse(address);
+    }
+
 }

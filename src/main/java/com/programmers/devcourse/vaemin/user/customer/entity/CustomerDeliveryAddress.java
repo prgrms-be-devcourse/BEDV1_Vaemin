@@ -14,13 +14,14 @@ public class CustomerDeliveryAddress extends IdentifiableEntity {
     @Column(name = "address_detail", nullable = false, length = 50)
     private String addressDetail;
 
-    @Column(name = "customer_name", nullable = false, length = 50)
-    private String customerName;
+    @ManyToOne
+    @JoinColumn(name = "customer_delivery_address_id")
+    private Customer customer;
 
-    public CustomerDeliveryAddress(String locationCode, String addressDetail, String customerName) {
+    public CustomerDeliveryAddress(String locationCode, String addressDetail, Customer customer) {
         this.locationCode = locationCode;
         this.addressDetail = addressDetail;
-        this.customerName = customerName;
+        this.customer = customer;
     }
 
     public CustomerDeliveryAddress() {

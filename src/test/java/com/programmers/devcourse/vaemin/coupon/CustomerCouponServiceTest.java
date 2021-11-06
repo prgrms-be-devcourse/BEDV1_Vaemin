@@ -70,7 +70,7 @@ class CustomerCouponServiceTest {
                 123,
                 "Seoul");
         shopRepository.save(shop);
-        customer = customerRepository.save(new Customer("USERNAME", "email@domain.com", "010-1234-5678"));
+        customer = customerRepository.save(new Customer("USERNAME", "email@domain.com", "010-1234-5678", "location code", "address detail"));
         coupon = couponRepository.save(Coupon.builder()
                 .name("COUPON_NAME")
                 .discountType(CouponDiscountType.FIXED)

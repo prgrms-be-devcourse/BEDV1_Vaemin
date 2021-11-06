@@ -2,6 +2,7 @@ package com.programmers.devcourse.vaemin.user.customer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerCreateRequest;
+import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDeliveryAddressRequest;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import com.programmers.devcourse.vaemin.user.customer.service.CustomerDeliveryAddressService;
 import com.programmers.devcourse.vaemin.user.customer.service.CustomerService;
@@ -47,8 +48,18 @@ class CustomerDeliveryAddressControllerTest {
 
     @Test
     void getAddress() throws Exception {
-        mockMvc.perform(get("/customers/{customerId}/address/list", setCustomer.getId())
+        mockMvc.perform(get("/customers/{customerId}/address", setCustomer.getId())
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void addAndUpdateAddress() throws Exception {
+        mockMvc.perform(post("/customers/{customerId}/address", setCustomer.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new CustomerDeliveryAddressRequest("updated L.C",
+                        "updated A.D"))))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

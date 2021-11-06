@@ -43,4 +43,12 @@ public class Customer extends User {
         this.locationCode = locationCode;
         this.addressDetail = addressDetail;
     }
+
+    public void changeLocationCode(String locationCode) {
+        this.locationCode = locationCode;
+    }
+
+    public void changeAddressDetail(String addressDetail) {
+        this.addressDetail = addressDetail;
+    }
 }

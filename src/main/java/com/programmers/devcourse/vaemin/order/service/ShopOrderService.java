@@ -61,6 +61,9 @@ public class ShopOrderService {
 
     public OwnerOrderDTO receiveOrder(long ownerId, long shopId, long orderId, OrderStatusRequest request) {
         Order order = readOrder(readShop(readOwner(ownerId), shopId), orderId);
+        if(order.getOrderStatus().equals(OrderStatus.CANCELLED)) {
+            throw new IllegalArgumentException("Cancelled order cannot be accepted/rejected.");
+        }
         order.changeOrderStatus(request.isAccept() ? OrderStatus.ACCEPTED : OrderStatus.REJECTED);
         return new OwnerOrderDTO(order);
     }

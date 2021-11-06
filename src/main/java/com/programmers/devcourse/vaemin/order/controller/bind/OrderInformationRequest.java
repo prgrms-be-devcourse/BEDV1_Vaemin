@@ -12,6 +12,5 @@ public class OrderInformationRequest {
     private long customerId;
     private long shopId;
     private List<FoodItemRequest> foodItems = new ArrayList<>();
-    private List<FoodSubItemRequest> foodSubItems = new ArrayList<>();
-    private long appliedCouponId;
+    private Long appliedCouponId;
 }

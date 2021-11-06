@@ -51,4 +51,18 @@ public class CustomerDeliveryAddressService {
         return new CustomerDeliveryAddressResponse(address);
     }
 
+    @Transactional
+    public void deleteAddress(Long customerId, Long addressId) {
+        CustomerDeliveryAddress address = addressRepository.findById(addressId).orElseThrow(CustomerAddressExceptionSuppliers.customerAddressNotFound);
+        if (!customerId.equals(address.getCustomer().getId())) {
+            throw new IllegalArgumentException("This customer has no access to address.");
+        }
+        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
+        if (customer.getLocationCode().equals(address.getLocationCode()) &&
+                customer.getAddressDetail().equals(address.getAddressDetail())) {
+            // 현재 customer에 설정된 주소면 exception
+            throw new IllegalArgumentException("This address is customer's current address");
+        }
+        addressRepository.deleteById(addressId);
+    }
 }

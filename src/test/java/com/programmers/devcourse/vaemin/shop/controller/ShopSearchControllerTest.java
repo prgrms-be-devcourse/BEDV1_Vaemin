@@ -20,7 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -76,8 +76,8 @@ class ShopSearchControllerTest {
                 "This is a long description of set shop 1.",
                 ShopSupportedOrderType.BOTH,
                 ShopSupportedPayment.CARD,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusHours(2),
+                LocalTime.now(),
+                LocalTime.now().plusHours(2),
                 2000,
                 10000,
                 ShopStatus.DEACTIVATED,
@@ -93,8 +93,8 @@ class ShopSearchControllerTest {
                 "This is a long description of set shop 2.",
                 ShopSupportedOrderType.BOTH,
                 ShopSupportedPayment.CARD,
-                LocalDateTime.now().plusHours(3),
-                LocalDateTime.now().plusHours(4),
+                LocalTime.now().plusHours(3),
+                LocalTime.now().plusHours(4),
                 3000,
                 12000,
                 ShopStatus.DEACTIVATED,

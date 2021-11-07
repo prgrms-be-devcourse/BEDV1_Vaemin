@@ -53,6 +53,15 @@ public class CustomerDeliveryAddressController {
         return ApiResponse.success(address);
     }
 
+    @PutMapping("/list/{addressId}")
+    public ApiResponse<CustomerDeliveryAddressResponse> changeAddress(
+            @PathVariable Long customerId,
+            @PathVariable Long addressId
+    ) {
+        CustomerDeliveryAddressResponse address = addressService.changeAddress(customerId, addressId);
+        return ApiResponse.success(address);
+    }
+
     @DeleteMapping("/list/{addressId}")
     public ApiResponse<Object> deleteAddress(
             @PathVariable Long customerId,

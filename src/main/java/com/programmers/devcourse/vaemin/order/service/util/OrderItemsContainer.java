@@ -24,9 +24,17 @@ public class OrderItemsContainer {
                 .reduce(0, Integer::sum);
     }
 
-    private void validatePaymentStatus() {
+    private void validatePayment() {
         if (!payment.getPaymentStatus().equals(PaymentStatus.PAYED)) {
             throw new IllegalArgumentException("Payment not accepted.");
+        }
+
+        if(payment.getOrder() != null) {
+            throw new IllegalArgumentException("Already processed payment.");
+        }
+
+        if (getTotalPrice() - coupon.getDiscountAmount() != payment.getPrice()) {
+            throw new IllegalArgumentException("Payment amount not matched with order price.");
         }
     }
 
@@ -46,7 +54,7 @@ public class OrderItemsContainer {
 
     public void validateOrder() {
         foodItemsContainer.forEach(FoodItemsContainer::validateFoodOrder);
-        validatePaymentStatus();
+        validatePayment();
         validateCouponUsable();
         validateMinimumTotalPriceLimit();
     }

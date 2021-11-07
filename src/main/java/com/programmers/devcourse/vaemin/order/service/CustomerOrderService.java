@@ -110,6 +110,7 @@ public class CustomerOrderService {
                                     Integer::sum));
                     order.addFoodItems(fic.getFood(), fic.getFoodCount(), foodSubMap);
                 });
+        orderPayment.registerOrder(order);
         orderRepository.save(order);
         return new CustomerOrderDTO(order);
     }

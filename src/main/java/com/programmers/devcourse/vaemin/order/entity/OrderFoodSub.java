@@ -18,6 +18,10 @@ public class OrderFoodSub extends IdentifiableEntity {
     private Order order;
 
     @ManyToOne
+    @JoinColumn(name = "food_order_id", referencedColumnName = "id")
+    private OrderFood orderFood;
+
+    @ManyToOne
     @JoinColumn(name = "food_sub_id", referencedColumnName = "id")
     private FoodSub foodSub;
 
@@ -25,8 +29,9 @@ public class OrderFoodSub extends IdentifiableEntity {
     private int foodSubCount;
 
     @Builder
-    public OrderFoodSub(Order order, FoodSub foodSub, int foodSubCount) {
+    public OrderFoodSub(Order order, OrderFood orderFood, FoodSub foodSub, int foodSubCount) {
         this.order = order;
+        this.orderFood = orderFood;
         this.foodSub = foodSub;
         this.foodSubCount = foodSubCount;
     }

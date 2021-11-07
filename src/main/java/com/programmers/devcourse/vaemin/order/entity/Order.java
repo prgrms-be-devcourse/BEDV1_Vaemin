@@ -15,6 +15,7 @@ import org.springframework.lang.NonNull;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -42,27 +43,19 @@ public class Order extends AuditableEntity {
     @OneToMany(mappedBy = "order")
     private final List<OrderFood> orderFoodItems = new ArrayList<>();
 
-    @OneToMany(mappedBy = "order")
-    private final List<OrderFoodSub> orderFoodSubItems = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "applied_coupon_id", referencedColumnName = "id")
     private Coupon appliedCoupon;
 
 
-    public void addFood(Food food, int count) {
+    public void addFoodItems(Food food, int count, Map<FoodSub, Integer> foodSubs) {
         OrderFood orderFood = OrderFood.builder()
                 .food(food)
                 .foodCount(count)
                 .order(this).build();
+        foodSubs.forEach(orderFood::addFoodSub);
         this.orderFoodItems.add(orderFood);
-    }
-
-    public void addFoodSub(FoodSub foodSub, int count) {
-        OrderFoodSub orderFoodSub = OrderFoodSub.builder()
-                .foodSub(foodSub)
-                .foodSubCount(count).build();
-        this.orderFoodSubItems.add(orderFoodSub);
     }
 
     public void changeCustomer(@NonNull Customer customer) {

@@ -11,10 +11,12 @@ import com.programmers.devcourse.vaemin.food.repository.FoodSubRepository;
 import com.programmers.devcourse.vaemin.food.service.FoodEntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.order.controller.bind.OrderInformationRequest;
 import com.programmers.devcourse.vaemin.order.entity.Order;
-import com.programmers.devcourse.vaemin.order.entity.OrderFoodSub;
 import com.programmers.devcourse.vaemin.order.entity.OrderStatus;
 import com.programmers.devcourse.vaemin.order.entity.dto.CustomerOrderDTO;
 import com.programmers.devcourse.vaemin.order.repository.OrderRepository;
+import com.programmers.devcourse.vaemin.order.service.util.FoodItemsContainer;
+import com.programmers.devcourse.vaemin.order.service.util.FoodSubItemsContainer;
+import com.programmers.devcourse.vaemin.order.service.util.OrderItemsContainer;
 import com.programmers.devcourse.vaemin.payment.entity.Payment;
 import com.programmers.devcourse.vaemin.payment.entity.PaymentStatus;
 import com.programmers.devcourse.vaemin.payment.repository.PaymentRepository;
@@ -28,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -47,53 +48,20 @@ public class CustomerOrderService {
     private final OrderRepository orderRepository;
 
 
-    private int calculateTotalPrice(OrderInformationRequest request) {
-        return request.getFoodItems().stream()
-                .map(foodItemRequest -> {
-                    int foodPrice = foodRepository.findById(foodItemRequest.getFoodItemId())
-                            .map(food -> food.getPrice() * foodItemRequest.getCount())
-                            .orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
-                    int foodSubPrices = foodItemRequest.getFoodSubItemRequests().stream()
-                            .map(foodSubItemRequest -> {
-                                FoodSub foodSub = foodSubRepository.findById(foodSubItemRequest.getFoodSubItemId())
-                                        .orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
-                                return foodSub.getPrice() * foodSubItemRequest.getCount();
-                            })
-                            .reduce(0, Integer::sum);
-                    return foodPrice + foodSubPrices;
-                })
-                .reduce(0, Integer::sum);
-    }
-
-    public long requestPayment(OrderInformationRequest request) {
-        Customer customer = customerRepository.findById(request.getCustomerId()).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
-        int price = calculateTotalPrice(request);
-        if(request.getAppliedCouponId() != null) {
-            Coupon coupon = couponRepository.findById(request.getAppliedCouponId()).orElseThrow(CouponExceptionSuppliers.noCouponFound);
-            validateCouponConstraint(coupon, price);
-            price = Math.max(0, price - coupon.getDiscountAmount());
-        }
-        // TODO: 결제 서비스 연동
-        return paymentRepository.save(Payment.builder()
-                .paymentStatus(PaymentStatus.NOT_PAYED)
-                .customer(customer)
-                .price(price).build()).getId();
-    }
-
-    private void validateFoodOrderSubSelectGroupSelection(OrderInformationRequest request) {
+    private List<FoodItemsContainer> mapFoodItemsToContainer(OrderInformationRequest request) {
         if (request.getFoodItems().isEmpty()) throw new IllegalArgumentException("Order cannot be empty.");
-        request.getFoodItems().forEach(
+        return request.getFoodItems().stream().map(
                 foodRequest -> {
                     Food food = foodRepository.findById(foodRequest.getFoodItemId())
                             .orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
-                    Map<FoodSubSelectGroup, LinkedList<OrderFoodSub>> foodSubSelectGroupMap =
+                    FoodItemsContainer foodItemsContainer = new FoodItemsContainer(food, foodRequest.getCount());
+
+                    Map<FoodSubSelectGroup, List<FoodSubItemsContainer>> foodSubSelectGroupMap =
                             foodRequest.getFoodSubItemRequests().stream()
                                     .map(subRequest -> {
                                         FoodSub foodSub = foodSubRepository.findById(subRequest.getFoodSubItemId())
                                                 .orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
-                                        return OrderFoodSub.builder()
-                                                .foodSub(foodSub)
-                                                .foodSubCount(subRequest.getCount()).build();
+                                        return new FoodSubItemsContainer(foodSub, subRequest.getCount());
                                     })
                                     .collect(Collectors.toMap(
                                             orderFoodSub -> orderFoodSub.getFoodSub().getSelectGroup(),
@@ -102,80 +70,46 @@ public class CustomerOrderService {
                                                 o1.addAll(o2);
                                                 return o1;
                                             }));
-                    food.getSubFoodGroups().forEach(subGroup -> {
-                        LinkedList<OrderFoodSub> selectedFoodSubs = foodSubSelectGroupMap.get(subGroup);
-                        if (subGroup.isRequired() && (selectedFoodSubs == null || selectedFoodSubs.isEmpty())) {
-                            throw new IllegalArgumentException(
-                                    String.format("Food sub of group %s should be included at least one.",
-                                            subGroup.getGroupName()));
-                        }
-
-                        if (!subGroup.isMultiSelect() && selectedFoodSubs.size() > 1) {
-                            throw new IllegalArgumentException(
-                                    String.format("Food sub of group %s should be included only one.",
-                                            subGroup.getGroupName()));
-                        }
-                    });
-                });
-    }
-
-    private void validateCouponConstraint(Coupon coupon, int totalPrice) {
-        if(coupon.getExpirationDate().isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("Coupon expiration date exceeded.");
-        }
-
-        if (totalPrice < coupon.getMinimumOrderPrice())
-            throw new IllegalArgumentException(String.format(
-                    "Order price %d should exceed coupon's required minimum order price %d.",
-                    totalPrice, coupon.getMinimumOrderPrice()));
-    }
-
-    private void validateCouponConstraint(OrderInformationRequest request) {
-        if (request.getAppliedCouponId() == null) return;
-        Coupon coupon = couponRepository.findById(request.getAppliedCouponId())
-                .orElseThrow(CouponExceptionSuppliers.noCouponFound);
-        int totalPrice = calculateTotalPrice(request);
-        validateCouponConstraint(coupon, totalPrice);
+                    foodItemsContainer.getFoodSubs().putAll(foodSubSelectGroupMap);
+                    return foodItemsContainer;
+                })
+                .collect(Collectors.toList());
     }
 
     public CustomerOrderDTO createOrder(OrderInformationRequest request, long paymentId) {
-        validateFoodOrderSubSelectGroupSelection(request);
-        validateCouponConstraint(request);
-
+        List<FoodItemsContainer> foodItemsContainers = mapFoodItemsToContainer(request);
         Payment orderPayment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new IllegalArgumentException("Payment not found."));
-        if (!orderPayment.getPaymentStatus().equals(PaymentStatus.PAYED))
-            throw new IllegalArgumentException("Payment not accepted.");
-
-        Customer customer = customerRepository.findById(request.getCustomerId()).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
         Coupon coupon = request.getAppliedCouponId() == null ?
                 null :
-                couponRepository.findById(request.getAppliedCouponId()).orElseThrow(CouponExceptionSuppliers.noCouponFound);
+                couponRepository.findById(request.getAppliedCouponId())
+                        .orElseThrow(CouponExceptionSuppliers.noCouponFound);
         Shop shop = shopRepository.findById(request.getShopId()).orElseThrow(ShopExceptionSuppliers.shopNotFound);
+        OrderItemsContainer orderItemsContainer = new OrderItemsContainer(shop, foodItemsContainers, orderPayment, coupon);
+        orderItemsContainer.validateOrder();
+
+        Customer customer = customerRepository.findById(request.getCustomerId()).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
         Order order = Order.builder()
                 .customer(customer)
                 .shop(shop)
                 .payment(orderPayment)
                 .orderStatus(OrderStatus.CREATED)
-                .totalPrice(0)
+                .totalPrice(orderItemsContainer.getTotalPrice())
                 .appliedCoupon(coupon).build();
 
-        int totalPrice = request.getFoodItems().stream().map(foodItemRequest -> {
-            Food food = foodRepository.findById(foodItemRequest.getFoodItemId())
-                    .orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
-            order.addFood(food, foodItemRequest.getCount());
-            int foodPrice = food.getPrice() * foodItemRequest.getCount();
-
-            int subFoodPrice = foodItemRequest.getFoodSubItemRequests().stream().map(foodSubItemRequest -> {
-                FoodSub foodSub = foodSubRepository.findById(foodSubItemRequest.getFoodSubItemId())
-                        .orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
-                order.addFoodSub(foodSub, foodSubItemRequest.getCount());
-                return foodSub.getPrice() * foodSubItemRequest.getCount();
-            }).reduce(0, Integer::sum);
-            return foodPrice + subFoodPrice;
-        }).reduce(0, Integer::sum);
-        order.changeTotalPrice(totalPrice);
-
+        orderItemsContainer.getFoodItemsContainer().forEach(
+                fic -> {
+                    Map<FoodSub, Integer> foodSubMap = fic.getFoodSubs().values().stream()
+                            .reduce(new LinkedList<>(), (l1, l2) -> {
+                                l1.addAll(l2);
+                                return l1;
+                            })
+                            .stream().collect(Collectors.toMap(
+                                    FoodSubItemsContainer::getFoodSub,
+                                    FoodSubItemsContainer::getCount,
+                                    Integer::sum));
+                    order.addFoodItems(fic.getFood(), fic.getFoodCount(), foodSubMap);
+                });
         orderRepository.save(order);
         return new CustomerOrderDTO(order);
     }

@@ -17,7 +17,7 @@ public class FoodItemsContainer {
     private Map<FoodSubSelectGroup, List<FoodSubItemsContainer>> foodSubs = new HashMap<>();
 
     public int getTotalPrice() {
-        int foodPrice = food.getPrice() * foodCount;
+        int foodPrice = food.getDiscountType().discount(food.getPrice(), food.getDiscountAmount()) * foodCount;
         int foodSubPrice = foodSubs.values().stream()
                 .map(sub -> sub.stream()
                         .map(FoodSubItemsContainer::getTotalPrice)

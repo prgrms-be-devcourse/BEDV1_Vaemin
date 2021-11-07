@@ -65,4 +65,14 @@ public class CustomerDeliveryAddressService {
         }
         addressRepository.deleteById(addressId);
     }
+
+    @Transactional
+    public CustomerDeliveryAddressResponse changeAddress(Long customerId, Long addressId) {
+        CustomerDeliveryAddress address = addressRepository.findById(addressId).orElseThrow(CustomerAddressExceptionSuppliers.customerAddressNotFound);
+        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerAddressExceptionSuppliers.customerAddressNotFound);
+        customer.changeLocationCode(address.getLocationCode());
+        customer.changeAddressDetail(address.getAddressDetail());
+        customerRepository.save(customer);
+        return new CustomerDeliveryAddressResponse(address);
+    }
 }

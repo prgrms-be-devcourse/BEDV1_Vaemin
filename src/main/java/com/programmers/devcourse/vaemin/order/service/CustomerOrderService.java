@@ -76,9 +76,9 @@ public class CustomerOrderService {
                 .collect(Collectors.toList());
     }
 
-    public CustomerOrderDTO createOrder(OrderInformationRequest request, long paymentId) {
+    public CustomerOrderDTO createOrder(OrderInformationRequest request) {
         List<FoodItemsContainer> foodItemsContainers = mapFoodItemsToContainer(request);
-        Payment orderPayment = paymentRepository.findById(paymentId)
+        Payment orderPayment = paymentRepository.findById(request.getPaymentId())
                 .orElseThrow(() -> new IllegalArgumentException("Payment not found."));
         Coupon coupon = request.getAppliedCouponId() == null ?
                 null :

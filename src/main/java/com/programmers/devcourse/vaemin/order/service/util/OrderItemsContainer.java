@@ -33,16 +33,20 @@ public class OrderItemsContainer {
             throw new IllegalArgumentException("Already processed payment.");
         }
 
-        if (getTotalPrice() - coupon.getDiscountAmount() != payment.getPrice()) {
-            throw new IllegalArgumentException("Payment amount not matched with order price.");
+        int requiredPay = getTotalPrice() - (coupon == null ? 0 : coupon.getDiscountAmount());
+        if (requiredPay != payment.getPrice()) {
+            throw new IllegalArgumentException(String.format(
+                    "Payment amount(%s) not matched with order price(%s).", payment.getPrice(), requiredPay));
         }
     }
 
     private void validateCouponUsable() {
         if (coupon == null) return;
-        if(coupon.getExpirationDate().isBefore(LocalDateTime.now()) ||
-                coupon.getMinimumOrderPrice() >= getTotalPrice()) {
-            throw new IllegalArgumentException("Coupon is expired or not usable because of minimum price limit.");
+        if(coupon.getExpirationDate().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Coupon is not available because it's expired.");
+        }
+        if(coupon.getMinimumOrderPrice() > getTotalPrice()) {
+            throw new IllegalArgumentException("Coupon is expired because of minimum price limit.");
         }
     }
 

@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 public abstract class AbstractOrderDTO {
     @JsonProperty("id")
-    private final long id;
+    protected final long id;
 
     @JsonProperty("totalPrice")
     protected final int totalPrice;
@@ -28,6 +28,6 @@ public abstract class AbstractOrderDTO {
         this.totalPrice = order.getTotalPrice();
         this.paymentPrice = order.getPayment().getPrice();
         this.orderStatus = order.getOrderStatus();
-        this.appliedCoupon = order.getAppliedCoupon().getName();
+        this.appliedCoupon = order.getAppliedCoupon() == null ? "" : order.getAppliedCoupon().getName();
     }
 }

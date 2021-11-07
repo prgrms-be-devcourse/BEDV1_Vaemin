@@ -19,8 +19,7 @@ public class CustomerOrderController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<CustomerOrderDTO>> createOrder(OrderInformationRequest request) {
-        long paymentId = customerOrderService.requestPayment(request);
-        CustomerOrderDTO order = customerOrderService.createOrder(request, paymentId);
+        CustomerOrderDTO order = customerOrderService.createOrder(request);
         return ResponseEntity.created(URI.create(
                 String.format("/customers/%d/orders/%d", request.getCustomerId(), order.getId())))
                 .body(ApiResponse.success(order));

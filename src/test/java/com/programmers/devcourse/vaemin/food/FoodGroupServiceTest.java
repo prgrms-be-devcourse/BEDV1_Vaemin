@@ -102,7 +102,7 @@ class FoodGroupServiceTest {
         Group group1 = groupRepository.save(Group.builder()
                 .name("GROUP_NAME1")
                 .shop(shop).build());
-        Group group2 = groupRepository.save(Group.builder()
+        groupRepository.save(Group.builder()
                 .name("GROUP_NAME2")
                 .shop(shop).build());
         foodGroupService.joinFoodGroup(food.getId(), group1.getId());

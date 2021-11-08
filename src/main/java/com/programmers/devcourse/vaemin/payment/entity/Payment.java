@@ -20,9 +20,6 @@ public class Payment extends AuditableEntity {
     @Column(name = "price", nullable = false)
     private int price;
 
-    @OneToOne(mappedBy = "payment")
-    private Order order;
-
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
@@ -30,19 +27,23 @@ public class Payment extends AuditableEntity {
     @Column(name = "status", nullable = false)
     private PaymentStatus paymentStatus;
 
-    public void changePaymentStatus(@NonNull PaymentStatus paymentStatus) {
-        if(paymentStatus == PaymentStatus.PAYED) this.paymentStatus = PaymentStatus.REFUND;
+    @OneToOne(mappedBy = "payment")
+    private Order order;
+
+
+    public void changeStatus(@NonNull PaymentStatus status) {
+        this.paymentStatus = status;
+    }
+
+    public void registerOrder(@NonNull Order order) {
+        if (this.order != null) throw new IllegalArgumentException("Payment already registered order.");
+        this.order = order;
     }
 
     @Builder
-    public Payment(
-            int price,
-            Order order,
-            Customer customer) {
+    public Payment(int price, Customer customer, PaymentStatus paymentStatus) {
         this.price = price;
-        this.order = order;
         this.customer = customer;
-        if(price > customer.getPoint()) this.paymentStatus = PaymentStatus.NOT_PAYED;
-        else this.paymentStatus = PaymentStatus.PAYED;
+        this.paymentStatus = paymentStatus;
     }
 }

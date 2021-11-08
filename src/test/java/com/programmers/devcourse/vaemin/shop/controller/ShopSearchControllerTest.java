@@ -20,7 +20,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;

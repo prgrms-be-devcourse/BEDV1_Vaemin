@@ -17,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ShopDto {
+    private long id;
 
     @NotNull(message = "Name is mandatory")
     private String name;
@@ -70,6 +71,7 @@ public class ShopDto {
     private List<ReviewDto> reviews;
 
     public ShopDto(Shop shop) {
+        this.id = shop.getId();
         this.name = shop.getName();
         this.phoneNum = shop.getPhoneNum();
         this.shortDescription = shop.getShortDescription();

@@ -47,6 +47,9 @@ public class Food extends AuditableEntity {
     @OneToMany(mappedBy = "food", orphanRemoval = true)
     private final List<FoodSub> subFoods = new ArrayList<>();
 
+    @OneToMany(mappedBy = "parentFood", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private final List<FoodSubSelectGroup> subFoodGroups = new ArrayList<>();
+
 
     public void changeName(@NonNull String name) {
         if(name.isBlank()) return;

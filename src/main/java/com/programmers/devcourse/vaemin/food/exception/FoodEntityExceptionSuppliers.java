@@ -1,4 +1,4 @@
-package com.programmers.devcourse.vaemin.food.service;
+package com.programmers.devcourse.vaemin.food.exception;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

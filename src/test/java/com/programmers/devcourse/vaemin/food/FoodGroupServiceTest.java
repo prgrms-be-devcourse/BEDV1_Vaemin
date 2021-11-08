@@ -3,10 +3,10 @@ package com.programmers.devcourse.vaemin.food;
 import com.programmers.devcourse.vaemin.food.controller.bind.FoodGroupInformationRequest;
 import com.programmers.devcourse.vaemin.food.entity.*;
 import com.programmers.devcourse.vaemin.food.entity.dto.GroupDTO;
+import com.programmers.devcourse.vaemin.food.exception.FoodEntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.food.repository.FoodGroupRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.food.repository.GroupRepository;
-import com.programmers.devcourse.vaemin.food.service.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.food.service.FoodGroupService;
 import com.programmers.devcourse.vaemin.food.service.FoodService;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
@@ -84,7 +84,7 @@ class FoodGroupServiceTest {
         request.setName("FOOD_GROUP");
         List<GroupDTO> foodGroup = foodGroupService.createFoodGroup(shop.getId(), request);
         assertEquals(request.getName(), foodGroup.get(0).getName());
-        Group createdGroup = groupRepository.findById(foodGroup.get(0).getId()).orElseThrow(EntityExceptionSuppliers.groupNotFound);
+        Group createdGroup = groupRepository.findById(foodGroup.get(0).getId()).orElseThrow(FoodEntityExceptionSuppliers.groupNotFound);
         assertEquals(request.getName(), createdGroup.getName());
     }
 
@@ -132,18 +132,18 @@ class FoodGroupServiceTest {
         List<GroupDTO> joinedGroups = foodGroupService.joinFoodGroup(food.getId(), group1.getId());
         assertEquals(group1.getId(), joinedGroups.get(0).getId());
 
-        assertTrue(groupRepository.findById(group1.getId()).orElseThrow(EntityExceptionSuppliers.groupNotFound)
+        assertTrue(groupRepository.findById(group1.getId()).orElseThrow(FoodEntityExceptionSuppliers.groupNotFound)
                 .getIncludingFoods().stream().map(FoodGroup::getFood).anyMatch(food::equals));
-        assertTrue(foodRepository.findById(food.getId()).orElseThrow(EntityExceptionSuppliers.foodNotFound)
+        assertTrue(foodRepository.findById(food.getId()).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound)
                 .getJoinedGroups().stream().map(FoodGroup::getGroup).anyMatch(group1::equals));
         assertTrue(foodGroupRepository.existsByFoodAndGroup(food, group1));
 
         joinedGroups = foodGroupService.joinFoodGroup(food.getId(), group2.getId());
         assertTrue(joinedGroups.stream().anyMatch(groupDTO -> groupDTO.getId() == group2.getId()));
 
-        assertTrue(groupRepository.findById(group2.getId()).orElseThrow(EntityExceptionSuppliers.groupNotFound)
+        assertTrue(groupRepository.findById(group2.getId()).orElseThrow(FoodEntityExceptionSuppliers.groupNotFound)
                 .getIncludingFoods().stream().map(FoodGroup::getFood).anyMatch(food::equals));
-        assertTrue(foodRepository.findById(food.getId()).orElseThrow(EntityExceptionSuppliers.foodNotFound)
+        assertTrue(foodRepository.findById(food.getId()).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound)
                 .getJoinedGroups().stream().map(FoodGroup::getGroup).anyMatch(group2::equals));
         assertTrue(foodGroupRepository.existsByFoodAndGroup(food, group2));
     }
@@ -175,7 +175,7 @@ class FoodGroupServiceTest {
         assertTrue(joinedGroups.stream().noneMatch(groupDTO -> groupDTO.getId() == group1.getId()));
         assertTrue(joinedGroups.stream().anyMatch(groupDTO -> groupDTO.getId() == group2.getId()));
 
-        List<Group> groups = foodRepository.findById(food.getId()).orElseThrow(EntityExceptionSuppliers.foodNotFound).getJoinedGroups()
+        List<Group> groups = foodRepository.findById(food.getId()).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound).getJoinedGroups()
                 .stream().map(FoodGroup::getGroup).collect(Collectors.toList());
         assertTrue(groups.stream().noneMatch(group1::equals));
         assertTrue(groups.stream().anyMatch(group2::equals));

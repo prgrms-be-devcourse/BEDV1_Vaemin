@@ -31,8 +31,7 @@ public class Payment extends AuditableEntity {
     private PaymentStatus paymentStatus;
 
     public void changePaymentStatus(@NonNull PaymentStatus paymentStatus) {
-        if(paymentStatus == PaymentStatus.NOT_PAYED) this.paymentStatus = PaymentStatus.PAYED;
-        if(paymentStatus == PaymentStatus.PAYED) this.paymentStatus = PaymentStatus.NOT_PAYED;
+        if(paymentStatus == PaymentStatus.PAYED) this.paymentStatus = PaymentStatus.REFUND;
     }
 
     @Builder

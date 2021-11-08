@@ -1,11 +1,10 @@
 package com.programmers.devcourse.vaemin.user.customer.service;
 
+import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDeliveryAddressRequest;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDeliveryAddressResponse;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import com.programmers.devcourse.vaemin.user.customer.entity.CustomerDeliveryAddress;
-import com.programmers.devcourse.vaemin.user.customer.exception.CustomerAddressExceptionSuppliers;
-import com.programmers.devcourse.vaemin.user.customer.exception.CustomerExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerDeliveryAddressRepository;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -27,23 +26,21 @@ public class CustomerDeliveryAddressService {
 
     @Transactional
     public CustomerDeliveryAddressResponse getAddress(Long customerId) {
-        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
+        Customer customer = customerRepository.findById(customerId).orElseThrow(EntityExceptionSuppliers.customerNotFound);
         return new CustomerDeliveryAddressResponse(customer.getLocationCode(), customer.getAddressDetail());
     }
 
     @Transactional
     public List<CustomerDeliveryAddressResponse> getAddressList(Long customerId) {
-        List<CustomerDeliveryAddressResponse> addresses = addressRepository.findAllByCustomerId(customerId)
-                .orElseThrow(CustomerAddressExceptionSuppliers.customerAddressNotFound)
+        return addressRepository.findAllByCustomerId(customerId)
                 .stream()
                 .map(CustomerDeliveryAddressResponse::new)
                 .collect(Collectors.toList());
-        return addresses;
     }
 
     @Transactional
     public CustomerDeliveryAddressResponse addAndUpdateAddress(Long customerId, CustomerDeliveryAddressRequest request) {
-        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
+        Customer customer = customerRepository.findById(customerId).orElseThrow(EntityExceptionSuppliers.customerNotFound);
         customer.changeLocationCode(request.getLocationCode());
         customer.changeAddressDetail(request.getAddressDetail());
         Customer updatedCustomer = customerRepository.save(customer);   // 주소 수정한 customer
@@ -53,11 +50,11 @@ public class CustomerDeliveryAddressService {
 
     @Transactional
     public void deleteAddress(Long customerId, Long addressId) {
-        CustomerDeliveryAddress address = addressRepository.findById(addressId).orElseThrow(CustomerAddressExceptionSuppliers.customerAddressNotFound);
+        CustomerDeliveryAddress address = addressRepository.findById(addressId).orElseThrow(EntityExceptionSuppliers.customerAddressNotFound);
         if (!customerId.equals(address.getCustomer().getId())) {
             throw new IllegalArgumentException("This customer has no access to address.");
         }
-        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
+        Customer customer = customerRepository.findById(customerId).orElseThrow(EntityExceptionSuppliers.customerNotFound);
         if (customer.getLocationCode().equals(address.getLocationCode()) &&
                 customer.getAddressDetail().equals(address.getAddressDetail())) {
             // 현재 customer에 설정된 주소면 exception
@@ -68,8 +65,8 @@ public class CustomerDeliveryAddressService {
 
     @Transactional
     public CustomerDeliveryAddressResponse changeAddress(Long customerId, Long addressId) {
-        CustomerDeliveryAddress address = addressRepository.findById(addressId).orElseThrow(CustomerAddressExceptionSuppliers.customerAddressNotFound);
-        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerAddressExceptionSuppliers.customerAddressNotFound);
+        CustomerDeliveryAddress address = addressRepository.findById(addressId).orElseThrow(EntityExceptionSuppliers.customerAddressNotFound);
+        Customer customer = customerRepository.findById(customerId).orElseThrow(EntityExceptionSuppliers.customerAddressNotFound);
         customer.changeLocationCode(address.getLocationCode());
         customer.changeAddressDetail(address.getAddressDetail());
         customerRepository.save(customer);

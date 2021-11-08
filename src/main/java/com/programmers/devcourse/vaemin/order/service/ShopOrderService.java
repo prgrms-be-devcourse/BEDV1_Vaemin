@@ -4,10 +4,9 @@ import com.programmers.devcourse.vaemin.order.controller.bind.OrderStatusRequest
 import com.programmers.devcourse.vaemin.order.entity.Order;
 import com.programmers.devcourse.vaemin.order.entity.OrderStatus;
 import com.programmers.devcourse.vaemin.order.entity.dto.OwnerOrderDTO;
+import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
-import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
-import com.programmers.devcourse.vaemin.user.owner.exception.OwnerExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.owner.repository.OwnerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,13 +22,13 @@ public class ShopOrderService {
     private final OwnerRepository ownerRepository;
 
     private Owner readOwner(long ownerId) {
-        return ownerRepository.findById(ownerId).orElseThrow(OwnerExceptionSuppliers.ownerNotFound);
+        return ownerRepository.findById(ownerId).orElseThrow(EntityExceptionSuppliers.ownerNotFound);
     }
 
     private Shop readShop(Owner owner, long shopId) {
         return owner.getShops().stream()
                 .filter(s -> s.getId() == shopId)
-                .findAny().orElseThrow(ShopExceptionSuppliers.shopNotFound);
+                .findAny().orElseThrow(EntityExceptionSuppliers.shopNotFound);
     }
 
     private Order readOrder(Shop shop, long orderId) {

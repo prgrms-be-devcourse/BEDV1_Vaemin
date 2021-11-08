@@ -1,8 +1,8 @@
 package com.programmers.devcourse.vaemin.shop.service;
 
+import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.dto.CategoryDto;
 import com.programmers.devcourse.vaemin.shop.entity.*;
-import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.repository.CategoryRepository;
 import com.programmers.devcourse.vaemin.shop.repository.ShopCategoryRepository;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
@@ -71,9 +71,10 @@ class CategoryServiceTest {
 
         // When
         categoryId = categoryService.createCategory(categoryDto);
-        category = categoryRepository.findById(categoryId).orElseThrow(ShopExceptionSuppliers.categoryNotFound);
+
         // Then
-        assertThat(categoryRepository.count()).isEqualTo(1);
+        category = categoryRepository.findById(categoryId).orElseThrow(EntityExceptionSuppliers.categoryNotFound);
+        assertEquals(categoryDto.getName(), categoryDto.getName());
     }
 
     @AfterEach
@@ -109,7 +110,7 @@ class CategoryServiceTest {
         Long updatedCategoryId = categoryService.updateCategory(categoryId, categoryDto);
 
         // Then
-        Category updated = categoryRepository.findById(updatedCategoryId).orElseThrow(ShopExceptionSuppliers.categoryNotFound);
+        Category updated = categoryRepository.findById(updatedCategoryId).orElseThrow(EntityExceptionSuppliers.categoryNotFound);
         assertEquals("korean food", updated.getName());
     }
 
@@ -122,7 +123,7 @@ class CategoryServiceTest {
         Long shopCategoryId = categoryService.joinShopCategory(shopId, categoryId);
 
         // Then
-        ShopCategory shopCategory = shopCategoryRepository.findById(shopCategoryId).orElseThrow(ShopExceptionSuppliers.shopCategoryNotFound);
+        ShopCategory shopCategory = shopCategoryRepository.findById(shopCategoryId).orElseThrow(EntityExceptionSuppliers.shopCategoryNotFound);
         assertEquals(shopId, shopCategory.getShop().getId());
         assertEquals(categoryId, shopCategory.getCategory().getId());
     }

@@ -1,15 +1,14 @@
 package com.programmers.devcourse.vaemin.shop.service;
 
+import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.dto.ShopDto;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.shop.entity.ShopStatus;
 import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedOrderType;
 import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedPayment;
-import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import com.programmers.devcourse.vaemin.user.owner.repository.OwnerRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +36,12 @@ class ShopServiceTest {
 
     Owner owner;
     Shop shop;
-    Long shopId;
 
     @BeforeEach
     void save_test() {
         owner = new Owner("username", "email", "phoneNum");
         ownerRepository.save(owner);
-        shop = Shop.builder()
+        shop = shopRepository.save(Shop.builder()
                 .name("test")
                 .phoneNum("010-1234-5678")
                 .shortDesc("shop service test")
@@ -60,25 +58,14 @@ class ShopServiceTest {
                 .doroAddress("Doro-ro")
                 .doroIndex(123)
                 .detailAddress("Seoul")
-                .build();
-        ShopDto shopDto = new ShopDto(shop);
-
-        // Given
-        shopId = shopService.createShop(shopDto);
-
-        // Then
-        assertThat(shopRepository.count()).isEqualTo(1);
+                .build());
     }
 
-    @AfterEach
-    void tearDown() {
-        shopRepository.deleteAll();
-    }
 
     @Test
     void findShopTest() {
         // When
-        ShopDto one = shopService.findShop(shopId);
+        ShopDto one = shopService.findShop(shop.getId());
 
         // Then
         assertThat(one.getRegisterNumber()).isEqualTo(shop.getRegisterNumber());
@@ -87,16 +74,16 @@ class ShopServiceTest {
     @Test
     void deleteShopTest() {
         // When
-        shopService.deleteShop(shopId);
+        shopService.deleteShop(shop.getId());
 
         // Then
-        assertFalse(shopRepository.existsById(shopId));
+        assertFalse(shopRepository.existsById(shop.getId()));
     }
 
     @Test
     void updateShopTest() {
         // Given
-        ShopDto shopDto = shopService.findShop(shopId);
+        ShopDto shopDto = shopService.findShop(shop.getId());
         shopDto.setName("update test");
         shopDto.setLongDescription("updated shop");
         shopDto.setDeliveryFee(2000);
@@ -106,10 +93,10 @@ class ShopServiceTest {
         shopDto.setDetailAddress("Busan");
 
         // When
-        Long updatedShopId = shopService.updateShop(shopId, shopDto);
+        Long updatedShopId = shopService.updateShop(shop.getId(), shopDto);
 
         // Then
-        Shop updated = shopRepository.findById(updatedShopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
+        Shop updated = shopRepository.findById(updatedShopId).orElseThrow(EntityExceptionSuppliers.shopNotFound);
         assertEquals("update test", updated.getName());
         assertEquals("updated shop", updated.getLongDescription());
         assertEquals(2000, updated.getDeliveryFee());

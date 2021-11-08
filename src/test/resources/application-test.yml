@@ -10,6 +10,7 @@ spring:
       ddl-auto: create-drop
     properties:
       hibernate.format_sql: true
+    generate-ddl: true
 
 server:
   servlet:

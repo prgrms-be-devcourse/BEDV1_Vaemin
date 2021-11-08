@@ -80,7 +80,12 @@ class OwnerOrderServiceTest {
 
     @BeforeEach
     void init() {
-        customer = customerRepository.save(new Customer("USERNAME", "email@domain.com", "010-1234-5678"));
+        customer = customerRepository.save(Customer.builder()
+                .userName("USERNAME")
+                .email("email@domain.com")
+                .phoneNum("010-1234-5678")
+                .locationCode("LOCATION_CODE")
+                .addressDetail("ADDR_DETAIL").build());
         owner = ownerRepository.save(new Owner("OWNER_USERNAME", "owner@domain.com", "123-1234-1234"));
         shop = shopRepository.save(Shop.builder()
                 .name("SHOP_NAME")

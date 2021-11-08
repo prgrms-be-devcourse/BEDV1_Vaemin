@@ -5,12 +5,11 @@ import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.food.entity.FoodSub;
 import com.programmers.devcourse.vaemin.food.entity.FoodSubSelectGroup;
 import com.programmers.devcourse.vaemin.food.entity.dto.FoodSubDTO;
-import com.programmers.devcourse.vaemin.food.exception.FoodEntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodSubRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodSubSelectGroupRepository;
+import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
-import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,8 +28,8 @@ public class FoodSubService {
     private final FoodSubSelectGroupRepository foodSubSelectGroupRepository;
 
     public List<FoodSubDTO> createFoodSub(long shopId, long foodId, FoodSubInformationRequest request) {
-        Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
-        Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
+        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        Shop shop = shopRepository.findById(shopId).orElseThrow(EntityExceptionSuppliers.shopNotFound);
         FoodSub.FoodSubBuilder foodSubBuilder = FoodSub.builder()
                 .shop(shop)
                 .food(food)
@@ -50,7 +49,7 @@ public class FoodSubService {
     }
 
     public List<FoodSubDTO> deleteFoodSub(long foodSubId) {
-        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
+        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
         foodSub.withdrawGroup();
         foodSub.getFood().getSubFoods().remove(foodSub);
         foodSubRepository.delete(foodSub);
@@ -60,16 +59,16 @@ public class FoodSubService {
     }
 
     public FoodSubDTO updateFoodSub(long foodSubId, FoodSubInformationRequest request) {
-        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
+        FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
         foodSub.changeName(request.getName());
         foodSub.changePrice(request.getPrice());
-        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(request.getGroup()).orElseThrow(FoodEntityExceptionSuppliers.foodSubSelectGroupNotFound);
+        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(request.getGroup()).orElseThrow(EntityExceptionSuppliers.foodSubSelectGroupNotFound);
         foodSub.changeGroup(group);
         return new FoodSubDTO(foodSub);
     }
 
     public List<FoodSubDTO> getFoodSubFromSubGroup(long groupId) {
-        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.foodSubSelectGroupNotFound);
+        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.foodSubSelectGroupNotFound);
         return group.getFoods().stream()
                 .map(FoodSubDTO::new)
                 .collect(Collectors.toList());

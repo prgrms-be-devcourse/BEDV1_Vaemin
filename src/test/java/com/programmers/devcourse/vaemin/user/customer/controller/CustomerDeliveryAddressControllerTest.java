@@ -5,7 +5,6 @@ import com.programmers.devcourse.vaemin.user.customer.dto.CustomerCreateRequest;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDeliveryAddressRequest;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import com.programmers.devcourse.vaemin.user.customer.entity.CustomerDeliveryAddress;
-import com.programmers.devcourse.vaemin.user.customer.exception.CustomerAddressExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerDeliveryAddressRepository;
 import com.programmers.devcourse.vaemin.user.customer.service.CustomerDeliveryAddressService;
 import com.programmers.devcourse.vaemin.user.customer.service.CustomerService;
@@ -45,7 +44,6 @@ class CustomerDeliveryAddressControllerTest {
 
     private static Customer setCustomer;
     private static CustomerDeliveryAddress setAddress;
-    private static CustomerDeliveryAddress updatedAddress;
 
     @BeforeEach
     void setUp() {
@@ -55,9 +53,7 @@ class CustomerDeliveryAddressControllerTest {
                         "01000000000",
                         "set location code",
                         "set address detail"));
-        setAddress = addressRepository.findAllByCustomerId(setCustomer.getId())
-                .orElseThrow(CustomerAddressExceptionSuppliers.customerAddressNotFound)
-                .get(0);
+        setAddress = addressRepository.findAllByCustomerId(setCustomer.getId()).get(0);
     }
 
     @Test
@@ -87,16 +83,14 @@ class CustomerDeliveryAddressControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        updatedAddress = addressRepository.findAllByCustomerId(setCustomer.getId())
-                .orElseThrow(CustomerAddressExceptionSuppliers.customerAddressNotFound)
-                .get(1);
+        CustomerDeliveryAddress updatedAddress = addressRepository.findAllByCustomerId(setCustomer.getId()).get(1);
 
         mockMvc.perform(delete("/customers/{customerId}/address/list/{addressId}", setCustomer.getId(), setAddress.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        assertThat(addressRepository.findAllByCustomerId(setCustomer.getId()).get().size()).isEqualTo(1);
+        assertThat(addressRepository.findAllByCustomerId(setCustomer.getId()).size()).isEqualTo(1);
     }
 
     @Test

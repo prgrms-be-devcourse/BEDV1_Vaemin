@@ -4,8 +4,7 @@ import com.programmers.devcourse.vaemin.user.customer.entity.CustomerDeliveryAdd
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CustomerDeliveryAddressRepository extends CrudRepository<CustomerDeliveryAddress, Long> {
-    Optional<List<CustomerDeliveryAddress>> findAllByCustomerId(Long customerId);
+    List<CustomerDeliveryAddress> findAllByCustomerId(Long customerId);
 }

@@ -81,8 +81,16 @@ class CustomerOrderServiceTest {
 
     @BeforeEach
     void init() {
-        customer = customerRepository.save(new Customer("USERNAME", "email@domain.com", "010-1234-5678"));
-        owner = ownerRepository.save(new Owner("OWNER_USERNAME", "owner@domain.com", "123-1234-1234"));
+        customer = customerRepository.save(Customer.builder()
+                .userName("USERNAME")
+                .email("email@domain.com")
+                .phoneNum("010-1234-5678")
+                .locationCode("LOCATION_CODE")
+                .addressDetail("ADDR_DETAIL").build());
+        owner = ownerRepository.save(Owner.builder()
+                .username("OWNER_USERNAME")
+                .email("owner@domain.com")
+                .phoneNum("123-1234-1234").build());
         shop = shopRepository.save(Shop.builder()
                 .name("SHOP_NAME")
                 .shortDesc("SHOP_SHORT_DESCRIPTION")
@@ -110,7 +118,6 @@ class CustomerOrderServiceTest {
                 .discountType(DiscountType.NONE)
                 .discountAmount(0)
                 .build());
-        // make food group, add to group, so as food-sub and init test.
         group = groupRepository.save(Group.builder()
                 .name("GROUP_NAME")
                 .shop(shop).build());

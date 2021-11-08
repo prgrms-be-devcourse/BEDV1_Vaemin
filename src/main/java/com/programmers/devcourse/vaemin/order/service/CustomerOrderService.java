@@ -1,14 +1,12 @@
 package com.programmers.devcourse.vaemin.order.service;
 
 import com.programmers.devcourse.vaemin.coupon.entity.Coupon;
-import com.programmers.devcourse.vaemin.coupon.exception.CouponExceptionSuppliers;
 import com.programmers.devcourse.vaemin.coupon.repository.CouponRepository;
 import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.food.entity.FoodSub;
 import com.programmers.devcourse.vaemin.food.entity.FoodSubSelectGroup;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodSubRepository;
-import com.programmers.devcourse.vaemin.food.service.FoodEntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.order.controller.bind.OrderInformationRequest;
 import com.programmers.devcourse.vaemin.order.entity.Order;
 import com.programmers.devcourse.vaemin.order.entity.OrderStatus;
@@ -20,11 +18,10 @@ import com.programmers.devcourse.vaemin.order.service.util.OrderItemsContainer;
 import com.programmers.devcourse.vaemin.payment.entity.Payment;
 import com.programmers.devcourse.vaemin.payment.entity.PaymentStatus;
 import com.programmers.devcourse.vaemin.payment.repository.PaymentRepository;
+import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
-import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
-import com.programmers.devcourse.vaemin.user.customer.exception.CustomerExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,14 +50,14 @@ public class CustomerOrderService {
         return request.getFoodItems().stream().map(
                 foodRequest -> {
                     Food food = foodRepository.findById(foodRequest.getFoodItemId())
-                            .orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
+                            .orElseThrow(EntityExceptionSuppliers.foodNotFound);
                     FoodItemsContainer foodItemsContainer = new FoodItemsContainer(food, foodRequest.getCount());
 
                     Map<FoodSubSelectGroup, List<FoodSubItemsContainer>> foodSubSelectGroupMap =
                             foodRequest.getFoodSubItemRequests().stream()
                                     .map(subRequest -> {
                                         FoodSub foodSub = foodSubRepository.findById(subRequest.getFoodSubItemId())
-                                                .orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
+                                                .orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
                                         return new FoodSubItemsContainer(foodSub, subRequest.getCount());
                                     })
                                     .collect(Collectors.toMap(
@@ -83,12 +80,12 @@ public class CustomerOrderService {
         Coupon coupon = request.getAppliedCouponId() == null ?
                 null :
                 couponRepository.findById(request.getAppliedCouponId())
-                        .orElseThrow(CouponExceptionSuppliers.noCouponFound);
-        Shop shop = shopRepository.findById(request.getShopId()).orElseThrow(ShopExceptionSuppliers.shopNotFound);
+                        .orElseThrow(EntityExceptionSuppliers.noCouponFound);
+        Shop shop = shopRepository.findById(request.getShopId()).orElseThrow(EntityExceptionSuppliers.shopNotFound);
         OrderItemsContainer orderItemsContainer = new OrderItemsContainer(shop, foodItemsContainers, orderPayment, coupon);
         orderItemsContainer.validateOrder();
 
-        Customer customer = customerRepository.findById(request.getCustomerId()).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
+        Customer customer = customerRepository.findById(request.getCustomerId()).orElseThrow(EntityExceptionSuppliers.customerNotFound);
         Order order = Order.builder()
                 .customer(customer)
                 .shop(shop)
@@ -116,14 +113,14 @@ public class CustomerOrderService {
     }
 
     public List<CustomerOrderDTO> listCustomerOrders(long customerId) {
-        return customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound)
+        return customerRepository.findById(customerId).orElseThrow(EntityExceptionSuppliers.customerNotFound)
                 .getOrders().stream()
                 .map(CustomerOrderDTO::new)
                 .collect(Collectors.toList());
     }
 
     public CustomerOrderDTO readCustomerOrder(long customerId, long orderId) {
-        return customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound)
+        return customerRepository.findById(customerId).orElseThrow(EntityExceptionSuppliers.customerNotFound)
                 .getOrders().stream()
                 .filter(order -> order.getId() == orderId)
                 .findAny()
@@ -132,7 +129,7 @@ public class CustomerOrderService {
     }
 
     public CustomerOrderDTO revokeCustomerOrder(long customerId, long orderId) {
-        Order order = customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound)
+        Order order = customerRepository.findById(customerId).orElseThrow(EntityExceptionSuppliers.customerNotFound)
                 .getOrders().stream()
                 .filter(o -> o.getId() == orderId)
                 .findAny()

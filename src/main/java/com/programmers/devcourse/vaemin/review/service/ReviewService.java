@@ -2,8 +2,8 @@ package com.programmers.devcourse.vaemin.review.service;
 
 import com.programmers.devcourse.vaemin.review.dto.ReviewDto;
 import com.programmers.devcourse.vaemin.review.entity.Review;
-import com.programmers.devcourse.vaemin.review.exception.ReviewExceptionSuppliers;
 import com.programmers.devcourse.vaemin.review.repository.ReviewRepository;
+import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,17 +27,17 @@ public class ReviewService {
     }
 
     public void deleteReview(Long id) {
-        Review review = reviewRepository.findById(id).orElseThrow(ReviewExceptionSuppliers.reviewNotFound);
+        Review review = reviewRepository.findById(id).orElseThrow(EntityExceptionSuppliers.reviewNotFound);
         reviewRepository.delete(review);
     }
 
     public ReviewDto findReview(Long id) {
-        Review review = reviewRepository.findById(id).orElseThrow(ReviewExceptionSuppliers.reviewNotFound);
+        Review review = reviewRepository.findById(id).orElseThrow(EntityExceptionSuppliers.reviewNotFound);
         return new ReviewDto(review);
     }
 
     public Long updateReview(Long id, ReviewDto reviewDto) {
-        Review review = reviewRepository.findById(id).orElseThrow(ReviewExceptionSuppliers.reviewNotFound);
+        Review review = reviewRepository.findById(id).orElseThrow(EntityExceptionSuppliers.reviewNotFound);
         review.changeText(reviewDto.getText());
         review.changeStarPoint(reviewDto.getStarPoint());
 

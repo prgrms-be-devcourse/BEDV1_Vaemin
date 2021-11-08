@@ -4,12 +4,12 @@ import com.programmers.devcourse.vaemin.food.controller.bind.FoodSubSelectGroupI
 import com.programmers.devcourse.vaemin.food.entity.*;
 import com.programmers.devcourse.vaemin.food.entity.dto.FoodSubDTO;
 import com.programmers.devcourse.vaemin.food.entity.dto.FoodSubSelectGroupDTO;
-import com.programmers.devcourse.vaemin.food.exception.FoodEntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodSubRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodSubSelectGroupRepository;
 import com.programmers.devcourse.vaemin.food.service.FoodSubSelectGroupService;
 import com.programmers.devcourse.vaemin.food.service.FoodSubService;
+import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.shop.entity.ShopStatus;
 import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedOrderType;
@@ -129,10 +129,10 @@ class FoodSubGroupServiceTest {
         List<FoodSubSelectGroup> allByParentFood = foodSubSelectGroupRepository.findAllByParentFood(food);
         assertTrue(allByParentFood.isEmpty());
 
-        FoodSub foundFoodSub1 = foodSubRepository.findById(foodSub1.getId()).orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
+        FoodSub foundFoodSub1 = foodSubRepository.findById(foodSub1.getId()).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
         assertNull(foundFoodSub1.getSelectGroup());
 
-        FoodSub foundFoodSub2 = foodSubRepository.findById(foodSub2.getId()).orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
+        FoodSub foundFoodSub2 = foodSubRepository.findById(foodSub2.getId()).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
         assertNull(foundFoodSub2.getSelectGroup());
     }
 
@@ -197,11 +197,11 @@ class FoodSubGroupServiceTest {
                 .name("SUB_FOOD2").build());
 
         foodSubSelectGroupService.withdrawSelectGroup(foodSub2.getId());
-        FoodSub foundFoodSub1 = foodSubRepository.findById(foodSub1.getId()).orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
+        FoodSub foundFoodSub1 = foodSubRepository.findById(foodSub1.getId()).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
         assertEquals(subGroup, foundFoodSub1.getSelectGroup());
-        FoodSub foundFoodSub2 = foodSubRepository.findById(foodSub2.getId()).orElseThrow(FoodEntityExceptionSuppliers.foodSubNotFound);
+        FoodSub foundFoodSub2 = foodSubRepository.findById(foodSub2.getId()).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
         assertNull(foundFoodSub2.getSelectGroup());
-        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(subGroup.getId()).orElseThrow(FoodEntityExceptionSuppliers.foodSubSelectGroupNotFound);
+        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(subGroup.getId()).orElseThrow(EntityExceptionSuppliers.foodSubSelectGroupNotFound);
         assertEquals(1, group.getFoods().size());
         assertEquals(foodSub1, group.getFoods().get(0));
     }

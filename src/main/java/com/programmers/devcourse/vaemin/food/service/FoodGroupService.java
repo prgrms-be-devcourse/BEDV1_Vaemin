@@ -5,11 +5,10 @@ import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.food.entity.FoodGroup;
 import com.programmers.devcourse.vaemin.food.entity.Group;
 import com.programmers.devcourse.vaemin.food.entity.dto.GroupDTO;
-import com.programmers.devcourse.vaemin.food.exception.FoodEntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.food.repository.GroupRepository;
+import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
-import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ public class FoodGroupService {
 
 
     public List<GroupDTO> createFoodGroup(long shopId, FoodGroupInformationRequest request) {
-        Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
+        Shop shop = shopRepository.findById(shopId).orElseThrow(EntityExceptionSuppliers.shopNotFound);
         Group group = Group.builder()
                 .name(request.getName())
                 .shop(shop).build();
@@ -38,13 +37,13 @@ public class FoodGroupService {
     }
 
     public GroupDTO updateFoodGroup(long groupId, FoodGroupInformationRequest request) {
-        Group group = groupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.groupNotFound);
+        Group group = groupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.groupNotFound);
         group.changeName(request.getName());
         return new GroupDTO(group);
     }
 
     public List<GroupDTO> deleteFoodGroup(long groupId) {
-        Group group = groupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.groupNotFound);
+        Group group = groupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.groupNotFound);
         group.cleanup();
         groupRepository.delete(group);
         // 읽어오는 시점의 레코드만 있고 다른 엔티티의 연관관계가 변형되어도 데이터베이스에 쓰기 전까지는 반영되지 않는듯?
@@ -53,8 +52,8 @@ public class FoodGroupService {
     }
 
     public List<GroupDTO> joinFoodGroup(long foodId, long groupId) {
-        Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
-        Group group = groupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.groupNotFound);
+        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        Group group = groupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.groupNotFound);
         group.addFood(food);
         return food.getJoinedGroups().stream()
                 .map(FoodGroup::getGroup)
@@ -63,8 +62,8 @@ public class FoodGroupService {
     }
 
     public List<GroupDTO> withdrawFoodGroup(long foodId, long groupId) {
-        Food food = foodRepository.findById(foodId).orElseThrow(FoodEntityExceptionSuppliers.foodNotFound);
-        Group group = groupRepository.findById(groupId).orElseThrow(FoodEntityExceptionSuppliers.groupNotFound);
+        Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        Group group = groupRepository.findById(groupId).orElseThrow(EntityExceptionSuppliers.groupNotFound);
         group.removeFood(food);
         return food.getJoinedGroups().stream()
                 .map(FoodGroup::getGroup)

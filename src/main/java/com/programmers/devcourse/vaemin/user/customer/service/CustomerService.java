@@ -1,11 +1,11 @@
 package com.programmers.devcourse.vaemin.user.customer.service;
 
+import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerCreateRequest;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDetailResponse;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerUpdateRequest;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import com.programmers.devcourse.vaemin.user.customer.entity.CustomerDeliveryAddress;
-import com.programmers.devcourse.vaemin.user.customer.exception.CustomerExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerDeliveryAddressRepository;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -38,13 +38,13 @@ public class CustomerService {
 
     @Transactional
     public CustomerDetailResponse findOneCustomer(Long customerId) {
-        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
+        Customer customer = customerRepository.findById(customerId).orElseThrow(EntityExceptionSuppliers.customerNotFound);
         return new CustomerDetailResponse(customer);
     }
 
     @Transactional
     public Customer updateCustomer(Long customerId, CustomerUpdateRequest request) {
-        Customer customer = customerRepository.findById(customerId).orElseThrow(CustomerExceptionSuppliers.customerNotFound);
+        Customer customer = customerRepository.findById(customerId).orElseThrow(EntityExceptionSuppliers.customerNotFound);
         customer.changeName(request.getUserName());
         customer.changeEmail(request.getEmail());
         customer.changePhoneNum(request.getPhoneNum());

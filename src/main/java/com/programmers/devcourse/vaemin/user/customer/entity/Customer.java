@@ -4,6 +4,7 @@ import com.programmers.devcourse.vaemin.coupon.entity.Coupon;
 import com.programmers.devcourse.vaemin.coupon.entity.CustomerCoupon;
 import com.programmers.devcourse.vaemin.order.entity.Order;
 import com.programmers.devcourse.vaemin.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "customer")
 public class Customer extends User {
     @Column(name = "point", nullable = false)
     private int point; // mileage
@@ -52,7 +54,7 @@ public class Customer extends User {
         coupon.getCustomers().add(customerCoupon);
     }
 
-
+    @Builder
     public Customer(String userName, String email, String phoneNum, String locationCode, String addressDetail) {
         this.username = userName;
         this.email = email;

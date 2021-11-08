@@ -5,6 +5,7 @@ import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.food.entity.FoodSub;
 import com.programmers.devcourse.vaemin.food.entity.FoodSubSelectGroup;
 import com.programmers.devcourse.vaemin.food.entity.dto.FoodSubDTO;
+import com.programmers.devcourse.vaemin.food.exception.FoodEntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodSubRepository;
 import com.programmers.devcourse.vaemin.food.repository.FoodSubSelectGroupRepository;

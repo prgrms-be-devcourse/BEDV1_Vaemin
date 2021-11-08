@@ -41,7 +41,9 @@ class CustomerControllerTest {
     void setUp() {
         customerCreateRequest = new CustomerCreateRequest("set customer name",
                 "setcustomer@gmail.com",
-                "01000000000");
+                "01000000000",
+                "set location code",
+                "set address detail");
         setCustomer = customerService.createCustomer(customerCreateRequest);
         setCustomerId = setCustomer.getId();
     }
@@ -52,7 +54,9 @@ class CustomerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(new CustomerCreateRequest("new customer name",
                         "newCustomer@gmail.com",
-                        "01000000000"))))
+                        "01000000000",
+                        "new location code",
+                        "new address detail"))))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

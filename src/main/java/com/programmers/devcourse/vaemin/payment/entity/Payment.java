@@ -1,7 +1,9 @@
 package com.programmers.devcourse.vaemin.payment.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.programmers.devcourse.vaemin.order.entity.Order;
 import com.programmers.devcourse.vaemin.root.AuditableEntity;
+import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +14,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Table(name = "payment")
 @NoArgsConstructor
 public class Payment extends AuditableEntity {
     @Column(name = "price", nullable = false)

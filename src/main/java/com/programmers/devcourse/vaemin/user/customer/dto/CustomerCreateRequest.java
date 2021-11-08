@@ -1,25 +1,20 @@
 package com.programmers.devcourse.vaemin.user.customer.dto;
 
+import lombok.Getter;
+
+@Getter
 public class CustomerCreateRequest {
     private String userName;
     private String email;
     private String phoneNum;
+    private String locationCode;
+    private String addressDetail;
 
-    public CustomerCreateRequest(String username, String email, String phoneNum) {
+    public CustomerCreateRequest(String username, String email, String phoneNum, String locationCode, String addressDetail) {
         this.userName = username;
         this.email = email;
         this.phoneNum = phoneNum;
-    }
-
-    public String getUserName() {
-        return this.userName;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public String getPhoneNum() {
-        return this.phoneNum;
+        this.locationCode = locationCode;
+        this.addressDetail = addressDetail;
     }
 }

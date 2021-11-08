@@ -15,9 +15,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class ReviewDto {
 
-    @JsonProperty("id")
-    private long id;
-
     @NotNull(message = "Order is mandatory")
     private Order order;
 
@@ -34,7 +31,6 @@ public class ReviewDto {
     private int starPoint;
 
     public ReviewDto(Review review) {
-        this.id = review.getId();
         this.order = review.getOrder();
         this.customer = review.getCustomer();
         this.shop = review.getShop();

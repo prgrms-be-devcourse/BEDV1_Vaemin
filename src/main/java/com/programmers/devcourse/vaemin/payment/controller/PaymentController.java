@@ -6,8 +6,6 @@ import com.programmers.devcourse.vaemin.root.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
 @RequiredArgsConstructor
 public class PaymentController {
@@ -15,7 +13,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/payment")
-    public ApiResponse<Long> createPayment(@Valid @RequestBody PaymentDto paymentDto) {
+    public ApiResponse<Long> createPayment(@RequestBody PaymentDto paymentDto) {
         return ApiResponse.success(paymentService.createPayment(paymentDto));
     }
 

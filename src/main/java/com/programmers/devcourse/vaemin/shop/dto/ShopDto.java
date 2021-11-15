@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.programmers.devcourse.vaemin.review.dto.ReviewDto;
 import com.programmers.devcourse.vaemin.review.entity.Review;
 import com.programmers.devcourse.vaemin.shop.entity.*;
-import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
@@ -56,7 +55,7 @@ public class ShopDto {
     private String registerNumber;
 
     @NotNull(message = "Owner is mandatory")
-    private Owner owner;
+    private long ownerId;
 
     @JsonProperty("doroAddress")
     private String doroAddress;
@@ -84,7 +83,7 @@ public class ShopDto {
         this.minOrderPrice = shop.getMinOrderPrice();
         this.shopStatus = shop.getShopStatus();
         this.registerNumber = shop.getRegisterNumber();
-        this.owner = shop.getOwner();
+        this.ownerId = shop.getOwner().getId();
         this.doroAddress = shop.getDoroAddress();
         this.doroIndex = shop.getDoroIndex();
         this.detailAddress = shop.getDetailAddress();

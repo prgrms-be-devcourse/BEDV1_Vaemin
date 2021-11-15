@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.programmers.devcourse.vaemin.coupon.entity.Coupon;
 import com.programmers.devcourse.vaemin.coupon.entity.CouponDiscountType;
-import com.programmers.devcourse.vaemin.shop.dto.ShopDto;
-import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -28,11 +26,8 @@ public class CouponDTO {
     private final int minimumOrderPrice;
 
     @JsonProperty("expirationDate")
-    @JsonFormat(pattern = "yyyy:MM:dd hh:MM:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime expirationDate;
-
-    @JsonProperty("shop")
-    private final ShopDto shop;
 
 
     public CouponDTO(Coupon coupon) {
@@ -42,6 +37,5 @@ public class CouponDTO {
         this.discountAmount = coupon.getDiscountAmount();
         this.minimumOrderPrice = coupon.getMinimumOrderPrice();
         this.expirationDate = coupon.getExpirationDate();
-        this.shop = new ShopDto(coupon.getShop());
     }
 }

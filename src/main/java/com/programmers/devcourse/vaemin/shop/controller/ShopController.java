@@ -8,7 +8,6 @@ import com.programmers.devcourse.vaemin.shop.service.ShopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,41 +19,41 @@ public class ShopController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ApiResponse<Long> createShop(@Valid @RequestBody ShopDto shopDto, @PathVariable Long ownerId) {
+    public ApiResponse<Long> createShop(@RequestBody ShopDto shopDto) {
         return ApiResponse.success(shopService.createShop(shopDto));
     }
 
     @DeleteMapping("/{shopId}")
-    public ApiResponse<Long> deleteShop(@Valid @PathVariable Long ownerId, @PathVariable Long shopId) {
+    public ApiResponse<Long> deleteShop(@PathVariable Long shopId) {
         shopService.deleteShop(shopId);
         return ApiResponse.success(shopId);
     }
 
     @GetMapping("/{shopId}")
-    public ApiResponse<ShopDto> getShop(@PathVariable Long shopId, @PathVariable Long ownerId) {
+    public ApiResponse<ShopDto> getShop(@PathVariable Long shopId) {
         ShopDto shop = shopService.findShop(shopId);
         return ApiResponse.success(shop);
     }
 
     @PutMapping("/{shopId}")
-    public ApiResponse<Long> updateShop(@PathVariable Long shopId, @Valid @RequestBody ShopDto shopDto, @PathVariable Long ownerId) {
+    public ApiResponse<Long> updateShop(@PathVariable Long shopId, @RequestBody ShopDto shopDto) {
         return ApiResponse.success(shopService.updateShop(shopId, shopDto));
     }
 
     @GetMapping("/{shopId}/reviews")
-    public ApiResponse<List<ReviewDto>> getReviews(@PathVariable Long shopId, @PathVariable Long ownerId) {
+    public ApiResponse<List<ReviewDto>> getReviews(@PathVariable Long shopId) {
         ShopDto shop = shopService.findShop(shopId);
         List<ReviewDto> reviews = shop.getReviews();
         return ApiResponse.success(reviews);
     }
 
     @PutMapping("/{shopId}/categories/{categoryId}")
-    public ApiResponse<Long> joinShopCategory(@PathVariable Long shopId, @PathVariable Long categoryId, @PathVariable Long ownerId) {
+    public ApiResponse<Long> joinShopCategory(@PathVariable Long shopId, @PathVariable Long categoryId) {
         return ApiResponse.success(categoryService.joinShopCategory(shopId, categoryId));
     }
 
     @DeleteMapping("/{shopId}/categories/{categoryId}")
-    public ApiResponse<Long> withdrawShopCategory(@PathVariable Long shopId, @PathVariable Long categoryId, @PathVariable Long ownerId) {
+    public ApiResponse<Long> withdrawShopCategory(@PathVariable Long shopId, @PathVariable Long categoryId) {
         categoryService.withdrawShopCategory(shopId, categoryId);
         return ApiResponse.success(null, String.format("Category %d deleted.", categoryId));
     }

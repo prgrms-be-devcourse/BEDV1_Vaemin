@@ -19,43 +19,43 @@ public class ShopController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ApiResponse<Long> createShop(@RequestBody ShopDto shopDto) {
+    public ApiResponse<Long> createShop(@PathVariable Long ownerId, @RequestBody ShopDto shopDto) {
         return ApiResponse.success(shopService.createShop(shopDto));
     }
 
     @DeleteMapping("/{shopId}")
-    public ApiResponse<Long> deleteShop(@PathVariable Long shopId) {
+    public ApiResponse<Object> deleteShop(@PathVariable Long ownerId, @PathVariable Long shopId) {
         shopService.deleteShop(shopId);
-        return ApiResponse.success(shopId);
+        return ApiResponse.success(null);
     }
 
     @GetMapping("/{shopId}")
-    public ApiResponse<ShopDto> getShop(@PathVariable Long shopId) {
+    public ApiResponse<ShopDto> getShop(@PathVariable Long ownerId, @PathVariable Long shopId) {
         ShopDto shop = shopService.findShop(shopId);
         return ApiResponse.success(shop);
     }
 
     @PutMapping("/{shopId}")
-    public ApiResponse<Long> updateShop(@PathVariable Long shopId, @RequestBody ShopDto shopDto) {
+    public ApiResponse<Long> updateShop(@PathVariable Long ownerId, @PathVariable Long shopId, @RequestBody ShopDto shopDto) {
         return ApiResponse.success(shopService.updateShop(shopId, shopDto));
     }
 
     @GetMapping("/{shopId}/reviews")
-    public ApiResponse<List<ReviewDto>> getReviews(@PathVariable Long shopId) {
+    public ApiResponse<List<ReviewDto>> getReviews(@PathVariable Long ownerId, @PathVariable Long shopId) {
         ShopDto shop = shopService.findShop(shopId);
         List<ReviewDto> reviews = shop.getReviews();
         return ApiResponse.success(reviews);
     }
 
-    @PutMapping("/{shopId}/categories/{categoryId}")
-    public ApiResponse<Long> joinShopCategory(@PathVariable Long shopId, @PathVariable Long categoryId) {
+    @PostMapping("/{shopId}/categories/{categoryId}")
+    public ApiResponse<Long> joinShopCategory(@PathVariable Long ownerId, @PathVariable Long shopId, @PathVariable Long categoryId) {
         return ApiResponse.success(categoryService.joinShopCategory(shopId, categoryId));
     }
 
     @DeleteMapping("/{shopId}/categories/{categoryId}")
-    public ApiResponse<Long> withdrawShopCategory(@PathVariable Long shopId, @PathVariable Long categoryId) {
+    public ApiResponse<Object> withdrawShopCategory(@PathVariable Long ownerId, @PathVariable Long shopId, @PathVariable Long categoryId) {
         categoryService.withdrawShopCategory(shopId, categoryId);
-        return ApiResponse.success(null, String.format("Category %d deleted.", categoryId));
+        return ApiResponse.success(null);
     }
 
 }

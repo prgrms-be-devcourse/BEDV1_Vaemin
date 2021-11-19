@@ -92,6 +92,10 @@ public class Shop extends AuditableEntity {
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
     private final List<Review> reviews = new ArrayList<>();
 
+    public void removeReview(Review review) {
+        this.reviews.remove(review);
+    }
+
     public void changeName(@NonNull String name) {
         if (name.isBlank()) return;
         this.name = name;

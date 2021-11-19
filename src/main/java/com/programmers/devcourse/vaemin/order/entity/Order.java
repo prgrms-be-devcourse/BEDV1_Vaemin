@@ -56,6 +56,10 @@ public class Order extends AuditableEntity {
         this.review = review;
     }
 
+    public void deleteReview() {
+        this.review = null;
+    }
+
     public void addFoodItems(Food food, int count, Map<FoodSub, Integer> foodSubs) {
         OrderFood orderFood = OrderFood.builder()
                 .food(food)

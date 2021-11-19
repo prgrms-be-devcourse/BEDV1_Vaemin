@@ -51,8 +51,7 @@ class ReviewServiceTest {
     @Autowired
     PaymentRepository paymentRepository;
 
-    ReviewDto review;
-    Long reviewId;
+    Review review;
     Order order;
     Customer customer;
     Shop shop;
@@ -100,22 +99,18 @@ class ReviewServiceTest {
                 .shop(shop)
                 .appliedCoupon(null)
                 .payment(payment).build());
-
-        ReviewInformationRequest request = new ReviewInformationRequest();
-        request.setText("TASTE GOOD!");
-        request.setStarPoint(10);
-
-        // When
-        review = reviewService.createReview(request, customer.getId(), order.getId());
-
-        // Then
-        assertThat(reviewRepository.count()).isEqualTo(1);
+        review = reviewRepository.save(Review.builder()
+                .text("TASTE GOOD!")
+                .starPoint(10)
+                .shop(shop)
+                .order(order)
+                .customer(customer).build());
     }
 
     @Test
     void findReviewTest() {
         // When
-        ReviewDto one = reviewService.findReview(reviewId);
+        ReviewDto one = reviewService.findReview(review.getId());
 
         // Then
         assertThat(one.getOrder().getId()).isEqualTo(order.getId());
@@ -124,10 +119,10 @@ class ReviewServiceTest {
     @Test
     void deleteReviewTest() {
         // When
-        reviewService.deleteReview(reviewId);
+        reviewService.deleteReview(review.getId());
 
         // Then
-        assertFalse(reviewRepository.existsById(reviewId));
+        assertFalse(reviewRepository.existsById(review.getId()));
     }
 
     @Test
@@ -138,7 +133,7 @@ class ReviewServiceTest {
         request.setText("taste bad :(");
 
         // When
-        ReviewDto reviewDto = reviewService.updateReview(reviewId, request);
+        ReviewDto reviewDto = reviewService.updateReview(review.getId(), request);
 
         // Then
         Review updated = reviewRepository.findById(reviewDto.getId()).orElseThrow(EntityExceptionSuppliers.reviewNotFound);

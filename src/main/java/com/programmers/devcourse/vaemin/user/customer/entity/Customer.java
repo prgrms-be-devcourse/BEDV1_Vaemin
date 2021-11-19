@@ -38,6 +38,10 @@ public class Customer extends User {
     @Column(name = "address_detail", nullable = false, length = 50)
     private String addressDetail;
 
+    public void changePoint(int point) {
+        this.point = point;
+    }
+
     public void changeLocationCode(String locationCode) {
         this.locationCode = locationCode;
     }

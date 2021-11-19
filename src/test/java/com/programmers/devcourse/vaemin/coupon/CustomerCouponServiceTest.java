@@ -11,6 +11,7 @@ import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedOrderType;
 import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedPayment;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
+import com.programmers.devcourse.vaemin.user.customer.entity.CustomerDeliveryAddress;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerRepository;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import com.programmers.devcourse.vaemin.user.owner.repository.OwnerRepository;
@@ -70,7 +71,14 @@ class CustomerCouponServiceTest {
                 123,
                 "Seoul");
         shopRepository.save(shop);
-        customer = customerRepository.save(new Customer("USERNAME", "email@domain.com", "010-1234-5678", "location code", "address detail"));
+        customer = customerRepository.save(
+                new Customer(
+                        "USERNAME",
+                        "email@domain.com",
+                        "010-1234-5678",
+                        new CustomerDeliveryAddress(
+                                "location code",
+                                "address detail")));
         coupon = couponRepository.save(Coupon.builder()
                 .name("COUPON_NAME")
                 .discountType(CouponDiscountType.FIXED)

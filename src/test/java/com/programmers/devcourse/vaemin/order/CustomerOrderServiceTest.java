@@ -22,6 +22,7 @@ import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedOrderType;
 import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedPayment;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
+import com.programmers.devcourse.vaemin.user.customer.entity.CustomerDeliveryAddress;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerRepository;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import com.programmers.devcourse.vaemin.user.owner.repository.OwnerRepository;
@@ -85,8 +86,11 @@ class CustomerOrderServiceTest {
                 .userName("USERNAME")
                 .email("email@domain.com")
                 .phoneNum("010-1234-5678")
-                .locationCode("LOCATION_CODE")
-                .addressDetail("ADDR_DETAIL").build());
+                .currentAddress(
+                        new CustomerDeliveryAddress(
+                                "LOCATION_CODE",
+                                "ADDR_DETAIL"))
+                .build());
         owner = ownerRepository.save(Owner.builder()
                 .username("OWNER_USERNAME")
                 .email("owner@domain.com")

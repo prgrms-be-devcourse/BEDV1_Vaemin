@@ -36,39 +36,15 @@ public class CustomerDeliveryAddressController {
         return ApiResponse.success(address);
     }
 
-    @GetMapping("/list")
-    public ApiResponse<List<CustomerDeliveryAddressResponse>> getAddressList(
-            @PathVariable Long customerId
-    ) {
-        List<CustomerDeliveryAddressResponse> addresses = addressService.getAddressList(customerId);
-        return ApiResponse.success(addresses);
-    }
-
     @PostMapping
-    public ApiResponse<CustomerDeliveryAddressResponse> addAndUpdateAddress(
+    public ApiResponse<CustomerDeliveryAddressResponse> updateAddress(
             @PathVariable Long customerId,
             @RequestBody CustomerDeliveryAddressRequest request
             ) {
-        CustomerDeliveryAddressResponse address = addressService.addAndUpdateAddress(customerId, request);
+        CustomerDeliveryAddressResponse address = addressService.updateAddress(customerId, request);
         return ApiResponse.success(address);
     }
 
-    @PutMapping("/list/{addressId}")
-    public ApiResponse<CustomerDeliveryAddressResponse> changeAddress(
-            @PathVariable Long customerId,
-            @PathVariable Long addressId
-    ) {
-        CustomerDeliveryAddressResponse address = addressService.changeAddress(customerId, addressId);
-        return ApiResponse.success(address);
-    }
-
-    @DeleteMapping("/list/{addressId}")
-    public ApiResponse<Object> deleteAddress(
-            @PathVariable Long customerId,
-            @PathVariable Long addressId
-    ) {
-        addressService.deleteAddress(customerId, addressId);
-        return ApiResponse.success(null);
-    }
+    // TODO: 2021-11-19 changeAddress,  addAddress, getAddressList, deleteAddress
 
 }

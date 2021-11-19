@@ -5,7 +5,6 @@ import com.programmers.devcourse.vaemin.user.customer.dto.CustomerCreateRequest;
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDeliveryAddressRequest;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import com.programmers.devcourse.vaemin.user.customer.entity.CustomerDeliveryAddress;
-import com.programmers.devcourse.vaemin.user.customer.repository.CustomerDeliveryAddressRepository;
 import com.programmers.devcourse.vaemin.user.customer.service.CustomerDeliveryAddressService;
 import com.programmers.devcourse.vaemin.user.customer.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,9 +36,6 @@ class CustomerDeliveryAddressControllerTest {
     private CustomerDeliveryAddressService addressService;
 
     @Autowired
-    private CustomerDeliveryAddressRepository addressRepository;
-
-    @Autowired
     ObjectMapper objectMapper;
 
     private static Customer setCustomer;
@@ -53,7 +49,7 @@ class CustomerDeliveryAddressControllerTest {
                         "01000000000",
                         "set location code",
                         "set address detail"));
-        setAddress = addressRepository.findAllByCustomerId(setCustomer.getId()).get(0);
+        setAddress = setCustomer.getCurrentAddress();
     }
 
     @Test
@@ -65,7 +61,7 @@ class CustomerDeliveryAddressControllerTest {
     }
 
     @Test
-    void addAndUpdateAddress() throws Exception {
+    void updateAddress() throws Exception {
         mockMvc.perform(post("/customers/{customerId}/address", setCustomer.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(new CustomerDeliveryAddressRequest("updated L.C",
@@ -74,39 +70,6 @@ class CustomerDeliveryAddressControllerTest {
                 .andDo(print());
     }
 
-    @Test
-    void deleteAddress() throws Exception {
-        mockMvc.perform(post("/customers/{customerId}/address", setCustomer.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new CustomerDeliveryAddressRequest("updated L.C",
-                        "updated A.D"))))
-                .andExpect(status().isOk())
-                .andDo(print());
-
-        CustomerDeliveryAddress updatedAddress = addressRepository.findAllByCustomerId(setCustomer.getId()).get(1);
-
-        mockMvc.perform(delete("/customers/{customerId}/address/list/{addressId}", setCustomer.getId(), setAddress.getId())
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(print());
-
-        assertThat(addressRepository.findAllByCustomerId(setCustomer.getId()).size()).isEqualTo(1);
-    }
-
-    @Test
-    void changeAddress() throws Exception {
-        mockMvc.perform(post("/customers/{customerId}/address", setCustomer.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new CustomerDeliveryAddressRequest("updated L.C",
-                        "updated A.D"))))
-                .andExpect(status().isOk())
-                .andDo(print());
-
-        mockMvc.perform(put("/customers/{customerId}/address/list/{addressId}", setCustomer.getId(), setAddress.getId())
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
+    // TODO: 2021-11-19 changeAddress, addAddress
 
 }

@@ -6,7 +6,6 @@ import com.programmers.devcourse.vaemin.user.customer.dto.CustomerDetailResponse
 import com.programmers.devcourse.vaemin.user.customer.dto.CustomerUpdateRequest;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import com.programmers.devcourse.vaemin.user.customer.entity.CustomerDeliveryAddress;
-import com.programmers.devcourse.vaemin.user.customer.repository.CustomerDeliveryAddressRepository;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,25 +13,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CustomerService {
     private final CustomerRepository customerRepository;
-    private final CustomerDeliveryAddressRepository addressRepository;
 
-    public CustomerService(CustomerRepository customerRepository, CustomerDeliveryAddressRepository addressRepository) {
+    public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-        this.addressRepository = addressRepository;
     }
 
     @Transactional
     public Customer createCustomer(CustomerCreateRequest request) {
-        Customer newCustomer = customerRepository.save(new Customer(request.getUserName(),
-                request.getEmail(),
-                request.getPhoneNum(),
-                request.getLocationCode(),
-                request.getAddressDetail()));
-        addressRepository.save(
-                new CustomerDeliveryAddress(
-                        request.getLocationCode(),
-                        request.getAddressDetail(),
-                        newCustomer));
+        CustomerDeliveryAddress customerAddress = new CustomerDeliveryAddress(request.getLocationCode(), request.getAddressDetail());
+        Customer newCustomer = customerRepository.save(
+                new Customer(
+                        request.getUserName(),
+                        request.getEmail(),
+                        request.getPhoneNum(),
+                        customerAddress));
         return newCustomer;
     }
 

@@ -1,11 +1,11 @@
 package com.programmers.devcourse.vaemin.review.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.programmers.devcourse.vaemin.order.entity.Order;
 import com.programmers.devcourse.vaemin.review.entity.Review;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
@@ -13,10 +13,8 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class ReviewDto {
-
-    @JsonProperty("id")
-    private long id;
 
     @NotNull(message = "Order is mandatory")
     private Order order;
@@ -34,7 +32,6 @@ public class ReviewDto {
     private int starPoint;
 
     public ReviewDto(Review review) {
-        this.id = review.getId();
         this.order = review.getOrder();
         this.customer = review.getCustomer();
         this.shop = review.getShop();

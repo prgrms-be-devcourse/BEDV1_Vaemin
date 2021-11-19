@@ -5,12 +5,14 @@ import com.programmers.devcourse.vaemin.payment.entity.Payment;
 import com.programmers.devcourse.vaemin.payment.entity.PaymentStatus;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class PaymentDto {
 
     @NotNull(message = "Price is mandatory")

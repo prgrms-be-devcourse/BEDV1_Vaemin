@@ -5,6 +5,7 @@ import com.programmers.devcourse.vaemin.review.dto.ReviewDto;
 import com.programmers.devcourse.vaemin.review.entity.Review;
 import com.programmers.devcourse.vaemin.shop.entity.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
@@ -15,8 +16,8 @@ import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class ShopDto {
-    private long id;
 
     @NotNull(message = "Name is mandatory")
     private String name;
@@ -70,7 +71,6 @@ public class ShopDto {
     private List<ReviewDto> reviews;
 
     public ShopDto(Shop shop) {
-        this.id = shop.getId();
         this.name = shop.getName();
         this.phoneNum = shop.getPhoneNum();
         this.shortDescription = shop.getShortDescription();

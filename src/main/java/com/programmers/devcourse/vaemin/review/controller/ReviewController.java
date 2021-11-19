@@ -8,7 +8,6 @@ import com.programmers.devcourse.vaemin.shop.service.ShopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +18,7 @@ public class ReviewController {
     private final ShopService shopService;
 
     @PostMapping("/customers/{userId}/orders/{orderId}/reviews")
-    public ApiResponse<Long> createReview(@Valid @RequestBody ReviewDto reviewDto, @PathVariable Long userId, @PathVariable Long orderId) {
+    public ApiResponse<Long> createReview(@RequestBody ReviewDto reviewDto, @PathVariable Long userId, @PathVariable Long orderId) {
         return ApiResponse.success(reviewService.createReview(reviewDto));
     }
 
@@ -30,7 +29,7 @@ public class ReviewController {
     }
 
     @PutMapping("/customers/{userId}/orders/{orderId}/reviews/{reviewId}")
-    public ApiResponse<Long> updateReview(@PathVariable Long reviewId, @Valid @RequestBody ReviewDto reviewDto, @PathVariable Long userId, @PathVariable Long orderId) {
+    public ApiResponse<Long> updateReview(@PathVariable Long reviewId, @RequestBody ReviewDto reviewDto, @PathVariable Long userId, @PathVariable Long orderId) {
         return ApiResponse.success(reviewService.updateReview(reviewId, reviewDto));
     }
 

@@ -9,6 +9,7 @@ import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.shop.entity.ShopCategory;
 import com.programmers.devcourse.vaemin.shop.repository.ShopCategoryRepository;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
+import com.programmers.devcourse.vaemin.user.owner.repository.OwnerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class ShopService {
-
+    private final OwnerRepository ownerRepository;
     private final ShopRepository shopRepository;
     private final ShopCategoryRepository shopCategoryRepository;
     private final FoodRepository foodRepository;
@@ -40,7 +41,8 @@ public class ShopService {
                 .minOrderPrice(shopDto.getMinOrderPrice())
                 .shopStatus(shopDto.getShopStatus())
                 .registerNumber(shopDto.getRegisterNumber())
-                .owner(shopDto.getOwner())
+                .owner(ownerRepository.findById(shopDto.getOwnerId()).orElseThrow(() ->
+                        new IllegalArgumentException("Owner " + shopDto.getOwnerId() + " not found.")))
                 .doroAddress(shopDto.getDoroAddress())
                 .doroIndex(shopDto.getDoroIndex())
                 .detailAddress(shopDto.getDetailAddress())

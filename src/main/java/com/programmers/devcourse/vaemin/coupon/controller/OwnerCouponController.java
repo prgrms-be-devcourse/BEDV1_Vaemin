@@ -26,7 +26,7 @@ public class OwnerCouponController {
     @PostMapping
     public ResponseEntity<ApiResponse<CouponDTO>> createCoupon(@PathVariable("ownerId") long ownerId,
                                                                @PathVariable("shopId") long shopId,
-                                                               CouponInformationRequest request) {
+                                                               @RequestBody CouponInformationRequest request) {
         CouponDTO coupon = couponService.createCoupon(shopId, request);
         return ResponseEntity
                 .created(URI.create(String.format("/owners/%d/shops/%d/coupons/%d",

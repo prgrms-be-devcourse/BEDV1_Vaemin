@@ -17,18 +17,18 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ApiResponse<Long> createCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable Long shopId, @PathVariable Long ownerId) {
+    public ApiResponse<Long> createCategory(@RequestBody CategoryDto categoryDto) {
         return ApiResponse.success(categoryService.createCategory(categoryDto));
     }
 
     @DeleteMapping("/{categoryId}")
-    public ApiResponse<Long> deleteCategory(@PathVariable Long categoryId, @PathVariable Long shopId, @PathVariable Long ownerId) {
+    public ApiResponse<Long> deleteCategory(@PathVariable Long categoryId) {
         categoryService.deleteCategory(categoryId);
         return ApiResponse.success(categoryId);
     }
 
     @PutMapping("/{categoryId}")
-    public ApiResponse<Long> updateCategory(@PathVariable Long categoryId, @Valid @RequestBody CategoryDto categoryDto, @PathVariable Long shopId, @PathVariable Long ownerId) {
+    public ApiResponse<Long> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryDto categoryDto) {
         return ApiResponse.success(categoryService.updateCategory(categoryId, categoryDto));
     }
 }

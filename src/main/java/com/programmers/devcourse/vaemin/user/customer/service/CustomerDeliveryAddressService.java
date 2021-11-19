@@ -20,7 +20,7 @@ public class CustomerDeliveryAddressService {
     @Transactional
     public CustomerDeliveryAddressResponse getAddress(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(EntityExceptionSuppliers.customerNotFound);
-        return new CustomerDeliveryAddressResponse(customer.getCurrentAddress().getLocationCode(), customer.getCurrentAddress().getLocationCode());
+        return new CustomerDeliveryAddressResponse(customer.getCurrentAddress().getLocationCode(), customer.getCurrentAddress().getAddressDetail());
     }
 
     // TODO: 2021-11-19 getAllAddress , addAddress, deleteAddress, changeAddress

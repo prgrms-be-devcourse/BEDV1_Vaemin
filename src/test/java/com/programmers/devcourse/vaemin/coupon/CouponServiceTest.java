@@ -152,9 +152,6 @@ class CouponServiceTest {
                 .minimumOrderPrice(15000)
                 .shop(shop).build());
 
-        shop.getCoupons().add(coupon1);
-        shop.getCoupons().add(coupon2);
-
         List<CouponDTO> couponDTOS = couponService.deleteCoupon(shop.getId(), coupon1.getId());
         assertEquals(1, couponDTOS.size());
         assertEquals(coupon2.getName(), couponDTOS.get(0).getName());

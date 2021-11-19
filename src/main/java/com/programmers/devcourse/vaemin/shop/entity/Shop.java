@@ -151,7 +151,6 @@ public class Shop extends AuditableEntity {
         this.detailAddress = detailAddress;
     }
 
-    // TODO: decouple fields?
     @Builder
     public Shop(
             String name,
@@ -186,5 +185,7 @@ public class Shop extends AuditableEntity {
         this.doroAddress = doroAddress;
         this.doroIndex = doroIndex;
         this.detailAddress = detailAddress;
+
+        owner.addShop(this);
     }
 }

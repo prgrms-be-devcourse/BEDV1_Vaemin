@@ -63,7 +63,7 @@ public class Coupon extends IdentifiableEntity {
     }
 
     public void changeShop(@NonNull Shop shop) {
-        shop.getCoupons().remove(this);
+        if(this.shop != null) shop.getCoupons().remove(this);
         this.shop = shop;
         shop.getCoupons().add(this);
     }
@@ -83,5 +83,7 @@ public class Coupon extends IdentifiableEntity {
         this.minimumOrderPrice = minimumOrderPrice;
         this.expirationDate = expirationDate;
         this.shop = shop;
+
+        changeShop(shop);
     }
 }

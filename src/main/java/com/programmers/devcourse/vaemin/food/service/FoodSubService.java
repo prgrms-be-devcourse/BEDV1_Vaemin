@@ -62,8 +62,10 @@ public class FoodSubService {
         FoodSub foodSub = foodSubRepository.findById(foodSubId).orElseThrow(EntityExceptionSuppliers.foodSubNotFound);
         foodSub.changeName(request.getName());
         foodSub.changePrice(request.getPrice());
-        FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(request.getGroup()).orElseThrow(EntityExceptionSuppliers.foodSubSelectGroupNotFound);
-        foodSub.changeGroup(group);
+        if(request.getGroup() != null) {
+            FoodSubSelectGroup group = foodSubSelectGroupRepository.findById(request.getGroup()).orElseThrow(EntityExceptionSuppliers.foodSubSelectGroupNotFound);
+            foodSub.changeGroup(group);
+        }
         return new FoodSubDTO(foodSub);
     }
 

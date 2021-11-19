@@ -46,6 +46,11 @@ public class Customer extends User {
     public void changeAddress(CustomerDeliveryAddress address) {
         this.currentAddress = address;
     }
+
+    public void changePoint(int point) {
+        this.point = point;
+    }
+
     @Builder
     public Customer(String userName, String email, String phoneNum, CustomerDeliveryAddress currentAddress) {
         this.username = userName;

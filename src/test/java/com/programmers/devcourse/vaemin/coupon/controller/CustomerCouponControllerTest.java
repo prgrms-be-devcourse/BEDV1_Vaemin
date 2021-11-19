@@ -9,6 +9,7 @@ import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedOrderType;
 import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedPayment;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
+import com.programmers.devcourse.vaemin.user.customer.entity.CustomerDeliveryAddress;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerRepository;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import com.programmers.devcourse.vaemin.user.owner.repository.OwnerRepository;
@@ -61,8 +62,7 @@ class CustomerCouponControllerTest {
                 .email("EMAIL")
                 .phoneNum("123456789").build());
         customer = customerRepository.save(Customer.builder()
-                .addressDetail("ADDR")
-                .locationCode("LOC_CODE")
+                .currentAddress(new CustomerDeliveryAddress("LOC_CODE", "ADDR"))
                 .phoneNum("123456789")
                 .email("EMAIL")
                 .userName("USERNAME").build());

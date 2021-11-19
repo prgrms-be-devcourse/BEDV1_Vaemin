@@ -5,6 +5,7 @@ import com.programmers.devcourse.vaemin.payment.entity.Payment;
 import com.programmers.devcourse.vaemin.payment.entity.PaymentStatus;
 import com.programmers.devcourse.vaemin.payment.repository.PaymentRepository;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
+import com.programmers.devcourse.vaemin.user.customer.entity.CustomerDeliveryAddress;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,8 +38,7 @@ class PaymentServiceTest {
                 .userName("USERNAME")
                 .email("email@domain.com")
                 .phoneNum("010-1234-5678")
-                .locationCode("LOCATION_CODE")
-                .addressDetail("ADDR_DETAIL").build());
+                .currentAddress(new CustomerDeliveryAddress("LOC_CODE", "ADDR")).build());
         payment = Payment.builder()
                 .paymentStatus(PaymentStatus.REJECTED)
                 .price(10000)

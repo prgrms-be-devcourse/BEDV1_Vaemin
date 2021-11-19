@@ -6,6 +6,7 @@ import com.programmers.devcourse.vaemin.order.repository.OrderRepository;
 import com.programmers.devcourse.vaemin.payment.entity.Payment;
 import com.programmers.devcourse.vaemin.payment.entity.PaymentStatus;
 import com.programmers.devcourse.vaemin.payment.repository.PaymentRepository;
+import com.programmers.devcourse.vaemin.review.controller.bind.ReviewInformationRequest;
 import com.programmers.devcourse.vaemin.review.dto.ReviewDto;
 import com.programmers.devcourse.vaemin.review.entity.Review;
 import com.programmers.devcourse.vaemin.review.repository.ReviewRepository;
@@ -13,6 +14,7 @@ import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.entity.*;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
+import com.programmers.devcourse.vaemin.user.customer.entity.CustomerDeliveryAddress;
 import com.programmers.devcourse.vaemin.user.customer.repository.CustomerRepository;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
 import com.programmers.devcourse.vaemin.user.owner.repository.OwnerRepository;
@@ -49,7 +51,7 @@ class ReviewServiceTest {
     @Autowired
     PaymentRepository paymentRepository;
 
-    Review review;
+    ReviewDto review;
     Long reviewId;
     Order order;
     Customer customer;
@@ -86,8 +88,7 @@ class ReviewServiceTest {
                 .userName("USERNAME")
                 .email("email@domain.com")
                 .phoneNum("010-1234-5678")
-                .locationCode("LOCATION_CODE")
-                .addressDetail("ADDR_DETAIL").build());
+                .currentAddress(new CustomerDeliveryAddress("LOC_CODE", "ADDR")).build());
         payment = paymentRepository.save(Payment.builder()
                 .paymentStatus(PaymentStatus.PAYED)
                 .price(10000)
@@ -100,17 +101,12 @@ class ReviewServiceTest {
                 .appliedCoupon(null)
                 .payment(payment).build());
 
-        review = Review.builder()
-                .order(order)
-                .customer(customer)
-                .shop(shop)
-                .text("taste good!! :)")
-                .starPoint(10)
-                .build();
-        ReviewDto reviewDto = new ReviewDto(review);
+        ReviewInformationRequest request = new ReviewInformationRequest();
+        request.setText("TASTE GOOD!");
+        request.setStarPoint(10);
 
         // When
-        reviewId = reviewService.createReview(reviewDto);
+        review = reviewService.createReview(request, customer.getId(), order.getId());
 
         // Then
         assertThat(reviewRepository.count()).isEqualTo(1);
@@ -122,7 +118,7 @@ class ReviewServiceTest {
         ReviewDto one = reviewService.findReview(reviewId);
 
         // Then
-        assertThat(one.getOrder()).isEqualTo(order);
+        assertThat(one.getOrder().getId()).isEqualTo(order.getId());
     }
 
     @Test
@@ -137,15 +133,15 @@ class ReviewServiceTest {
     @Test
     void updateReviewTest() {
         // Given
-        ReviewDto reviewDto = reviewService.findReview(reviewId);
-        reviewDto.setText("taste bad :(");
-        reviewDto.setStarPoint(2);
+        ReviewInformationRequest request = new ReviewInformationRequest();
+        request.setStarPoint(2);
+        request.setText("taste bad :(");
 
         // When
-        Long updatedReviewId = reviewService.updateReview(reviewId, reviewDto);
+        ReviewDto reviewDto = reviewService.updateReview(reviewId, request);
 
         // Then
-        Review updated = reviewRepository.findById(updatedReviewId).orElseThrow(EntityExceptionSuppliers.reviewNotFound);
+        Review updated = reviewRepository.findById(reviewDto.getId()).orElseThrow(EntityExceptionSuppliers.reviewNotFound);
         assertEquals("taste bad :(", updated.getText());
         assertEquals(2, updated.getStarPoint());
     }

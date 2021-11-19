@@ -12,6 +12,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -68,7 +69,7 @@ public class ShopDto {
     private String detailAddress;
 
     @JsonProperty("reviews")
-    private List<ReviewDto> reviews;
+    private final List<ReviewDto> reviews = new ArrayList<>();
 
     public ShopDto(Shop shop) {
         this.name = shop.getName();

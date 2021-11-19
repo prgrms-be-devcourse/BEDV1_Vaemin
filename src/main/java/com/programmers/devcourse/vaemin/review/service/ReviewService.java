@@ -1,9 +1,14 @@
 package com.programmers.devcourse.vaemin.review.service;
 
+import com.programmers.devcourse.vaemin.order.entity.Order;
+import com.programmers.devcourse.vaemin.order.repository.OrderRepository;
+import com.programmers.devcourse.vaemin.review.controller.bind.ReviewInformationRequest;
 import com.programmers.devcourse.vaemin.review.dto.ReviewDto;
 import com.programmers.devcourse.vaemin.review.entity.Review;
 import com.programmers.devcourse.vaemin.review.repository.ReviewRepository;
 import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
+import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
+import com.programmers.devcourse.vaemin.user.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,18 +17,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class ReviewService {
-
+    private final OrderRepository orderRepository;
+    private final CustomerRepository customerRepository;
     private final ReviewRepository reviewRepository;
 
-    public Long createReview(ReviewDto reviewDto) {
-        Review review = Review.builder()
-                .order(reviewDto.getOrder())
-                .customer(reviewDto.getCustomer())
-                .text(reviewDto.getText())
-                .starPoint(reviewDto.getStarPoint())
-                .build();
-
-        return reviewRepository.save(review).getId();
+    public ReviewDto createReview(ReviewInformationRequest request, long customerId, long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(EntityExceptionSuppliers.orderNotFound);
+        Customer customer = customerRepository.findById(customerId).orElseThrow(EntityExceptionSuppliers.customerNotFound);
+        Review review = reviewRepository.save(Review.builder()
+                .order(order)
+                .shop(order.getShop())
+                .customer(customer)
+                .text(request.getText())
+                .starPoint(request.getStarPoint())
+                .build());
+        return new ReviewDto(review);
     }
 
     public void deleteReview(Long id) {
@@ -36,12 +44,10 @@ public class ReviewService {
         return new ReviewDto(review);
     }
 
-    public Long updateReview(Long id, ReviewDto reviewDto) {
-        Review review = reviewRepository.findById(id).orElseThrow(EntityExceptionSuppliers.reviewNotFound);
-        review.changeText(reviewDto.getText());
-        review.changeStarPoint(reviewDto.getStarPoint());
-
-        return review.getId();
+    public ReviewDto updateReview(long reviewId, ReviewInformationRequest request) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(EntityExceptionSuppliers.reviewNotFound);
+        review.changeText(request.getText());
+        review.changeStarPoint(request.getStarPoint());
+        return new ReviewDto(review);
     }
-
 }

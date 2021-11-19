@@ -49,4 +49,7 @@ public class EntityExceptionSuppliers {
     public static final Supplier<RuntimeException> ownerNotFound = () -> {
         throw new IllegalArgumentException("Owner with given id not found.");
     };
+    public static final Supplier<RuntimeException> orderNotFound = () -> {
+        throw new IllegalArgumentException("Order with given id not found.");
+    };
 }

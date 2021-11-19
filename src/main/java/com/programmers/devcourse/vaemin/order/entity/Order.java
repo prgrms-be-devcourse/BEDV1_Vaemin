@@ -4,6 +4,7 @@ import com.programmers.devcourse.vaemin.coupon.entity.Coupon;
 import com.programmers.devcourse.vaemin.food.entity.Food;
 import com.programmers.devcourse.vaemin.food.entity.FoodSub;
 import com.programmers.devcourse.vaemin.payment.entity.Payment;
+import com.programmers.devcourse.vaemin.review.entity.Review;
 import com.programmers.devcourse.vaemin.root.AuditableEntity;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
 import com.programmers.devcourse.vaemin.user.customer.entity.Customer;
@@ -43,11 +44,17 @@ public class Order extends AuditableEntity {
     @OneToMany(mappedBy = "order")
     private final List<OrderFood> orderFoodItems = new ArrayList<>();
 
+    @OneToOne(mappedBy = "order")
+    private Review review;
 
     @OneToOne
     @JoinColumn(name = "applied_coupon_id", referencedColumnName = "id")
     private Coupon appliedCoupon;
 
+    public void registerReview(Review review) {
+        if(this.review != null) throw new IllegalArgumentException("Review already written.");
+        this.review = review;
+    }
 
     public void addFoodItems(Food food, int count, Map<FoodSub, Integer> foodSubs) {
         OrderFood orderFood = OrderFood.builder()

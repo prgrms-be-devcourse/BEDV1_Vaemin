@@ -52,8 +52,10 @@ public class Review extends AuditableEntity {
             String text,
             int starPoint) {
         this.order = order;
+        order.registerReview(this);
         this.customer = customer;
         this.shop = shop;
+        shop.getReviews().add(this);
         this.text = text;
         this.starPoint = starPoint;
     }

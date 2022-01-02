@@ -16,7 +16,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/owners/{ownerId}/shops/{shopId}/foods")
+@RequestMapping("/owners/{ownerId}/shops/{shopId}")
 @RequiredArgsConstructor
 public class FoodController {
 
@@ -30,7 +30,7 @@ public class FoodController {
      * @param request Required food informations.
      * @return DTO list of food include created food.
      */
-    @PostMapping
+    @PostMapping("/foods")
     public ResponseEntity<ApiResponse<List<FoodDTO>>> createFood(
             @PathVariable long ownerId,
             @PathVariable long shopId,
@@ -47,7 +47,7 @@ public class FoodController {
      * @param foodId Food's id to delete.
      * @return DTO list of remaining foods.
      */
-    @DeleteMapping("/{foodId}")
+    @DeleteMapping("/foods/{foodId}")
     public ResponseEntity<ApiResponse<List<FoodDTO>>> deleteFood(
             @PathVariable long ownerId,
             @PathVariable long shopId,
@@ -63,7 +63,7 @@ public class FoodController {
      * @param request Updated information of food.
      * @return DTO containing updated food information.
      */
-    @PutMapping("/{foodId}")
+    @PutMapping("/foods/{foodId}")
     public ResponseEntity<ApiResponse<FoodDTO>> updateFood(
             @PathVariable long ownerId,
             @PathVariable long shopId,
@@ -118,7 +118,7 @@ public class FoodController {
             @PathVariable long ownerId,
             @PathVariable long shopId,
             @PathVariable long groupId) {
-        List<GroupDTO> groupDTOS = foodGroupService.deleteFoodGroup(shopId, groupId);
+        List<GroupDTO> groupDTOS = foodGroupService.deleteFoodGroup(groupId);
         return ResponseEntity.ok(ApiResponse.success(groupDTOS));
     }
 
@@ -130,7 +130,7 @@ public class FoodController {
      * @param groupId Group's id.
      * @return DTO list of groups where food is joined.
      */
-    @PutMapping("/{foodId}/group/{groupId}")
+    @PutMapping("/groups/{groupId}/foods/{foodId}")
     public ResponseEntity<ApiResponse<List<GroupDTO>>> joinFoodGroup(
             @PathVariable long ownerId,
             @PathVariable long shopId,
@@ -147,7 +147,7 @@ public class FoodController {
      * @param groupId Group's id.
      * @return DTO list of groups where food is joined except withdrawn group.
      */
-    @DeleteMapping("/{foodId}/group/{groupId}")
+    @DeleteMapping("/groups/{groupId}/foods/{foodId}")
     public ResponseEntity<ApiResponse<List<GroupDTO>>> withdrawFoodGroup(
             @PathVariable long ownerId,
             @PathVariable long shopId,

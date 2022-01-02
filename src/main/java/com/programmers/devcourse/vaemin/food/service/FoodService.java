@@ -2,10 +2,11 @@ package com.programmers.devcourse.vaemin.food.service;
 
 import com.programmers.devcourse.vaemin.food.controller.bind.FoodInformationRequest;
 import com.programmers.devcourse.vaemin.food.entity.Food;
+import com.programmers.devcourse.vaemin.food.entity.FoodGroup;
 import com.programmers.devcourse.vaemin.food.entity.dto.FoodDTO;
 import com.programmers.devcourse.vaemin.food.repository.FoodRepository;
+import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.entity.Shop;
-import com.programmers.devcourse.vaemin.shop.exception.ShopExceptionSuppliers;
 import com.programmers.devcourse.vaemin.shop.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class FoodService {
 
 
     public List<FoodDTO> createFood(long shopId, FoodInformationRequest request) {
-        Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
+        Shop shop = shopRepository.findById(shopId).orElseThrow(EntityExceptionSuppliers.shopNotFound);
         Food food = Food.builder()
                 .name(request.getName())
                 .shortDesc(request.getShortDescription())
@@ -40,12 +41,15 @@ public class FoodService {
 
     public List<FoodDTO> deleteFood(long foodId) {
         Food food = foodRepository.findById(foodId).orElseThrow(EntityExceptionSuppliers.foodNotFound);
+        food.getJoinedGroups().stream()
+                .map(FoodGroup::getGroup)
+                .forEach(group -> group.removeFood(food));
         foodRepository.delete(food);
         return food.getShop().getFoods().stream().map(FoodDTO::new).collect(Collectors.toList());
     }
 
     public FoodDTO updateFood(long shopId, long foodId, FoodInformationRequest request) {
-        Shop shop = shopRepository.findById(shopId).orElseThrow(ShopExceptionSuppliers.shopNotFound);
+        Shop shop = shopRepository.findById(shopId).orElseThrow(EntityExceptionSuppliers.shopNotFound);
         Food food = foodRepository.findByIdAndShop(foodId, shop).orElseThrow(EntityExceptionSuppliers.foodNotFound);
         food.changeName(request.getName());
         food.changeDescription(request.getShortDescription());

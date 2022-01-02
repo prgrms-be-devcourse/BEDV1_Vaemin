@@ -45,7 +45,7 @@ public class OwnerController {
     }
 
     @PutMapping("/{ownerId}")
-    public ApiResponse<Owner> updateCustomer(
+    public ApiResponse<Owner> updateOwner(
             @PathVariable Long ownerId,
             @RequestBody OwnerUpdateRequest request
             )  {

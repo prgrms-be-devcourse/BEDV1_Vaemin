@@ -1,45 +1,62 @@
 package com.programmers.devcourse.vaemin.user.customer.entity;
 
+import com.programmers.devcourse.vaemin.coupon.entity.Coupon;
+import com.programmers.devcourse.vaemin.coupon.entity.CustomerCoupon;
+import com.programmers.devcourse.vaemin.order.entity.Order;
 import com.programmers.devcourse.vaemin.user.User;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
+@Table(name = "customer")
 public class Customer extends User {
     @Column(name = "point", nullable = false)
     private int point; // mileage
 
-    // question : 처음 생성했을 때 updatedAt이 null일텐데 왜 nullable = false?
-    public Customer(String userName, String email, String phoneNum) {
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
+    private final List<CustomerCoupon> coupons = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private final List<Order> orders = new ArrayList<>();
+
+    @Embedded
+    private CustomerDeliveryAddress currentAddress;
+
+    public void addOrder(Order order) {
+        this.orders.add(order);
+        order.changeCustomer(this);
+    }
+
+    public void addCoupon(Coupon coupon) {
+        CustomerCoupon customerCoupon = CustomerCoupon.builder()
+                .coupon(coupon)
+                .customer(this).build();
+        this.coupons.add(customerCoupon);
+        coupon.getCustomers().add(customerCoupon);
+    }
+
+    public void changeAddress(CustomerDeliveryAddress address) {
+        this.currentAddress = address;
+    }
+
+    public void changePoint(int point) {
+        this.point = point;
+    }
+
+    @Builder
+    public Customer(String userName, String email, String phoneNum, CustomerDeliveryAddress currentAddress) {
         this.username = userName;
         this.email = email;
         this.phoneNum = phoneNum;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
         this.point = 0;
-    }
-
-    public Customer() {
-
-    }
-
-    public void changeName(String userName) {
-        this.username = userName;
-    }
-
-    public void changeEmail(String email) {
-        this.email = email;
-    }
-
-
-    public void changePhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
-    }
-
-    public void changeUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+        this.currentAddress = currentAddress;
     }
 }

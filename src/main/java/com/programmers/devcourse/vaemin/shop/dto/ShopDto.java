@@ -1,73 +1,77 @@
 package com.programmers.devcourse.vaemin.shop.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.programmers.devcourse.vaemin.shop.entity.Shop;
-import com.programmers.devcourse.vaemin.shop.entity.ShopStatus;
-import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedOrderType;
-import com.programmers.devcourse.vaemin.shop.entity.ShopSupportedPayment;
-import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
+import com.programmers.devcourse.vaemin.review.dto.ReviewDto;
+import com.programmers.devcourse.vaemin.review.entity.Review;
+import com.programmers.devcourse.vaemin.shop.entity.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class ShopDto {
-    @JsonProperty("id")
-    private final long id;
 
-    @NotNull(message = "LocationCode is mandatory")
-    private final String name;
+    @NotNull(message = "Name is mandatory")
+    private String name;
 
     @JsonProperty("phoneNum")
-    private final String phoneNum;
+    private String phoneNum;
 
     @Range(min = 1, max = 100, message = "Short Description is between 0 and 100")
-    private final String shortDescription;
+    private String shortDescription;
 
     @Range(min = 1, max = 1000, message = "Long Description is between 0 and 1000")
-    private final String longDescription;
+    private String longDescription;
 
     @JsonProperty("supportedOrderType")
-    private final ShopSupportedOrderType supportedOrderType;
+    private ShopSupportedOrderType supportedOrderType;
 
     @JsonProperty("supportedPayment")
-    private final ShopSupportedPayment supportedPayment;
+    private ShopSupportedPayment supportedPayment;
 
     @JsonProperty("openTime")
-    private final LocalDateTime openTime;
+    private LocalTime openTime;
 
     @JsonProperty("closeTime")
-    private final LocalDateTime closeTime;
+    private LocalTime closeTime;
 
     @Min(0)
-    private final int deliveryFee;
+    private int deliveryFee;
 
     @Min(0)
-    private final int minOrderPrice;
+    private int minOrderPrice;
 
     @JsonProperty("shopStatus")
-    private final ShopStatus shopStatus;
+    private ShopStatus shopStatus;
 
     @NotNull(message = "RegisterNumber is mandatory")
-    private final String registerNumber;
+    private String registerNumber;
 
     @NotNull(message = "Owner is mandatory")
-    private final Owner owner;
+    private long ownerId;
 
     @JsonProperty("doroAddress")
-    private final String doroAddress;
+    private String doroAddress;
 
     @JsonProperty("doroIndex")
-    private final int doroIndex;
+    private int doroIndex;
 
     @JsonProperty("detailAddress")
-    private final String detailAddress;
+    private String detailAddress;
+
+    @JsonProperty("reviews")
+    private final List<ReviewDto> reviews = new ArrayList<>();
 
     public ShopDto(Shop shop) {
-        this.id = shop.getId();
         this.name = shop.getName();
         this.phoneNum = shop.getPhoneNum();
         this.shortDescription = shop.getShortDescription();
@@ -80,9 +84,13 @@ public class ShopDto {
         this.minOrderPrice = shop.getMinOrderPrice();
         this.shopStatus = shop.getShopStatus();
         this.registerNumber = shop.getRegisterNumber();
-        this.owner = shop.getOwner();
+        this.ownerId = shop.getOwner().getId();
         this.doroAddress = shop.getDoroAddress();
         this.doroIndex = shop.getDoroIndex();
         this.detailAddress = shop.getDetailAddress();
+        List<Review> reviewList = shop.getReviews();
+        for(Review review : reviewList) {
+            this.reviews.add(new ReviewDto(review));
+        }
     }
 }

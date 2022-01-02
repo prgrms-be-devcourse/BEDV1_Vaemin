@@ -18,9 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -28,6 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
+@Transactional
 class ShopSearchControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -44,38 +48,33 @@ class ShopSearchControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    private static Shop setShop1;
-    private static Shop setShop2;
     private static Category setCategory1;
-    private static Category setCategory2;
-    private static Owner setOwner1;
-    private static Owner setOwner2;
-    private static OwnerCreateRequest setOwnerRequest1;
-    private static OwnerCreateRequest setOwnerRequest2;
 
     @BeforeEach
     void setUp() {
-        setOwnerRequest1 = new OwnerCreateRequest("set owner1 name",
+        OwnerCreateRequest setOwnerRequest1 = new OwnerCreateRequest("set owner1 name",
                 "setowner1@gmail.com",
                 "01000000000");
-        setOwnerRequest2 = new OwnerCreateRequest("set owner2 name",
+        OwnerCreateRequest setOwnerRequest2 = new OwnerCreateRequest("set owner2 name",
                 "setowner2@gmail.com",
                 "01000000000");
 
-        setOwner1 = ownerService.createOwner(setOwnerRequest1);
-        setOwner2 = ownerService.createOwner(setOwnerRequest2);
+        Owner setOwner1 = ownerService.createOwner(setOwnerRequest1);
+        Owner setOwner2 = ownerService.createOwner(setOwnerRequest2);
 
+        categoryRepository.deleteByName("분식");
+        categoryRepository.deleteByName("치킨");
         setCategory1 = categoryRepository.save(new Category("분식"));
-        setCategory2 = categoryRepository.save(new Category("치킨"));
+        Category setCategory2 = categoryRepository.save(new Category("치킨"));
 
-        setShop1 = shopRepository.save(new Shop("set shop 1",
+        Shop setShop1 = shopRepository.save(new Shop("set shop 1",
                 "01010101010",
                 "This is a short description of set shop 1.",
                 "This is a long description of set shop 1.",
                 ShopSupportedOrderType.BOTH,
                 ShopSupportedPayment.CARD,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusHours(2),
+                LocalTime.now(),
+                LocalTime.now().plusHours(2),
                 2000,
                 10000,
                 ShopStatus.DEACTIVATED,
@@ -85,14 +84,14 @@ class ShopSearchControllerTest {
                 123,
                 "set shop 1's detail address"
         ));
-        setShop2 = shopRepository.save(new Shop("set shop 2",
+        Shop setShop2 = shopRepository.save(new Shop("set shop 2",
                 "01010101010",
                 "This is a short description of set shop 2.",
                 "This is a long description of set shop 2.",
                 ShopSupportedOrderType.BOTH,
                 ShopSupportedPayment.CARD,
-                LocalDateTime.now().plusHours(3),
-                LocalDateTime.now().plusHours(4),
+                LocalTime.now().plusHours(3),
+                LocalTime.now().plusHours(4),
                 3000,
                 12000,
                 ShopStatus.DEACTIVATED,
@@ -110,7 +109,6 @@ class ShopSearchControllerTest {
                 new FoodInformationRequest("떡볶이", "약간 매운 떡볶이", 12000, DiscountType.FIXED, 0, FoodStatus.NORMAL));
         foodService.createFood(setShop2.getId(),
                 new FoodInformationRequest("떡볶이", "shop1보다 맛있는 떡볶이", 10000, DiscountType.FIXED, 0, FoodStatus.NORMAL));
-
     }
 
     @Test

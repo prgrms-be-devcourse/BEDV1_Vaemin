@@ -24,7 +24,7 @@ public class FoodDTO {
     private final DiscountType discountType;
 
     @JsonProperty("discountAmount")
-    private final int amount;
+    private final int discountAmount;
 
     @JsonProperty("status")
     private final FoodStatus status;
@@ -36,7 +36,7 @@ public class FoodDTO {
         this.shortDescription = food.getShortDescription();
         this.price = food.getPrice();
         this.discountType = food.getDiscountType();
-        this.amount = food.getDiscountAmount();
+        this.discountAmount = food.getDiscountAmount();
         this.status = food.getStatus();
     }
 }

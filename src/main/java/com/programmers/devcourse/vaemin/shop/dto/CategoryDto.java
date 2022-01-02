@@ -1,21 +1,24 @@
 package com.programmers.devcourse.vaemin.shop.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.programmers.devcourse.vaemin.shop.entity.Category;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class CategoryDto {
-    @JsonProperty("id")
-    private final long id;
-
     @NotNull(message = "Name is mandatory")
-    private final String name;
+    private String name;
 
     public CategoryDto(Category category) {
-        this.id = category.getId();
         this.name = category.getName();
+    }
+
+    public CategoryDto(String name) {
+        this.name = name;
     }
 }

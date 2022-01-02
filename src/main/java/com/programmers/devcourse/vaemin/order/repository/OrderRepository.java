@@ -1,12 +1,11 @@
 package com.programmers.devcourse.vaemin.order.repository;
 
 import com.programmers.devcourse.vaemin.order.entity.Order;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface OrderRepository extends JpaRepository<Order, Long> {
-
-    List<Order> findAllByCustomerId(Long customerId);
-
+@Repository
+public interface OrderRepository extends CrudRepository<Order, Long> {
+  List<Order> findAllByCustomerId(Long customerId);
 }

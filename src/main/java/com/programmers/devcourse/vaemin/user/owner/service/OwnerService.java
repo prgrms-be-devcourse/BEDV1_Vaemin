@@ -1,10 +1,10 @@
 package com.programmers.devcourse.vaemin.user.owner.service;
 
+import com.programmers.devcourse.vaemin.root.exception.EntityExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.owner.dto.OwnerCreateRequest;
 import com.programmers.devcourse.vaemin.user.owner.dto.OwnerDetailResponse;
 import com.programmers.devcourse.vaemin.user.owner.dto.OwnerUpdateRequest;
 import com.programmers.devcourse.vaemin.user.owner.entity.Owner;
-import com.programmers.devcourse.vaemin.user.owner.exception.OwnerExceptionSuppliers;
 import com.programmers.devcourse.vaemin.user.owner.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,13 +27,13 @@ public class OwnerService {
 
     @Transactional
     public OwnerDetailResponse findOneOwner(Long ownerId) {
-        Owner owner = ownerRepository.findById(ownerId).orElseThrow(OwnerExceptionSuppliers.ownerNotFound);
+        Owner owner = ownerRepository.findById(ownerId).orElseThrow(EntityExceptionSuppliers.ownerNotFound);
         return new OwnerDetailResponse(owner);
     }
 
     @Transactional
     public Owner updateOwner(Long ownerId, OwnerUpdateRequest request) {
-        Owner owner = ownerRepository.findById(ownerId).orElseThrow(OwnerExceptionSuppliers.ownerNotFound);
+        Owner owner = ownerRepository.findById(ownerId).orElseThrow(EntityExceptionSuppliers.ownerNotFound);
         owner.changeName(request.getUserName());
         owner.changeEmail(request.getEmail());
         owner.changePhoneNum(request.getPhoneNum());

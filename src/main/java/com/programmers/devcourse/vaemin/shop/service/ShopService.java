@@ -80,7 +80,6 @@ public class ShopService {
         return shop.getId();
     }
 
-    // question : jpa repository vs crud repository
     public List<ShopSearchResponse> findAllShops() {
         List<ShopSearchResponse> shopResponses = new ArrayList<>();
         shopRepository.findAll().forEach(shop -> shopResponses.add(new ShopSearchResponse(shop)));
@@ -106,5 +105,13 @@ public class ShopService {
                 .map(Food::getShop)
                 .map(ShopSearchResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    public List<ShopSearchResponse> findByFoodName(String foodName) {
+        List<ShopSearchResponse> shopResponses = foodRepository.findByName(foodName).stream()
+                .map(Food::getShop)
+                .map(ShopSearchResponse::new)
+                .collect(Collectors.toList());
+        return shopResponses;
     }
 }

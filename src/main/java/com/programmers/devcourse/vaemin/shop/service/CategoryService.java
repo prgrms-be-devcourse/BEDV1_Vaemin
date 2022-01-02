@@ -21,7 +21,6 @@ public class CategoryService {
     private final ShopRepository shopRepository;
     private final ShopCategoryRepository shopCategoryRepository;
 
-    // question : categoryDto에 id가 있는데 이렇게 되면 생성된 category랑 categoryDto id가 달라질 거 같은데
     public Long createCategory(CategoryDto categoryDto) {
         Category category = Category.builder()
                 .name(categoryDto.getName())
